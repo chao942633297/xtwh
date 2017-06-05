@@ -14,7 +14,7 @@ class LoginController extends Controller {
             //取出POST请求的参数值
             $username=I('username');
             $pwd=md5(I('password'));
-            $users=M('adminuser');
+            $users=M('admin');
             $vercode=I("code");
             if(!$this->check_verify($vercode)){
                 $this->error('验证码错误');
@@ -26,10 +26,7 @@ class LoginController extends Controller {
                 //保存当前登录用户的 ID 和名称 到Session中
                 $_SESSION['userid']  =$user['id'];
                 $_SESSION['username']=$user['username'];
-                $_SESSION['roleid']  =$user['roleid'];
-                $_SESSION['rolename']=$user['rolename'];
-
-                $data['IP'] =  $_SERVER['REMOTE_ADDR'];
+                // $data['IP'] =  $_SERVER['REMOTE_ADDR'];
                 $data['logintime'] = time();
                 $result     = $users->where("username='%s'",$username)->save($data); 
                 //向页面发出登陆成功的消息

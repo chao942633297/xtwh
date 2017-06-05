@@ -40,31 +40,7 @@
 					<tr id="pwdhide">	
 						<td>密码</td>
 						<td><input type="password" class="form-control"  name="password" id="password" placeholder="六位以上的数组和字母"></td>
-					</tr>
-					<tr>
-						<td>角色</td>
-			             <td>
-			                <select class="form-control"  name="role" id="role" style="width:80%;margin-bottom:10px">
-			                	<volist name="roles" id="role1">
-										<option value="{$role1.id}" >{$role1.rolename}</option>
-			                	</volist>	
-			                </select>
-			            </td>
-					</tr> 	
-		            <tr>
-						<td>手机号</td>
-						<td><input type="text" class="form-control" name="phone" id="phone" placeholder="电话"></td>
-					</tr> 
-					<tr class="isuse">
-						<td>是否可用</td>
-						<td>
-							<select class="form-control"  name="status" id="status" style="width:80%;margin-bottom:10px">
-								<option value="1" >可用</option>
-								<option value="2" >不可用</option>
-			                </select>
-			            </td>
-
-					</tr>          
+					</tr>	         
     			</table>
 	      </div>
 	      <div class="modal-footer">
@@ -85,18 +61,16 @@
 
   function addUser(){
 		$("#username").val("");
-		$("#phone").val("");
 		$("#password").val("");
 		$("#userid").val("");		
-		$(".isuse").hide();
 		$('.bs-example-modal-lg').modal().show();  	
   }  
 
     //编辑用户信息
 	function edit(id){
 			var rowdata=$("#jqGrid").jqGrid('getRowData',id);
-			var username=rowdata.rolename;
-		if(username=="超级管理员"){
+			var username=rowdata.username;
+		if(username=="admin"){
 			alert("超级管理员为系统内置，不能进行删除！");
 			return;
 		}
@@ -108,41 +82,19 @@
 			type: "GET",  
 			success: function(user) {
 				$("#username").val(user.username);
-				$("#phone").val(user.phone);
-				$("#password").val(user.password);
-				$("#role option").each(function(){
-					var value=$(this).attr('value');
-					if(value==user.roleid)
-					{
-						$(this).prop('selected','selected');
-					}
-					else{
-						$(this).removeProp('selected');
-					}
-				});
-				$("#status option").each(function(){
-					var value=$(this).attr('value');
-					if(value==user.status)
-					{
-						$(this).prop('selected','selected');
-					}
-					else{
-						$(this).removeProp('selected');
-					}
-				});				
+				$("#password").val(user.password);				
 				$("#userid").val(id);
 			}  
 
 		});
-		$(".isuse").show();	
 		$('.bs-example-modal-lg').modal().show(); 
 
 	}
 
 	function deleteUser(id){
 			var rowdata=$("#jqGrid").jqGrid('getRowData',id);
-			var username=rowdata.rolename;
-		if(username=="超级管理员"){
+			var username=rowdata.username;
+		if(username=="admin"){
 			alert("超级管理员为系统内置，不能进行删除！");
 			return;
 		}
@@ -170,10 +122,7 @@
 	function saveUser(){
 		var userid   = $("#userid").val();
 		var username = $("#username").val();
-		var phone    = $("#phone").val();
 		var password = $("#password").val();
-		var status   = $("#status option:selected").val();
-		var roleid   = $("#role option:selected").val();
 		// var pattern = /^[\u4E00-\u9FA5]{1,6}$/;  //姓名正则
 		var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/; 	//手机号正则
 
@@ -183,17 +132,10 @@
 		if (password.length < 6) {
 			alert("密码不符合要求");return;
 		}
-		if ($("#role option:selected").text()=='') {
-			alert('请选择角色');return;
-		}
-		if(!myreg.test(phone)) {
-			alert('请输入有效的手机号码!');return;
-		};
-
   	$.ajax({
   		type     : "POST",
   		url      : "{:U('/Admin/Admin/saveUser')}",
-  		data     : {"userid":userid,"username":username,"password":password,"phone":phone,"roleid":roleid,"status":status},
+  		data     : {"userid":userid,"username":username,"password":password},
   		dataType : "json",
   		error    : function(){},
   		success  : function(data){
