@@ -240,7 +240,7 @@
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="产品分类" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/GoodsClass/index');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;产品分类</a></li>
-						<li><a href="javascript:" funtype="产品管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/User/user');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;产品管理</a></li>
+						<li><a href="javascript:" funtype="产品管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Goods/index');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;产品管理</a></li>
 			        </ul>
 			      </div>
 			    </div>
