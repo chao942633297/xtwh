@@ -1,0 +1,70 @@
+<include file="Public/head" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css">
+<script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script>
+<style type="text/css">
+  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+  table tr > td:last-child input{width:60%;margin-bottom:10px;  }
+</style>
+  <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">推荐　添加 | 编辑</h4>
+    </div>
+     <div class="modal-body">
+        <input type="hidden" name="id" id="id" value="{$products.id}">
+        <table style="width: 100%;">
+          
+            <tr style="margin-bottom:5px;">         
+            <td>选择类型</td>
+            <td><select class="form-control" style="width:200px;" id="ty" name="type"> 
+                  <option value="0">选择类型</option>           
+                  <option value="1">品牌</option>              
+                  <option value="2">乐器</option> 
+                  <option value="3">材质</option>         
+            </select></td>
+            </tr>
+            <tr style="margin-top:5px;">
+              <td>名称</td>
+              <td><input type="text" class="form-control" name="name" placeholder="推荐名称" id="name" value="{$products.name}"></td>
+            </tr>       
+       
+        
+        </table>
+      </div>      
+<script id="container" name="content" type="text/plain" style="min-height: 400px;">
+</script>   
+<button class="btn btn-default" style="width:200px;text-align:center;position:absolute;left:630px;margin-top:15px;" onclick="saveProduct()">完成</button>
+<include file="Public/footer" />
+<script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+  $("#detail").hide();
+   
+  //保存添加或修改的推荐信息
+  function saveProduct(){  
+    var name     = $("#name").val();  
+    var ty       = $("#ty").val();
+    if (ty == 0) {
+      alert('请选择类型!');return;
+    };   
+    if (name == '') {
+      alert('名称不能为空');return;
+    };
+      
+    $.ajax({
+      type     : "POST",
+      url      : "{:U('/Admin/GoodsClass/do_add')}",
+      data     : {"name":name,"type":ty},
+      dataType : "json",
+
+      success  : function(data){
+         if(data['code'] == 1){
+         	alert(data['msg']);
+         	window.location.href="{:U('/Admin/GoodsClass/index')}";
+         }else{
+         	alert(data['msg']);
+         }
+      }, error : function(){
+          alert('响应失败');
+      }
+    });
+  } 
+</script>
