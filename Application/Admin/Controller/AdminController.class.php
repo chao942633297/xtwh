@@ -15,78 +15,29 @@ class AdminController extends Controller {
 	 * 系统用户管理
 	 */
 	public function index(){
-		$user  = M('admin');
-		$users = $user->select();
-		foreach ($users as $key => $value) {
-			$users[$key]['logintime'] = date("Y-m-d H:i:s",$value['logintime']); 			
-		}
-		$this->assign("roles",$roles);
-		$this->assign("users",json_encode($users));
 		$this->display();
+	
 	}
 
-	/**
-	 * 根据用户ID获取用户信息
-	 */
-	public function getUserbyID(){
-		$id    = I("id");
-		$user  = M("admin");
-		$users = $user->where("id=%d", $id)->find();
-		$this->ajaxReturn($users);
+	public function index1(){
+		// var_dump($_GET);
+		if (IS_POST) {
+			// dump($_POST);exit;
+			$conf = serialize($_POST);
+			file_put_contents('./private/conf.txt',$conf);
+			$aa = unserialize(file_get_contents('./private/conf.txt'));
+			$this->ajaxReturn("成功");
+			// $this->success("更新规则成功！",$aa);
+		}else{		
+			$aa = file_get_contents('./private/conf.txt');
+			$aa = unserialize($aa);
+			$this->ajaxReturn($aa);		
+			// $this->assign("aa",$aa);
+		}		
 	}
 
-	/**
-	 * 删除选择的用户
-	 */
-	public function deleteUser(){
-		$id = I("id");
-		$user = M("admin");
-		$result = $user->where("id=%d", $id)->delete();
-		if($result){
-			echo "true";
-		}else{
-			echo "false";
-		}
-	}
 
-	/**
-	 * 保存（新增）用户信息
-	 */
-	public function saveUser(){
-		// dump($_POST);die;
-		$userid    = (int)I("userid");
-		$username  = I("username");
-		$user      = M('admin');
-		$password  = I('password');
-		$usernames = $user->where("username ='".$username."'")->find();
-		//判断登录名是否重复
-		if (!empty($usernames) && $usernames['id'] != $userid) {
-			$this->error("用户名存在!");
-		}
-			$data["username"]=I("username");
-			if($userid){
-				if ($usernames['password'] != $password) {
-					$data['password'] = MD5($password);
-				}
-				$result = $user->where("id=%d", $userid)->save($data);
-				if($result){
-					$this->success("更新用户成功！", U("/Admin/Admin/index"));
-				}else{
-					$this->error("更新用户失败！");
-				}
-			}else{
-				$data['password'] = MD5($password);
-				$data['logintime'] = date("Y-m-d H:i:s",time());
-				$result = $user->add($data);
-				if($result){
-					$this->success("添加用户成功！", U("/Admin/Admin/index"));
-				}else{
-					$this->error("添加用户失败！");
-				}
-			}
-	}
 
-	 
 	/**
 	 * 修改密码页面
 	 */
