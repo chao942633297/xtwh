@@ -151,3 +151,72 @@ function NewSms($Mobile){
     curl_close($ch);
     return ['code' => $code, 'data' => $result, 'msg' => ''];
 }
+
+
+/**
+ * [getExcel 导出数据到excel]
+ * @传入：[expTitle string excel文件名]
+ *       [expCellName string 列名数组]
+ *       [expTableData string 数据]
+ * @返回：[]
+ */
+function getExcel($expTitle,$expCellName,$expTableData){
+    //$xlsTitle=iconv('utf-8','gb2312',$expTitle);
+    $filename=$expTitle.date('_YmdHis');
+    $cellNum=count($expCellName);
+    $dataNum=count($expTableData);
+    Vendor("phpExcel.PHPExcel");
+    $objPHPExcel=new \PHPExcel();
+    $cellName=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
+    for($i=0;$i<$cellNum;$i++){
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cellName[$i].'1',$expCellName[$i][1]);
+    }
+    for($i=0;$i<$dataNum;$i++){
+        for($j=0;$j<$cellNum;$j++){
+            $objPHPExcel->getActiveSheet(0)->setCellValue($cellName[$j].($i+2), " ".$expTableData[$i][$expCellName[$j][0]]);
+        }
+    }
+    header('pragma:public');
+    header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$expTitle.'.xls"');
+    header("Content-Disposition:attachment;filename=".$filename.".xls");//attachment新窗口打印inline本窗口打印
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');  
+    $objWriter->save('php://output'); 
+    exit; 
+}
+
+
+    /**
+     *
+     * 导出Excel -- 例子
+     */
+    function expUser(){//导出Excel
+        $xlsName  = "User";
+        $xlsCell  = array(
+        array('id','账号序列'),
+        array('truename','名字'),
+        array('sex','性别'),
+        array('res_id','院系'),
+        array('sp_id','专业'),
+        array('class','班级'),
+        array('year','毕业时间'),
+        array('city','所在地'),
+        array('company','单位'),
+        array('zhicheng','职称'),
+        array('zhiwu','职务'),
+        array('jibie','级别'),
+        array('tel','电话'),
+        array('qq','qq'),
+        array('email','邮箱'),
+        array('honor','荣誉'),
+        array('remark','备注')
+        );
+        $xlsModel = M('Member');
+
+        $xlsData  = $xlsModel->Field('id,truename,sex,res_id,sp_id,class,year,city,company,zhicheng,zhiwu,jibie,tel,qq,email,honor,remark')->select();
+        foreach ($xlsData as $k => $v)
+        {
+            $xlsData[$k]['sex']=$v['sex']==1?'男':'女';
+        }
+        $this->getExcel($xlsName,$xlsCell,$xlsData);
+            
+    }

@@ -4,6 +4,8 @@ return array(
 	'DEFAULT_MODULE'   =>  'Admin',    // 默认模快
     'DEFAULT_CONTROLLER'   =>   'Login',
     'DEFAULT_ACTION'       =>   'login',
+    'TMPL_CACHE_ON' => false,//禁止模板编译缓存 
+    'HTML_CACHE_ON' => false,//禁止静态缓存     
 	/* 数据库设置 */
     'DB_TYPE'          =>  'mysql',      // 数据库类型
     'DB_HOST'          =>  '192.168.1.222',  // 服务器地址
