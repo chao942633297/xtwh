@@ -5,7 +5,28 @@ use Think\Controller;
 class GoodsController extends Controller {
 	
 	public function index(){
-		
+		$data = M('good')->select();
+		foreach ($data as $k => $v) {
+			 $instruments = M('goodtype')->where('id ='.$data[$k]['instruments_id'])->find();
+			 $data[$k]['instruments_id'] = $instruments['name'];
+			 $brand = M('goodtype')->where('id ='.$data[$k]['brand_id'])->find();
+			 $data[$k]['brand_id'] = $brand['name'];
+			 $material = M('goodtype')->where('id ='.$data[$k]['material_id'])->find();
+			 $data[$k]['material_id'] = $material['name'];
+			 
+			 if( $data[$k]['status'] == 0){
+			 	$data[$k]['status'] = '<font color="green">上线</font>';
+			 }else{
+			 	$data[$k]['status'] = '<font color="red">下架</font>';
+			 }
+			 $data[$k]['create_at'] = date('Y-m-d',$data[$k]['create_at']);
+			 if($data[$k]['update_at']){
+			 $data[$k]['update_at'] = date('Y-m-d',$data[$k]['update_at']);
+			 }
+			
+			
+		}
+		$this->assign('data',json_encode($data));
 		$this->display();	
 	}
 
