@@ -7,7 +7,7 @@ class IndexController extends Controller{
     public function index(){      //首页
         $category = D('Category');
         $common = D('Common');
-        $topCate = $category->where(array('pid'=>'0'))->select();  //一级分类
+        $topCate = $category->where(array('pid'=>'0','is_service'=>1))->select();  //一级分类
         $cateList = $common->getLoopCate();           //分类child为子分类
         if($cateList){
             jsonpReturn('1','查询成功',array('topCate'=>$topCate,'cateList'=>$cateList));
@@ -22,6 +22,7 @@ class IndexController extends Controller{
         $input = I('get.');
         $category = D('Category');
         $where['pid'] = '0';
+        $where['is_service'] = '2';
         $categoryData = $category->where($where)->select();
         if($categoryData){
             jsonpReturn('1','成功',$categoryData);
