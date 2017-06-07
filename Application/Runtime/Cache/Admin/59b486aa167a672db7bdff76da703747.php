@@ -143,7 +143,7 @@
 <body>
 
 
-    <a href="<?php echo U('Admin/GoodsClass/add');?>" style="margin-left:10px;margin-top:10px;margin-bottom:10px;width:100px;" type="button" class="btn btn-primary">添加类型</a>
+    <a href="javascript:void();" style="margin-left:10px;margin-top:10px;margin-bottom:10px;width:100px;" type="button" onclick="addUser()"  class="btn btn-primary">添加类型</a>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
@@ -152,10 +152,43 @@
       <div role="tabpanel" class="tab-pane" id="edituser">  
       </div>
   </div>
-  
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="width:80%;margin:auto;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">添加 | 编辑　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+        </div>
+         <div class="modal-body">
+            <table class="modal-table" style="width:80%;">
+             <tr style="margin-bottom:5px;">         
+              <td>选择类型</td>
+              <td><select class="form-control" style="margin-bottom:10px;" id="ty" name="type"> 
+                    <option value="0">选择类型</option>           
+                    <option value="1">品牌</option>              
+                    <option value="2">乐器</option> 
+                    <option value="3">材质</option>         
+              </select></td>
+              </tr>
+              <tr style="margin-top:5px;">
+                <td>名称</td>
+                <td><input type="text" class="form-control" name="name" placeholder="名称" id="name" value=""></td>
+            </tr>          
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="saveProduct()">保存</button>
+        </div>         
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 <script type="text/javascript">
+function addUser() {  
+    $('.bs-example-modal-lg').modal().show(); 
+  }
   function  formatLink(id) {
     return "<a href='edit/id/"+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a><a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='deleteRecom("+id+")'>删除</a>";
   }
@@ -177,6 +210,34 @@
       });
     }
   }
+  function saveProduct(){  
+    var name     = $("#name").val();  
+    var ty       = $("#ty").val();
+    if (ty == 0) {
+      alert('请选择类型!');return;
+    };   
+    if (name == '') {
+      alert('名称不能为空');return;
+    };
+      
+    $.ajax({
+      type     : "POST",
+      url      : "<?php echo U('/Admin/GoodsClass/do_add');?>",
+      data     : {"name":name,"type":ty},
+      dataType : "json",
+
+      success  : function(data){
+         if(data['code'] == 1){
+          alert(data['msg']);
+          window.location.href="<?php echo U('/Admin/GoodsClass/index');?>";
+         }else{
+          alert(data['msg']);
+         }
+      }, error : function(){
+          alert('响应失败');
+      }
+    });
+  } 
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',

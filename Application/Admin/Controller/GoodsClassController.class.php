@@ -5,7 +5,7 @@ use Think\Controller;
 class GoodsClassController extends Controller {
 	
 	public function index(){
-		$data = M('goodtype')->select();
+		$data = M('goodtype')->order('id desc')->select();
 		
 		$arr = array('','品牌','乐器','材质');
 		// $this->ajaxReturn($data);
