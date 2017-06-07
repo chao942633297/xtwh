@@ -158,7 +158,7 @@
 	<div class="modal-header">
       <h4 class="modal-title" id="myModalLabel">产品　添加 | 编辑</h4>
     </div>
-    <form action="<?php echo U('goods/insert');?>" method="post" onSubmit="return check();">
+    <form action="<?php echo U('goods/insert');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">
        
 				<table style="width: 100%;">
@@ -189,7 +189,7 @@
           </tr>
           <tr style="margin-bottom:5px;">
             <td>封面主图</td>
-            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="pic" > <div id="imgdiv"><img id="imgShow" width="100" height="100" /></div></td>
+            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="100" height="100" /></div></td>
           </tr>
 					<tr style="margin-bottom:5px;">
 						<td>产品价格</td>
@@ -275,12 +275,12 @@
       alert('产品价格不能为空');
        return false;
     }
-    var container = $("#container").val();
-    alert(container);
-  	if(container == 0){
-      alert('产品详情不能为空');
-       return false;
-    }
+   //  var container = $("#container").val();
+   //  alert(container);
+  	// if(container == 0){
+   //    alert('产品详情不能为空');
+   //     return false;
+   //  }
 	  return true;
   	
 	}
