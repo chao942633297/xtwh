@@ -5,13 +5,22 @@ use Think\Controller;
 class GoodsController extends Controller {
 	
 	public function index(){
-		echo 22;
-		// $this->display();	
+		
+		$this->display();	
 	}
 
 	public function add(){
-		echo 22;
-		// $this->display();	
+		$brand = M('goodtype')->where('type = 1')->select();
+		$instruments = M('goodtype')->where('type = 2')->select();
+		$material = M('goodtype')->where('type = 3')->select();
+		$this->assign('brand',$brand);//品牌
+		$this->assign('instruments',$instruments);//类型
+		$this->assign('material',$material);//材质
+		$this->display();	
+	}
+
+	public function insert(){
+		var_dump($_POST);
 	}
 
 	public function edit(){

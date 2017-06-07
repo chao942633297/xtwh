@@ -152,12 +152,11 @@
       <h4 class="modal-title" id="myModalLabel">推荐　添加 | 编辑</h4>
     </div>
      <div class="modal-body">
-        <input type="hidden" name="id" id="id" value="<?php echo ($products["id"]); ?>">
         <table style="width: 100%;">
           
             <tr style="margin-bottom:5px;">         
             <td>选择类型</td>
-            <td><select class="form-control" style="width:200px;" id="ty" name="type"> 
+            <td><select class="form-control" style="width:200px;margin-bottom:10px;" id="ty" name="type"> 
                   <option value="0">选择类型</option>           
                   <option value="1">品牌</option>              
                   <option value="2">乐器</option> 
@@ -166,7 +165,7 @@
             </tr>
             <tr style="margin-top:5px;">
               <td>名称</td>
-              <td><input type="text" class="form-control" name="name" placeholder="推荐名称" id="name" value="<?php echo ($products["name"]); ?>"></td>
+              <td><input type="text" class="form-control" name="name" placeholder="名称" id="name" value=""></td>
             </tr>       
        
         

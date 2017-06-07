@@ -146,7 +146,7 @@
 
 
   <div>
-    <a href="<?php echo U('Admin/GoodsClass/add');?>" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加类型</a>
+    <a href="<?php echo U('Admin/Goods/add');?>" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加产品</a>
   </div>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">

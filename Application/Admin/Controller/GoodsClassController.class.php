@@ -28,27 +28,21 @@ class GoodsClassController extends Controller {
 	}
 
 	public function do_add(){
-	
+		
 		$data['name'] = isset($_POST['name'])?trim($_POST['name']):'';
-		$data['type'] = $_POST('type');
+		$data['type'] = $_POST['type'];
 		$data['create_at'] = time();
+		
 		$row = M('goodtype')->where(array('name'=>$data['name']))->find();
 		if($row){			
-			$result['code']	= 0;
-			$result['msg'] = '数据已存在';
-			$this->ajaxReturn($result);	
-			
+			$this->ajaxReturn(array('code'=>0,'msg'=>'数据已存在'));								
 		}
 		$r = M('goodtype')->add($data);
 		if($r){	
-			$result['code']	= 1;
-			$result['msg'] = '添加成功';
-			$this->ajaxReturn($result);
-			
-		}else{			
-			$result['code']	= 0;
-			$result['msg'] = '添加成功';
-			$this->ajaxReturn($result);		
+			$this->ajaxReturn(array('code'=>1,'msg'=>'添加成功'));			
+						
+		}else{	
+			$this->ajaxReturn(array('code'=>0,'msg'=>'添加失败'));							
 		}
 		
 	}
@@ -90,11 +84,19 @@ class GoodsClassController extends Controller {
 	}
 	
 	public function delete(){
-		$id = $_GET('id');
-		
+
+		$id = $_GET['id'];
+	
 		if(empty($id)){
 			$this->ajaxReturn(array('code'=>0,'msg'=>'数据错误'));	
 		}
+		$ra = M('good')->where('brand_id='.$id)->find();
+		if($ra) $this->ajaxReturn(array('code'=>0,'msg'=>'商品关联数据，不能删除'));
+		$rb = M('good')->where('instruments_id='.$id)->find();
+		if($rb) $this->ajaxReturn(array('code'=>0,'msg'=>'商品关联数据，不能删除'));
+		$rc = M('good')->where('material_id='.$id)->find();
+		if($rc) $this->ajaxReturn(array('code'=>0,'msg'=>'商品关联数据，不能删除'));
+		
 		$r = M('goodtype')->where(array('id'=>$id))->delete();
 		if($r){
 			$this->ajaxReturn(array('code'=>1,'msg'=>'删除成功'));	
