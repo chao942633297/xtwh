@@ -350,7 +350,7 @@
 			    <div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
-			        	<li><a href="javascript:" funtype="提现管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Account/tixian');?>" class="	glyphicon glyphicon-align-justify" onclick="OpenPage($(this));">&nbsp;可提现管理</a></li>
+			        	<li><a href="javascript:" funtype="提现管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('GetCash/cashList');?>" class="	glyphicon glyphicon-align-justify" onclick="OpenPage($(this));">&nbsp;提现列表</a></li>
 			        </ul>
 			      </div>
 			    </div>
