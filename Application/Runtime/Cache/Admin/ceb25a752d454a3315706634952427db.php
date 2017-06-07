@@ -226,7 +226,25 @@
 			      </div>
 			    </div>
 			  </div>
-			 
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingT1" style="padding-left: 5px;">
+			      <h4 class="panel-title">
+			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo1" aria-expanded="true" aria-controls="collapseTwo1" style="font-weight:700;">
+			        	<span class="glyphicon glyphicon-tasks"></span>
+			          课程分类
+			        </a>
+			      </h4>
+			   </div>
+			   <div id="collapseTwo1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingT1">
+			      <div class="panel-body" style="padding: 0px;">
+			        <ul class="navul">
+			        	<li><a href="javascript:" funtype="产品分类" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Category/kecheng');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;课程分类</a></li>	
+			        	<li><a href="javascript:" funtype="产品分类" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Category/fuwu');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;服务分类</a></li>		
+			        </ul>
+			      </div>
+			    </div>
+			  </div>
+			
 			 <div class="panel panel-default">
 			    <div class="panel-heading" role="tab" id="headingT1" style="padding-left: 5px;">
 			      <h4 class="panel-title">
