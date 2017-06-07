@@ -7,11 +7,11 @@ class GetCashController extends Controller
 {
     public function cashList()//提现管理列表
     {
-        $where1="a.user_id=b.id";
-        $mod=D('GetCash');
-        $tables['table']='__GETCASH__ a,__USER2__ b';
-        $tables['where']='a.user_id=b.id';
-        $res=$mod->field('a.*,b.nickname,b.name,b.phone')->table($tables['table'])->where($where1)->order('a.id desc')->select();
+        $where1="a.u2id=b.id";
+        $mod=D('Order');
+        $tables['table']='__ORDER__ a,__USER2__ b';
+        $tables['where']='a.u2id=b.id';
+        $res=$mod->field('a.money,a.createtime,a.status,b.nickname,b.name,b.phone')->table($tables['table'])->where($where1)->order('a.id desc')->select();
         $this->assign('data',json_encode($res));
         $this->display('getcash/cashList');
     }
@@ -30,7 +30,6 @@ class GetCashController extends Controller
         }
         $mod=D('GetCash');
         $tables['table']='__GETCASH__ a,__USER2__ b';
-        $tables['where']='a.user_id=b.id';
         $res=$mod->field('a.*,b.nickname,b.name,b.phone')->table($tables['table'])->where($where1)->order('a.id desc')->select();
         $this->ajaxReturn($res);
     }
