@@ -42,7 +42,7 @@ class IndexController extends BaseController {
     public function qrcode(){
       $id = $_SESSION['userid'];
       $data = M('users')->field("headimg,name")->where("id=%d",$id)->find();
-      qrcode($id);  //生成二维码        
+      qrcode($id);  //生成二维码
       $data['qrcode'] = "./Uploads/qrcode/qrcode".$id.".png";
       $this->ajaxReturn(['status'=>1,'msg'=>'','data'=>$data],'jsonp');
    }
@@ -124,13 +124,13 @@ class IndexController extends BaseController {
       $this->ajaxReturn(['status'=>1,'msg'=>'短信验证码已发送','code'=>$code],'jsonp');
     }
 
-    #修改密码-忘记密码 
+    #修改密码-忘记密码
     public function updatePassword(){
       $id   = $_SESSION['userid'];
       $phone= I('phone');
       $password  = I('password');
       $rpassword = I('rpassword');
-      $code      = I('code'); 
+      $code      = I('code');
 
       // $code1 = M('pcode')->where("phone='%s'",$phone)->getField("code");
 
@@ -139,12 +139,12 @@ class IndexController extends BaseController {
       }
       // if (!preg_match("/^[1-9a-Z]{6,12}$/", $password)) {
       //   $this->ajaxReturn(['status'=>0,'msg'=>'密码为6到12为数字和字母'],'jsonp');
-        
+
       // }
 
       if ($password != $rpassword) {
         $this->ajaxReturn(['status'=>0,'msg'=>'两次输入密码不一致'],'jsonp');
-        
+
       }
 
       if ($code != $_SESSION['code']) {
@@ -223,6 +223,12 @@ class IndexController extends BaseController {
             $return[$k]['time'] = date('Y-m-d',$v['create_at']);    //创建时间?
         }
         $this->ajaxReturn(['status'=>1,'msg'=>'','data'=>$return],'jsonp');
+    }
+
+
+    public function test(){
+        $id = 1;
+        echo $id;
     }
 
 
