@@ -64,7 +64,7 @@ class GoodsClassController extends Controller {
 	}
 	
 	public function delete(){
-		echo 22;
+		echo 1;
 		// $this->display();	
 	}
 }

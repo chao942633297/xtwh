@@ -170,7 +170,8 @@
         type:"get",
         data:{"id":id},
         success:function(res){
-          if (res == 'true'){
+          if (res == 1){
+            alert("删除成功");
             $("#com"+id).parent().parent().remove();
           }else{
             alert("删除失败!");
