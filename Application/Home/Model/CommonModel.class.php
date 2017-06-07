@@ -16,6 +16,37 @@ class CommonModel extends Model{
         }
         return $topCate;
     }
+
+    public function getSearchCond($input){
+        if($input){
+            $cateId = $input['cateId'];
+            $province = $input['province'];
+            $city = $input['city'];
+            $area = $input['area'];
+        }
+        $where = array();
+        if($cateId){
+            $where['categoryid'] = $cateId;
+        }
+        if($area){
+            $where['area'] = $area;
+        }else if($city){
+            $where['city'] = $city;
+        }else if($province){
+            $where['province'] = $province;
+        }
+        return $where;
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 
