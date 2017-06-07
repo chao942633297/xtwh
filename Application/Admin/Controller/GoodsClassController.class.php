@@ -59,12 +59,39 @@ class GoodsClassController extends Controller {
 	}
 	
 	public function update(){
-		echo 22;
+		$data['name'] = isset(I('name'))?trim(I('name')):'';
+		if(empty($data['name'])){
+			$this->ajaxReturn(array('code'=>0,'msg'=>'名称不能为空'));	
+		}
+		$data['id'] = isset(I('name'))?I('id'):'';
+		if(empty($data['id'])){
+			$this->ajaxReturn(array('code'=>0,'msg'=>'数据错误'));	
+
+		}
+		$data['update_at'] = time();
+		$r = M('goodtype')->where(array('id'=>$id))->save($data); 
+		if($r){
+			$this->ajaxReturn(array('code'=>1,'msg'=>'更新成功'));	
+
+		}else{
+			$this->ajaxReturn(array('code'=>0,'msg'=>'更新失败'));	
+
+		}
 		// $this->display();	
 	}
 	
 	public function delete(){
-		echo 1;
+		$id = I('id');
+		$id = isset($id)?$id:'';
+		if(empty($id)){
+			$this->ajaxReturn(array('code'=>0,'msg'=>'数据错误'));	
+		}
+		$r = M('goodtype')->where(array('id'=>$id))->delete();
+		if($r){
+			$this->ajaxReturn(array('code'=>1,'msg'=>'删除成功'));	
+		}else{
+			$this->ajaxReturn(array('code'=>0,'msg'=>'删除失败'));	
+		}
 		// $this->display();	
 	}
 }
