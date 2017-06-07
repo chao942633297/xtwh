@@ -151,6 +151,9 @@
   table tr > td:last-child input{width:80%;margin-bottom:10px;  }
 </style>
 <div>
+
+      <a style="margin-left:20px;margin-top:10px;width:100px;" href="<?php echo U('goods/add');?>" class="btn btn-primary" >添加商品</a>
+  
   <div style="margin:24px;">
     产品名称： <input style="height:36px;" type="text" size="24px" placeholder="输入名称" id="tphone" />
     <select style="height:36px;" name="status">
@@ -160,9 +163,7 @@
     
     <button id="submit_search" class="btn btn-success" onclick="searchState();">搜索</button>
     
-    <div style="margin:24px;">
-      <!-- <a style="margin-left:240px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加会员</a> -->
-    </div>
+  
   </div>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
@@ -204,25 +205,23 @@
 <script type="text/javascript">
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='javascript:' onclick='dong("+id+");'>编辑</a>&nbsp<a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>";
+      return "<a href='edit/id/"+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a><a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='deleteRecom("+id+")'>删除</a>";
   };
 
-   
- 
   function deleteUser(id){
     if (confirm("你确定要删除吗?")) {
       $.ajax({
-        url: "<?php echo U('/Admin/User/deleteUser');?>",
+        url: "<?php echo U('/Admin/goods/delete');?>",
         dataType: "text",
         async: true,
         data: { "id": id},
         type: "GET",   
-        success: function(req) {
-          if(req=="true")
-          {
-            $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/User');?>");
+        success: function(res) {
+          if (res['code'] == 1){
+            alert("删除成功");
+            $("#com"+id).parent().parent().remove();
           }else{
-            alert('用户删除失败!');
+            alert(res['msg']);
           }
         }
         });     
@@ -234,13 +233,16 @@
    function pics(p){
     return "<img src='"+p+"' style='width:50px;height:50px;'>";
   }
-  
+  // function info(){
+  //   return "<a href='edit/id/"+id+"'></a>";
+  // }
+
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'50'},
-          { label: '名称', name: 'name',width:'80'},
+          { label: '名称', name: 'name',width:'80',},
           { label: '类型', name: 'instruments_id',width:'80'},
           { label: '品牌', name: 'brand_id',width:'80'},        
           { label: '材质', name: 'material_id',width:'80'},
@@ -251,7 +253,7 @@
           { label: '状态', name: 'status',width:'80'},
           { label: '添加时间', name: 'create_at',width:'100'},
           { label: '修改时间', name: 'update_at',width:'100' },       
-          { label: '操作', name: 'id',width:100,formatter: formatLink}
+          { label: '操作', name: 'id',width:'100',formatter:formatLink}
       ],
       viewrecords: true,
       rownumbers: true,

@@ -158,64 +158,64 @@
 	<div class="modal-header">
       <h4 class="modal-title" id="myModalLabel">产品　添加 | 编辑</h4>
     </div>
-    <form action="<?php echo U('goods/insert');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
+    <form action="<?php echo U('goods/update');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">
-       
+       <input type="hidden" name="id" value="<?php echo ($data['id']); ?>">
 				<table style="width: 100%;">
           <tr style="margin-bottom:5px;">
             <td>选择类型</td>
             <td><select name="instruments_id" class="form-control" id="instruments_id" style="width:300px;margin-bottom: 10px;" >
               <option value="0">选择类型</option>
-              <?php if(is_array($instruments)): foreach($instruments as $key=>$va): ?><option value="<?php echo ($va['id']); ?>"><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
+              <?php if(is_array($instruments)): foreach($instruments as $key=>$va): ?><option value="<?php echo ($va['id']); ?>" <?php if($data['instruments_id'] == $va['id']) echo 'selected';?>><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
             </select></td>
           </tr>
             <tr style="margin-bottom:5px;">
             <td>选择品牌</td>
             <td><select name="brand_id" class="form-control" id="brand_id" style="width:300px;margin-bottom: 10px;" >
              <option value="0">选择品牌</option>
-              <?php if(is_array($brand)): foreach($brand as $key=>$vb): ?><option value="<?php echo ($vb['id']); ?>"><?php echo ($vb['name']); ?></option><?php endforeach; endif; ?>
+              <?php if(is_array($brand)): foreach($brand as $key=>$vb): ?><option value="<?php echo ($vb['id']); ?>" <?php if($data['brand_id'] == $vb['id']) echo 'selected';?>><?php echo ($vb['name']); ?></option><?php endforeach; endif; ?>
             </select></td>
           </tr>
             <tr style="margin-bottom:5px;">
             <td>选择材质</td>
             <td><select name="material_id" class="form-control" id="material_id" style="width:300px;margin-bottom: 10px;" >
              <option value="0">选择材质</option>
-              <?php if(is_array($material)): foreach($material as $key=>$vc): ?><option value="<?php echo ($vc['id']); ?>"><?php echo ($vc['name']); ?></option><?php endforeach; endif; ?>
+              <?php if(is_array($material)): foreach($material as $key=>$vc): ?><option value="<?php echo ($vc['id']); ?>" <?php if($data['material_id'] == $vc['id']) echo 'selected';?>><?php echo ($vc['name']); ?></option><?php endforeach; endif; ?>
             </select></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>产品名称</td>
-            <td><input type="text" class="form-control" name="name" placeholder="名称" id="name" value=""></td>
+            <td><input type="text" class="form-control" name="name" placeholder="名称" id="name" value="<?php echo ($data['name']); ?>"></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>封面主图</td>
-            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="100" height="100" /></div></td>
+            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="100" height="100" src="<?php echo ($data['pic']); ?>" /></div></td>
           </tr>
 					<tr style="margin-bottom:5px;">
 						<td>产品价格</td>
-						<td><input type="text" style="width:200px"  class="form-control" name="price" placeholder="商品价格" id="price" value=""></td>
+						<td><input type="text" style="width:200px"  class="form-control" name="price" placeholder="商品价格" id="price" value="<?php echo ($data['price']); ?>"></td>
 					</tr>
           <tr style="margin-bottom:5px;">
             <td>会员打折</td>
-            <td><input type="text" style="width:200px" class="form-control" name="discount" placeholder="会员打折" id="discount" value="">(例：9表示打9折 或者9.5表示打9.5折)</td>
+            <td><input type="text" style="width:200px" class="form-control" name="discount" placeholder="会员打折" id="discount" value="<?php echo ($data['discount']); ?>">(例：9表示打9折 或者9.5表示打9.5折)</td>
           </tr>
            <tr>        
             <td>产品简述</td>
-            <td><textarea style="resize:none;width:410px" type="text" rows="4" class="form-control" name="desc" id="desc" ></textarea> 
+            <td><textarea style="resize:none;width:410px" type="text" rows="4" class="form-control" name="desc" id="desc" ><?php echo ($data['desc']); ?></textarea> 
          </tr>
           <tr style="margin-bottom:5px;">
             <td>产品状态</td>
             <td><select name="status" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
-                <option value="0">上线</option>
+                <option value="0" <?php if($data['status'] == 0) echo 'selected';?> >上线</option>
               
-                <option value="1">下架</option>          
+                <option value="1" <?php if($data['status'] == 1) echo 'selected';?>>下架</option>          
             </select></td>
           </tr>
 	       
 	       <tr>
 						<td style='margin-top:10px;padding-bottom:0px;'>产品详情</td>
 						<td>
-							<span id="detail" name="detail" style='display:block;margin-top:10px;'></span> 					
+							<span id="detail" name="detail" style='display:block;margin-top:10px;'><?php echo ($data['content']); ?></span> 					
 						</td>	       	
 	       </tr> 
 				</table>
@@ -265,11 +265,7 @@
       alert('产品名称不能为空');
        return false;
     }
-    var up_img = $("#up_img").val();
-    if(up_img == 0){
-      alert('必须上传一张产品封面');
-       return false;
-    }
+   
     var price      = $("#price").val();
     if(price == 0){
       alert('产品价格不能为空');

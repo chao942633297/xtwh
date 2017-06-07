@@ -1,6 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit();?>
-
-<!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -145,9 +143,7 @@
 <body>
 
 
-  <div>
-    <a href="<?php echo U('Admin/GoodsClass/add');?>" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加类型</a>
-  </div>
+    <a href="<?php echo U('Admin/GoodsClass/add');?>" style="margin-left:10px;margin-top:10px;margin-bottom:10px;width:100px;" type="button" class="btn btn-primary">添加类型</a>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
