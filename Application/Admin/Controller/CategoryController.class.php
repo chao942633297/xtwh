@@ -38,7 +38,15 @@ class CategoryController extends Controller
 
 
     public function fuwu(){
-    	echo 33;
+    	$data = M('category')->where(array('is_service'=>2))->order('id desc')->select();
+    	foreach ($data as $k => $v) {
+    		$data[$k]['create_at'] = date('Y-m-d',$data[$k]['create_at']);
+    		if($data[$k]['update_at']){
+    			$data[$k]['update_at'] = date('Y-m-d',$data[$k]['update_at']);
+    		}
+    	}
+    	$this->assign('data',json_encode($data));
+    	$this->display();
     }
 
     public function add(){
