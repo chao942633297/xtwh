@@ -245,97 +245,12 @@
 
 
 <script type="text/javascript">
-var area2 = new LArea();
-    area2.init({
-        'trigger': '#demo2',
-        'valueTo': '#value2',
-        'keys': {
-            id: 'value',
-            name: 'text'
-        },
-        'type': 2,
-        'data': [provs_data, citys_data, dists_data]
-    });
+
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' onclick='fall("+id+");'>查看下级</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>我的粉丝</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>我的关注</a>";
+    return "<a class='btn btn-success' onclick='fall("+id+");'>添加课程</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
   };
-  //上传图片
-  function upload(fromID,imgid){
-    var vars=$("#"+fromID);
-    var options={
-        type:"post",
-        url:"<?php echo U('/Admin/File/Upload');?>",
-        dataType:'json',
-        contentType:"application/json;charset=utf-8",
-        success:function(data){
-            if(data!="false"){
-                $("#"+imgid).attr('src',data);
-                $("#vidurl").attr('poster',data);
-                $("#thumbnail").attr('value',data);
-            }
-        }
-    }
-    vars.ajaxSubmit(options);
-  }
-  function formatIs(is) {
-    if (parseInt(is)) {
-      return "可用";      
-    }else{
-      return "不可用";
-    }
-  }
-  function addUser() {
-      $("#rname").val("");
-    $("#phone").val("");
-    $("#password").val("");   
-    $("#nickname").val("");
-    $("#level").val("");
-    $("#thumbnail").val("");
-    $("#userid").val("");
-    $("#isNo").hide();
-    $('.bs-example-modal-lg').modal().show(); 
-  }
-    //编辑用户信息
-  function edit(id){
-    $.ajax({
-      url: "<?php echo U('/Admin/User/getOneUser');?>",
-      dataType: "json",
-      async: false,
-      data: { "id": id},
-      type: "GET",  
-      success: function(user) {
-          $("#rname").val(user.rname);
-          $("#tel").val(user.phone);
-          $("#password").val(user.password);    
-          $("#nickname").val(user.name);
-          $("#imgurl").attr('src',user.headimg);
-          $("#vidurl").attr('poster',user.headimg);     
-          $("#thumbnail").val(user.headimg);
-          $("#level option").each(function(){
-            var val = $(this).val();
-            if (val == user.grade) {
-              $(this).prop("selected","selected");
-            }else{
-              $(this).removeProp("selected");
-            }
-          })
-          $("#remark").val(user.remark);
-          $("#isenable option").each(function(){
-            var val = $(this).val();
-            if (val == user.isenable) {
-              $(this).prop("selected","selected");
-            }else{
-              $(this).removeProp("selected");
-            }
-          });       
-        $("#userid").val(id);
-      }  
-    });
-    $("#isNo").show();
-    $('.bs-example-modal-lg').modal().show(); 
-  }
-
+ 
   function deleteUser(id){
     if (confirm("你确定要删除吗?")) {
       $.ajax({
@@ -355,119 +270,14 @@ var area2 = new LArea();
         });     
     }
   }
-  //我的下级
-  function fall(id){
-    $.ajax({
-      url: "<?php echo U('/Admin/User/getOneFall');?>",
-      dataType: "json",
-      async: false,
-      data: { "id": id},
-      type: "GET",   
-      success: function(data) {
-        // alert(data);
-        if(data >0){
-          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/fall');?>"+"?falluid="+data);
-        }else{
-          alert('用户下级为空!');
-        }
-      }
-      });     
-  }
-  //我的粉丝
-  function fans(id){
-    $.ajax({
-      url: "<?php echo U('/Admin/User/getOneFans');?>",
-      dataType: "json",
-      async: false,
-      data: { "id": id},
-      type: "GET",   
-      success: function(data) {
-        // alert(data);
-        if(data >0){
-          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/fans');?>"+"?fansuid="+data);
-        }else{
-          alert('用户粉丝为空!');
-        }
-      }
-      });     
-  }
-  //我的关注人
-  function follow(id){
-    $.ajax({
-      url: "<?php echo U('/Admin/User/getOneFol');?>",
-      dataType: "json",
-      async: false,
-      data: { "id": id},
-      type: "GET",   
-      success: function(data) {
-        // alert(data);
-        if(data >0)
-        {
-          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/follow');?>"+"?fid="+data);
-        }else{
-          alert('用户关注人为空!');
-        }
-      }
-      });     
-  }
-  //保存添加或修改的用户信息
-  function saveUser(){
-    var userid   = $("#userid").val();
-    var rname    = $("#rname").val();
-    var password = $("#password").val();
-    var tel  = $("#tel").val();
-    var remark   = $("#remark").val();
-    var thumbnail= $("#thumbnail").val();
-    var nickname      = $("#nickname").val();
-    var isenable   = $("#isenable option:selected").val();
-    var level   =  $("#level").val();
-    var preg_name= /^[\u4E00-\u9FA5]{1,6}$/;  //姓名正则
-    var preg_tel = /^1[34578]\d{9}$/; //手机号
-        if(!preg_tel.test(tel)) {
-            alert('请输入有效的手机号码!');return;
-        }
-    if (!preg_name.test(rname)) {
-      alert('请输入有效姓名!');return;
-    }         
-      if (password.length <6) {
-        alert('密码不符合要求');
-      } 
-      $.ajax({
-        type     : "POST",
-        url      : "<?php echo U('/Admin/User/saveUser');?>",
-        data     : {"userid":userid,"rname":rname,"nickname":nickname,"password":password,"tel":tel,"thumbnail":thumbnail,"remark":remark,"isenable":isenable,"level":level},
-        dataType : "json",
-        error    : function(){},
-        success  : function(data){
-            // console.log(data);
-            if(data.status){
-              $(window.parent.document).find("#main_iframe").attr("src",data.url);
-            }else{
-              alert(data.info);
-            }             
-        }
-      });
-  }
+  
+  
+ 
   //时间戳转换为日期格式
   function time(nS){
      return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' '); 
   }
-  function grade(as) {
-    switch(parseInt(as)){
-      case 1:
-        return "学童";
-        break;
-      case 2:
-        return "学霸";
-        break;
-      case 3:
-        return "讲师";
-        break;
-      case 4:
-        return "合伙人";
-        break;
-    } 
-  }
+ 
   function formatterImg(thumbnail){
     return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
   }
@@ -475,16 +285,16 @@ var area2 = new LArea();
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
-        { label: '手机号', name: 'phone',width:'110'},
-          { label: '昵称', name: 'name',width:'80'},
-          { label: '图片', name: 'headimg',width:'120',formatter: formatterImg },
-          { label: '注册时间', name: 'createtime',width:'125',formatter: time},
-          { label: '账户余额', name: 'money',width:'100'},
-          { label: '积分', name: 'score',width:'50' },
-          { label: '累计提现', name: 'bnm',width:'70' },
-          { label: '会员等级', name: 'grade',width:'80',formatter: grade},
-          { label: '直推人数', name: 'person',width:'70'},
-          { label: '操作', name: 'id',width:280,formatter: formatLink}
+          { label: '编号', name: 'id',width:'110'},
+          { label: '名称', name: 'title',width:'150'},
+          { label: '封面', name: 'logo',width:'120',formatter: formatterImg },
+          { label: '简介', name: 'detail',width:'300'},
+          { label: '省份', name: 'province',width:'100'},
+          { label: '城市', name: 'city',width:'100'},
+          { label: '区县', name: 'area',width:'100'},
+          { label: '详细地址', name: 'address',width:'300'},
+        
+          { label: '操作', name: 'id',width:380,formatter: formatLink}
       ],
       viewrecords: true,
       rownumbers: true,

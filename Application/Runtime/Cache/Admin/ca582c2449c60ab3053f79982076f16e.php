@@ -183,7 +183,7 @@ ul, ol, dl { list-style: none; }
           </tr>
            <tr>        
 	           <td>详细地址</td>
-	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*街道门牌*</font></td>
+	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
 	       </tr>  
           <tr style="margin-bottom:5px;">
             <td>封面</td>
@@ -191,12 +191,12 @@ ul, ol, dl { list-style: none; }
           </tr>       
 	       <tr>        
 	           <td>简介</td>
-	           <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea>*机构的详细介绍*</td>
+	           <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*机构的详细介绍*</font></td>
 	       </tr>       
 		</table>
 	    </div>  
 	    <input type="hidden" name="class" value="2">   
-		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:560px;">完成</button>
+		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 </body>
 </html>

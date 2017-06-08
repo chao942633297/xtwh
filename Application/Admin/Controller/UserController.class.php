@@ -5,6 +5,9 @@ use Think\Controller;
 class UserController extends Controller
 {
     public function index(){
+       $data = M('user1')->where(array('class'=>2))->select();
+       // var_dump($data);
+       $this->assign('data',json_encode($data));
        $this->display();
     }
 
@@ -21,16 +24,18 @@ class UserController extends Controller
     }
 
     public function do_jigou(){
-    	$_POST['title'] = trim($_POST['title']);
+    	
+    	$data = array();
+    	$data['title']	  = trim($_POST['title']);
+    	$data['province'] = trim($_POST['hcity']);
+    	$data['city']     = trim($_POST['hproper']);
+    	$data['area']     = trim($_POST['harea']);    	
+    	$data['address']  = trim($_POST['address']).trim($_POST['hcity']).trim($_POST['hproper']).trim($_POST['harea']);
+        $data['detail']   = trim($_POST['detail']);
     	$row = M('user1')->where(array('title'=>$_POST['title']))->select();
     	if($row){
     		$this->success('机构已存在');
-    	}
-    	$_POST['detail']   = trim($_POST['detail']);
-    	$arr =  explode('-',$_POST['city']); 
-    	$_POST['province'] = $arr[0];
-    	$_POST['city']     = $arr[1];
-    	$_POST['area']     = $arr[2];
+    	}   	
     	$upload = new \Think\Upload();
 		$upload->maxSize   =     3145728 ;  
 		$upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');
@@ -46,10 +51,11 @@ class UserController extends Controller
 		  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
 		  	}
 		}
-		$_POST['logo'] = $path;
-    	$_POST['created_at'] = time();
+		$data['logo']  = $path;
+		$data['class'] = 2;
+    	$data['create_at'] = time();
 
-    	$r = M('user1')->add($_POST);
+    	$r = M('user1')->add($data);
 
     	if($r){
     		$this->success('添加成功');

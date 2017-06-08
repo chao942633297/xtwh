@@ -199,7 +199,7 @@
 			        </a>
 			      </h4>
 			   </div>
-			   <div id="collapseTw" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTw">
+			   <div id="collapseTw" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTw">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="数据统计" funtypeicon="glyphicon glyphicon-cog"  data-url="" class="glyphicon glyphicon-calendar" onclick="OpenPage($(this));">&nbsp;数据统计</a></li>
@@ -216,7 +216,7 @@
 			        </a>
 			      </h4>
 			   </div>
-			   <div id="collapseT" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingT">
+			   <div id="collapseT" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingT">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/User/index');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;老师/机构管理</a></li>
@@ -235,7 +235,7 @@
 			        </a>
 			      </h4>
 			   </div>
-			   <div id="collapseTwo1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingT1">
+			   <div id="collapseTwo1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingT1">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="产品分类" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Category/kecheng');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;课程分类</a></li>	
@@ -248,13 +248,13 @@
 			 <div class="panel panel-default">
 			    <div class="panel-heading" role="tab" id="headingT1" style="padding-left: 5px;">
 			      <h4 class="panel-title">
-			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo1" aria-expanded="true" aria-controls="collapseTwo1" style="font-weight:700;">
+			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo12" aria-expanded="true" aria-controls="collapseTwo12" style="font-weight:700;">
 			        	<span class="glyphicon glyphicon-tasks"></span>
 			          产品管理
 			        </a>
 			      </h4>
 			   </div>
-			   <div id="collapseTwo1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingT1">
+			   <div id="collapseTwo12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingT1">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="产品分类" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/GoodsClass/index');?>" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;产品分类</a></li>
@@ -273,7 +273,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapsefor" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingfor">
+			    <div id="collapsefor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingfor">
 			      <div class="panel-body" style="padding: 0px;">
 			         <ul class="navul">
 			        	<li><a href="javascript:" funtype="课程视频发布/管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Course/index');?>" class="glyphicon glyphicon-film" onclick="OpenPage($(this));">&nbsp;课程列表</a></li>
@@ -294,7 +294,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseFi" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFi">
+			    <div id="collapseFi" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFi">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="内容管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('/Admin/Article/article');?>" class="glyphicon glyphicon-oil" onclick="OpenPage($(this));">&nbsp;文章管理</a></li>
@@ -311,7 +311,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseFiv" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFiv">
+			    <div id="collapseFiv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFiv">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="直播管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('/Admin/LetvList/index');?>" class="glyphicon glyphicon-flag" onclick="OpenPage($(this));">&nbsp;直播管理</a></li>
@@ -329,7 +329,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapsefor1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingfor">
+			    <div id="collapsefor1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingfor">
 			      <div class="panel-body" style="padding: 0px;">
 			         <ul class="navul">
 			        	<li><a href="javascript:" funtype="视频直播管理" funtypeicon="glyphicon glyphicon-cog"  data-url="" class="glyphicon glyphicon-th-large" onclick="OpenPage($(this));">&nbsp;直播房间管理</a></li>
@@ -347,7 +347,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+			    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="佣金管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Account/commissionIndex');?>" class="glyphicon glyphicon-yen" onclick="OpenPage($(this));">&nbsp;佣金列表</a></li>
@@ -365,7 +365,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">
+			    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="提现管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('GetCash/cashList');?>" class="	glyphicon glyphicon-align-justify" onclick="OpenPage($(this));">&nbsp;提现列表</a></li>
@@ -385,11 +385,11 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseF" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingF">
+			    <div id="collapseF" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingF">
 			      <div class="panel-body" style="padding: 0px;">
 			        <ul class="navul">
-			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/oneAccount');?>" class="glyphicon glyphicon-arrow-right" onclick="OpenPage($(this));">&nbsp;直营充值列表</a></li>
-			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/twoAccount');?>" class="glyphicon glyphicon-share-alt" onclick="OpenPage($(this));">&nbsp;非直营充值列表</a></li>
+			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/oneAccount/type/1');?>" class="glyphicon glyphicon-arrow-right" onclick="OpenPage($(this));">&nbsp;直营充值列表</a></li>
+			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/oneAccount/type/2');?>" class="glyphicon glyphicon-share-alt" onclick="OpenPage($(this));">&nbsp;非直营充值列表</a></li>
 			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/commission');?>" class="glyphicon glyphicon-usd" onclick="OpenPage($(this));">&nbsp;分销佣金列表</a></li>			        	
 			        	<li><a href="javascript:" funtype="财务对账" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Money/organization');?>" class="glyphicon glyphicon-object-align-bottom" onclick="OpenPage($(this));">&nbsp;合作机构列表</a></li>	
 			        </ul>
@@ -404,7 +404,7 @@
 				        </a>
 				      </h4>
 				    </div>
-				    <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
+				    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
 				      <div class="panel-body" style="padding: 0px;">
 				        <ul class="navul">
 				        	<li><a href="javascript:" funtype="数据统计" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('/Admin/Config/index');?>" class="glyphicon glyphicon-flag" onclick="OpenPage($(this));">&nbsp;数据设置管理</a></li>

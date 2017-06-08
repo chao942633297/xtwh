@@ -150,10 +150,10 @@
 <form id="myform">
 <table>
 	<tr>
-		<td class="wstxt">起始日期:</td>
-		<td><input type="text" class="workinput wicon mr25 form-control" id="inpstart" readonly placeholder="请选择开始日期" value="" name="start"></td>
-		<td class="wstxt">结束日期:</td>
-		<td><input type="text" class="workinput wicon mr25 form-control" id="inpend" readonly placeholder="请选择结束日期" value="" name="end"></td>
+		<!-- <td class="wstxt">起始日期:</td> -->
+		<!-- <td><input type="text" class="workinput wicon mr25 form-control" id="inpstart" readonly placeholder="请选择开始日期" value="" name="start"></td> -->
+		<!-- <td class="wstxt">结束日期:</td> -->
+		<!-- <td><input type="text" class="workinput wicon mr25 form-control" id="inpend" readonly placeholder="请选择结束日期" value="" name="end"></td> -->
 		<td>手机号:</td>	
 		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字"/>	</td>		
     <td><input type="button" name="" id="searchsub" class="btn btn-primary" value="查询"></td>
@@ -172,7 +172,11 @@
   
 </body>
 </html>
+
 <script type="text/javascript">
+  function formatImg(url) {
+        return "<img src='"+url+"' style='height:40px;width:40px'/>";              
+  }
   $("#phone").bind("input propertychange",function(){
     var phone = $(this).val();
     if (!/^[0-9]*$/.test(phone)) {
@@ -181,22 +185,21 @@
   });
   //查询
   $("#searchsub").click(function(){
-      var myform = $("#myform").serialize();
-      console.log(myform);
+      // var myform = $("#myform").serialize();
+      // console.log(myform);
+      var phone = $("#phone").val();
+      if (phone == "" ) {
+        alert("手机号不准为空");return false;
+      }
       $.ajax({
-        url:"<?php echo U('Admin/Account/search');?>",
+        url:"<?php echo U('Admin/Money/search');?>",
         type:"get",
-        data:myform,
+        data:{phone:phone},
         dataType:'json',        
         success:function(data){
-          console.log(data);
-            if (data.status ==0 ) {
-              alert(data.msg);
-            }else{
               $("#jqGrid").clearGridData();
-              $("#jqGrid").jqGrid('setGridParam', { data: data.data});
+              $("#jqGrid").jqGrid('setGridParam', { data: data});
               $("#jqGrid").trigger('reloadGrid');              
-            }
         }
       });
   });
@@ -206,11 +209,10 @@
       styleUI : 'Bootstrap',
       colModel: [
           // { label: '序号ID', name: 'id',width:'80'},
-          { label: '昵称', name: 'nickname',width:'100'},
-          { label: '手机号', name: 'phone',width:'100'},
-          { label: '佣金金额', name: 'money',width:'100'},
-          { label: '佣金来源信息', name: 'message',width:'180' },
-          { label: '时间', name: 'createtime',width:'180' }
+          { label: '用户头像', name: 'headimg',width:'100',formatter: formatImg },
+          { label: '昵称', name: 'nickname',width:'100' },
+          { label: '手机号', name: 'phone',width:'100' },
+          { label: '佣金总额', name: 'allmoney',width:'100' }
       ],
       gridview:true,  //加速显示
       viewrecords: true,  //显示总条数

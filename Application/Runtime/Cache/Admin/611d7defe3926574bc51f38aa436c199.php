@@ -154,12 +154,23 @@
 		<td><input type="text" class="workinput wicon mr25 form-control" id="inpstart" readonly placeholder="请选择开始日期" value="" name="start"></td>
 		<td class="wstxt">结束日期:</td>
 		<td><input type="text" class="workinput wicon mr25 form-control" id="inpend" readonly placeholder="请选择结束日期" value="" name="end"></td>
+    <td>支付方式:</td> 
+    <td>
+      <select class="form-control" name="paytype">
+        <option value="1">全部</option>
+        <option value="支付宝">支付宝</option>
+        <option value="微信端微信">微信端微信</option>
+        <option value="APP端微信">APP端微信</option>
+        <option value="基金余额充值">基金余额充值</option>
+      </select>
+    </td>    
 		<td>手机号:</td>	
-		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字"/>	</td>		
+		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字" />	</td>		
     <td><input type="button" name="" id="searchsub" class="btn btn-primary" value="查询"></td>
     <td><input type="reset" name="" class="btn btn-primary" value="重置"></td>
 	</tr>	
 </table>
+  <input type="hidden" name="type" id="type" value="<?php echo ($type); ?>" >   <!--直营非直营标识 -->
 </form>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
@@ -169,7 +180,6 @@
       <div role="tabpanel" class="tab-pane" id="edituser">  
       </div>
   </div>
-  
 </body>
 </html>
 <script type="text/javascript">
@@ -182,9 +192,9 @@
   //查询
   $("#searchsub").click(function(){
       var myform = $("#myform").serialize();
-      console.log(myform);
+      // console.log(myform);
       $.ajax({
-        url:"<?php echo U('Admin/Account/search');?>",
+        url:"<?php echo U('Admin/Money/oneSearch');?>",
         type:"get",
         data:myform,
         dataType:'json',        
@@ -207,10 +217,11 @@
       colModel: [
           // { label: '序号ID', name: 'id',width:'80'},
           { label: '昵称', name: 'nickname',width:'100'},
-          { label: '手机号', name: 'phone',width:'100'},
-          { label: '佣金金额', name: 'money',width:'100'},
-          { label: '佣金来源信息', name: 'message',width:'180' },
-          { label: '时间', name: 'createtime',width:'180' }
+          { label: '充值用户手机号', name: 'phone',width:'140'},
+          { label: '充值金额', name: 'money',width:'100'},
+          // { label: '支付类型', name: 'paytype',width:'180' formatter: formatLink}, 
+          { label: '支付类型', name: 'paytype',width:'180'},   
+          { label: '支付时间', name: 'createtime',width:'180' }
       ],
       gridview:true,  //加速显示
       viewrecords: true,  //显示总条数
