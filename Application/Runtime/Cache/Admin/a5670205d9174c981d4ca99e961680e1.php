@@ -177,7 +177,7 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='info/id/"+id+"'>课程列表</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
+    return "<a class='btn btn-success' href='info/id/"+id+"'>课程列表</a>&nbsp;<a class='btn btn-primary' href='edit_jiaoshi/id/"+id+"'>编辑</a>";
   };
  
   function deleteUser(id){

@@ -12,11 +12,11 @@ class TeacherController extends Controller
     }
 
      public function jiaoshi(){
-     	$id = isset($_GET['id'])?$_GET['id']:0;
-     	
-    	$data = M('user1')->where('class = 2')->select();
+    	$this->display();
+    }
+    public function edit_jiaoshi(){
+    	$data = M('user1')->where(array('id'=>$_GET['id']))->find();
     	$this->assign('data',$data);
-    	$this->assign('pid',$id);
     	$this->display();
     }
 
@@ -46,15 +46,14 @@ class TeacherController extends Controller
 		if($_POST['hcity']){
 			$data['province'] = trim($_POST['hcity']);
 	    	$data['city']     = trim($_POST['hproper']);
-	    	$data['area']     = trim($_POST['harea']);    	
-	    	
+	    	$data['area']     = trim($_POST['harea']);    		    	
 		}    
 		$data['address']  = trim($_POST['address']);
         $data['detail']   = trim($_POST['detail']);		
 		$data['teacherage']     = trim($_POST['teacherage']);
 		$data['motto']     = trim($_POST['motto']);
 		$data['level']     = trim($_POST['level']);
-		$data['class']     = $_POST['class'];  	
+		$data['class']     = 1;  	
     	$row = M('user1')->where(array('title'=>$data['title'],'pid'=>$_POST['pid']))->find();
     	
     	if($type == 'edit'){
@@ -65,28 +64,21 @@ class TeacherController extends Controller
 	    		// var_dump($data);exit;
 	    		$zid = M('user1')->where(array('id'=>$_POST['id']))->find();
 	    		
-	    		$this->success('编辑成功','/Admin/Mechanism/tream/id/'.$zid['pid']);
+	    		$this->success('编辑成功','/Admin/Teacher/index');
 	    	}else{
 	    		$this->error('编辑失败');
 	    	}	
     	}elseif($type == 'add'){
-    		if($row){
-    			$this->error('该机构已经添加该老师');
-    		}
+    		
     		$data['create_at'] = time();
     		$r = M('user1')->add($data);
 	    	if($r){
-	    		$this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);
+	    		$this->success('添加成功','/Admin/Teacher/index');
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
     	}
     
-    }
-
-    public function info(){
-    	$this->assign('id',$_GET['id']);
-    	$this->display();
     }
 
     public function kecheng(){

@@ -174,42 +174,43 @@ ul, ol, dl { list-style: none; }
 		<table style="width: 100%;">
           <tr style="margin-bottom:5px;">
             <td>教师名称</td>
-            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
+            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value="<?php echo ($data['title']); ?>"><font color="red">*本可以为空*</font></td>
           </tr>
           <tr>        
              <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ><?php echo ($data['detail']); ?></textarea><font color="red">*老师的详细介绍*</font></td>
          </tr> 
          <tr style="margin-bottom:5px;">
             <td>封面</td>
-            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
+            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" src="<?php echo ($data['logo']); ?>" width="100" height="100" /></td>
           </tr>  
           <tr style="margin-bottom:5px;">
             <td>教龄</td>
-            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
+            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value="<?php echo ($data['teacherage']); ?>"><font color="red">*不可以为空*</font></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>座右铭</td>
-            <td><input type="text" class="form-control" name="motto" placeholder="老师的座右铭" id="zy" value=""><font color="red"></font></td>
+            <td><input type="text" class="form-control" name="motto" placeholder="老师的座右铭" id="zy" value="<?php echo ($data['motto']); ?>"><font color="red"></font></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>等级</td>
-            <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value=""><font color="red">*1表示一颗星，最高五颗星*</font></td>
+            <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value="<?php echo ($data['level']); ?>"><font color="red">*1表示一颗星，最高五颗星*</font></td>
           </tr>
           <tr style="margin-bottom:1px;">
             <td>选择省份/城市</td>
-            <td><div ><input type="text" name="city" class="form-control" id="city" />
+            <td><div ><input type="text" name="city" class="form-control" id="city" value="<?php echo ($data['province']); ?>-<?php echo ($data['city']); ?>-<?php echo ($data['area']); ?>" />
             </div></td>
           </tr>
            <tr>        
 	           <td>详细地址</td>
-	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
+	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ><?php echo ($data['address']); ?></textarea><font color="red">*街道门牌*</font></td>
 	       </tr>  
             
 	             
 		</table>
 	    </div> 
-        <input type="hidden" name="type" value="add">   
+        <input type="hidden" name="type" value="edit"> 
+        <input type="hidden" name="id" value="<?php echo ($data['id']); ?>"> 
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 </body>
@@ -238,11 +239,7 @@ ul, ol, dl { list-style: none; }
       alert('老师的介绍不能为空');
        return false;
     }
-     var up_img = $("#up_img").val();
-    if(up_img == 0){
-      alert('必须上传一张封面');
-       return false;
-    }
+   
     var jl = $("#jl").val();
     if(jl== 0){
       alert('教龄');
