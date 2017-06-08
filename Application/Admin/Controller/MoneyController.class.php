@@ -24,8 +24,11 @@ class MoneyController extends Controller {
                 }
             }
         }       
-        // var_dump($user);
-        // die(); 
+        $summoney = 0;
+        foreach ($user as $ke => $va) {
+            $summoney += $va["allmoney"];
+        }
+        $this->assign("summoney",$summoney);
         $this->assign("data",json_encode($user));
         $this->display();
     }
@@ -58,6 +61,7 @@ class MoneyController extends Controller {
         $order  = M('order')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->where("message='".$message."' and money >0 and status =2 ")->select();
         if (empty($order) || $order ==false) {
             $order = [];
+            $summoney = 0;
         }else{
             $userid = M('order')->where("message='".$message."' and money >0 and status =2 ")->getField("u2id",true);
             $userid = array_unique($userid);     
@@ -70,9 +74,14 @@ class MoneyController extends Controller {
                         $order[$k]["phone"] = $userinfo[$k1]["phone"];
                     }
                 }
-            }             
+            }
+            $summoney = 0;
+            foreach ($order as $ke => $va) {
+                $summoney += $va["money"];
+            }
         }
 
+        $this->assign("summoney",$summoney);
         $this->assign("type",$type);
         $this->assign("data",json_encode($order));
         $this->display();
@@ -135,6 +144,10 @@ class MoneyController extends Controller {
     }
 
 
+    #合作机构列表
+    public function organization(){
+        $this->display();
+    }
 
 
 
