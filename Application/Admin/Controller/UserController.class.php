@@ -66,8 +66,11 @@ class UserController extends Controller
     }
 
      public function jiaoshi(){
+     	$id = isset($_GET['id'])?$_GET['id']:0;
+     	
     	$data = M('user1')->where('class = 2')->select();
     	$this->assign('data',$data);
+    	$this->assign('pid',$id);
     	$this->display();
     }
 
@@ -89,6 +92,7 @@ class UserController extends Controller
 		  	}
 		}
 		$data['title']	  = trim($_POST['title']);
+		$data['pid']	  = $_POST['pid'];
     	$data['province'] = trim($_POST['hcity']);
     	$data['city']     = trim($_POST['hproper']);
     	$data['area']     = trim($_POST['harea']);    	
@@ -98,7 +102,7 @@ class UserController extends Controller
 		$data['teacherage']     = trim($_POST['teacherage']);
 		$data['motto']     = trim($_POST['motto']);
 		$data['level']     = trim($_POST['level']);
-		$data['class']     = 1;
+		$data['class']     = $_POST['class'];
     	$data['create_at'] = time();
 
     	$r = M('user1')->add($data);
@@ -111,5 +115,17 @@ class UserController extends Controller
     public function info(){
     	$this->assign('id',$_GET['id']);
     	$this->display();
+    }
+
+    public function kecheng(){
+    	$data = M('category')->where('pid = 0 AND is_service = 1')->select();   	
+    	$this->assign('data',$data);
+    	$this->display();
+    }
+    public function kemu(){
+    	if($_POST['id']){
+	    	$data = M('category')->where('pid = '.$_POST['id'])->select();   	
+	    	$this->ajaxReturn($data);
+    	}   		
     }
 }

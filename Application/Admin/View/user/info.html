@@ -11,19 +11,13 @@
 <div>
   <div style="margin:24px;">
    <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="{:U('User/jigou')}">添加课程</a>
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="{:U('User/jiaoshi')}">添加老师</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="{:U('User/kecheng',array('id'=>$id))}">添加课程</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="{:U('User/jiaoshi',array('id'=>$id))}">添加老师</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
-    <select class="form-control" style="width:24%;height:36px;display:inline;border-radius:2px;" id="grade">
-        <option value="">请选择会员等级</option>
-        <option value="1">学童</option>
-        <option value="2">学霸</option>
-        <option value="3">讲师</option>
-        <option value="4">合伙人</option>
-    </select>
-    <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询会员</button>
+   
+    <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询</button>
    
   </div>
   <div class="tab-content">

@@ -167,13 +167,27 @@ ul, ol, dl { list-style: none; }
 .AreaS { background-color: #56b4f8 !important; color: #fff !important; }
 </style>
 	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
+      <h4 class="modal-title" id="myModalLabel">课程　添加 | 编辑</h4>
     </div>
     <form action="<?php echo U('User/do_jiaoshi');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
 		<table style="width: 100%;">
+           <tr style="margin-bottom:5px;">
+            <td>选择课程分类</td>
+            <td><select name="kecheng" class="form-control" id="ke" style="width:300px;margin-bottom: 10px;" >
+              <option value="0">选择分类</option>
+              <?php if(is_array($data)): foreach($data as $key=>$va): ?><option value="<?php echo ($va['id']); ?>"><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
+            </select></td>
+          </tr>
+           <tr style="margin-bottom:5px;">
+            <td>选择科目</td>
+            <td><select name="kemu" class="form-control" id="mu" style="width:300px;margin-bottom: 10px;" >
+              <option value="0">选择科目</option>
+             
+            </select></td>
+          </tr>
           <tr style="margin-bottom:5px;">
-            <td>教师名称</td>
+            <td>课程名称</td>
             <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
           </tr>
           <tr>        
@@ -185,32 +199,23 @@ ul, ol, dl { list-style: none; }
             <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
           </tr>  
           <tr style="margin-bottom:5px;">
-            <td>教龄</td>
-            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
+            <td>价格</td>
+            <td><input type="text" class="form-control" name="price" placeholder="价格" id="jl" value=""><font color="red">*视频价格*</font></td>
+          </tr>
+         <tr style="margin-bottom:5px;">
+            <td>讲师</td>
+            <td><select name="kecheng" class="form-control" id="ke" style="width:300px;margin-bottom: 10px;" >
+              <option value="0">选择分类</option>
+              <?php if(is_array($data)): foreach($data as $key=>$va): ?><option value="<?php echo ($va['id']); ?>"><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
+            </select></td>
           </tr>
           <tr style="margin-bottom:5px;">
-            <td>座右铭</td>
-            <td><input type="text" class="form-control" name="motto" placeholder="老师的座右铭" id="zy" value=""><font color="red"></font></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>等级</td>
-            <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value=""><font color="red">*1表示一颗星，最高五颗星*</font></td>
-          </tr>
-          <tr style="margin-bottom:1px;">
-            <td>选择省份/城市</td>
-            <td><div ><input type="text" name="city" class="form-control" id="city" />
-            </div></td>
-          </tr>
-           <tr>        
-	           <td>详细地址</td>
-	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
-	       </tr>  
-            
-	             
+            <td>开播时间</td>
+            <td><input type="text" class="form-control" name="level" placeholder="开播时间" id="name" value=""><font color="red"></font></td>
+          </tr>             
 		</table>
-	    </div> 
-    <input type="hidden" name="pid" value="<?php echo ($pid); ?>">  
-	  <input type="hidden" name="class" value="1">   
+	    </div>  
+	    <input type="hidden" name="class" value="1">   
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 </body>
@@ -226,7 +231,42 @@ ul, ol, dl { list-style: none; }
 		SelCity(this,e);
 	    console.log("inout",$(this).val(),new Date())
 	});
+  function add() { 
+    // alert('ss'); 
+    $('.bs-example-modal-lg').modal().show(); 
+  }
+  function sub(){
+  var na  = $.trim($("#na").val());
+  if(na == ''){
+     alert('课程名称不能为空');
+     return false;
+  }
+  return true;
+ }
+  $("#ke").change(function(){
+    // alert($(this).val());
+    var id = $("#ke").val();
+    if(id != 0){
+          $.ajax({
+            type     : "POST",
+            url      : "<?php echo U('User/kemu');?>",
+            data     : {"id":id,},
+            dataType : "json",
+            success  : function(data){   
+                $("#mu option").remove();          
+                for (var i = data.length - 1; i >= 0; i--) {
 
+                  $("#mu").append("<option value='" + data[i]['id'] + "'>" + data[i]['name'] + "</option>");               
+                }
+            }, error : function(){
+              alert('数据获取失败');
+            }
+          }); 
+      }else{
+         $("#mu option").remove();
+         $("#mu").append("<option value='0'>选择科目</option>");    
+      }
+  });
 	//保存添加或修改的推荐信息
 	function check(){
     var name   = $("#name").val();  
@@ -259,8 +299,6 @@ ul, ol, dl { list-style: none; }
       alert('选择地址');
        return false;
     }
-   
-   
 	  return true; 	
 	}
 
