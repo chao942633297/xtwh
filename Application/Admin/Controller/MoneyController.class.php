@@ -2,7 +2,7 @@
 namespace Admin\Controller;
 use Think\Controller;
 
-class AccountController extends Controller {
+class MoneyController extends Controller {
 	/**
      * Session过期重新定位到登录页面
      */
@@ -13,23 +13,21 @@ class AccountController extends Controller {
     }
 
     #佣金列表
-    public function commissionIndex(){
+    public function commission(){
         $comm = M('backmoney')->field("*,FROM_UNIXTIME(createtime,'%Y-%m-%d %H:%i:%s') as createtime")->select();  //所有佣金记录        
-    	$userid = M('backmoney')->getField("u2id",true);
+        $userid = M('backmoney')->getField("u2id",true);
         $userid = array_unique($userid);
         $where["id"] = array("in",$userid);
-    	$userinfo = M('user2')->where($where)->select();   //所有佣金记录的用户
+        $userinfo = M('user2')->where($where)->select();   //所有佣金记录的用户
 
-    	foreach ($comm as $k => $v) {
-    		foreach ($userinfo as $k1 => $v1) {
-    			if ($v['u2id'] == $v1["id"]) {
+        foreach ($comm as $k => $v) {
+            foreach ($userinfo as $k1 => $v1) {
+                if ($v['u2id'] == $v1["id"]) {
                     $comm[$k]["nickname"] = $v1["nickname"];
                     $comm[$k]["phone"] = $v1["phone"]; 
                 }
-    		}
-    	}
-
-        // var_dump($comm);
+            }
+        }
         $this->assign("data",json_encode($comm));
         $this->display();
     }
@@ -77,4 +75,35 @@ class AccountController extends Controller {
         $this->ajaxReturn(["status"=>1,"data"=>$comm]);       
     }
 
+
+    #直营充值列表
+    public function OneAccount(){
+        $type = I('type');
+        if ($type == 1 ) {
+            $message = "直营余额充值";
+        }else{
+            $message = "非直营余额充值";
+        }
+        $order  = M('order')->field("*,FROM_UNIXTIME(createtime,'%Y-%m-%d %H:%i:%s') as createtime")->where("message='".$message."' and money >0 and status =2 ")->select();
+        if (empty($order) || $order ==false) {
+            $data = [];
+        }else{
+            $userid = M('order')->where("message='".$message."' and money >0 and status =2 ")->getField("u2id",true);
+            $userid = array_unique($userid);     
+            $where["id"] = array("in",$userid);
+            $userinfo = M('user2')->field("headimg,nickname,phone,id")->where($where)->select(); 
+            foreach ($userinfo as $k1 => $v1) {
+                foreach ($order as $k => $v) {
+                    if ($v["u2id"] == $userinfo[$k1]["id"]) {
+                        $order[$k]["nickname"] = $userinfo[$k1]["nickname"];
+                        $order[$k]["phone"] = $userinfo[$k1]["phone"];
+                    }
+                }
+            }             
+        }
+
+
+        $this->assign("data",json_encode($order));
+        $this->display();
+    }
 }

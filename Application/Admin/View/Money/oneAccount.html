@@ -57,10 +57,11 @@
       colModel: [
           // { label: '序号ID', name: 'id',width:'80'},
           { label: '昵称', name: 'nickname',width:'100'},
-          { label: '手机号', name: 'phone',width:'100'},
-          { label: '佣金金额', name: 'money',width:'100'},
-          { label: '佣金来源信息', name: 'message',width:'180' },
-          { label: '时间', name: 'createtime',width:'180' }
+          { label: '充值用户手机号', name: 'phone',width:'140'},
+          { label: '充值金额', name: 'money',width:'100'},
+          // { label: '支付类型', name: 'paytype',width:'180' formatter: formatLink}, 
+          { label: '支付类型', name: 'paytype',width:'180'},   
+          { label: '支付时间', name: 'createtime',width:'180' }
       ],
       gridview:true,  //加速显示
       viewrecords: true,  //显示总条数

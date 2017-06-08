@@ -34,7 +34,7 @@
       var myform = $("#myform").serialize();
       console.log(myform);
       $.ajax({
-        url:"{:U('Admin/Account/search')}",
+        url:"{:U('Admin/Money/search')}",
         type:"get",
         data:myform,
         dataType:'json',        
