@@ -24,14 +24,34 @@ ul, ol, dl { list-style: none; }
 .AreaS { background-color: #56b4f8 !important; color: #fff !important; }
 </style>
 	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">机构　添加 | 编辑</h4>
+      <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
     </div>
-    <form action="{:U('User/do_jigou')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
+    <form action="{:U('Mechanism/do_jiaoshi')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
 		<table style="width: 100%;">
           <tr style="margin-bottom:5px;">
-            <td>机构名称</td>
-            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*机构名称不可以为空，名称不可以相同*</font></td>
+            <td>教师名称</td>
+            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
+          </tr>
+          <tr>        
+             <td>简介</td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
+         </tr> 
+         <tr style="margin-bottom:5px;">
+            <td>封面</td>
+            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
+          </tr>  
+          <tr style="margin-bottom:5px;">
+            <td>教龄</td>
+            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>座右铭</td>
+            <td><input type="text" class="form-control" name="motto" placeholder="老师的座右铭" id="zy" value=""><font color="red"></font></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>等级</td>
+            <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value=""><font color="red">*1表示一颗星，最高五颗星*</font></td>
           </tr>
           <tr style="margin-bottom:1px;">
             <td>选择省份/城市</td>
@@ -42,17 +62,13 @@ ul, ol, dl { list-style: none; }
 	           <td>详细地址</td>
 	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
 	       </tr>  
-          <tr style="margin-bottom:5px;">
-            <td>封面</td>
-            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
-          </tr>       
-	       <tr>        
-	           <td>简介</td>
-	           <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*机构的详细介绍*</font></td>
-	       </tr>       
+            
+	             
 		</table>
-	    </div>  
-	    <input type="hidden" name="class" value="2">   
+	    </div> 
+	    <input type="hidden" name="type" value="add">
+        <input type="hidden" name="pid" value="{$pid}">  
+	    <input type="hidden" name="class" value="1">   
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 <include file="Public/footer" />
@@ -72,7 +88,27 @@ ul, ol, dl { list-style: none; }
 	function check(){
     var name   = $("#name").val();  
     if(name == 0){
-      alert('机构名称不能为空');
+      alert('教师名称不能为空');
+       return false;
+    }
+     var price      = $("#desc").val();
+    if(price == 0){
+      alert('老师的介绍不能为空');
+       return false;
+    }
+     var up_img = $("#up_img").val();
+    if(up_img == 0){
+      alert('必须上传一张封面');
+       return false;
+    }
+    var jl = $("#jl").val();
+    if(jl== 0){
+      alert('教龄');
+       return false;
+    }
+    var zy = $("#zy").val();
+    if(zy== 0){
+      alert('座右铭不能为空');
        return false;
     }
     var up_img = $("#city").val();
@@ -80,16 +116,8 @@ ul, ol, dl { list-style: none; }
       alert('选择地址');
        return false;
     }
-    var up_img = $("#up_img").val();
-    if(up_img == 0){
-      alert('必须上传一张封面');
-       return false;
-    }
-    var price      = $("#desc").val();
-    if(price == 0){
-      alert('机构介绍不能为空');
-       return false;
-    }
+   
+   
 	  return true; 	
 	}
 
