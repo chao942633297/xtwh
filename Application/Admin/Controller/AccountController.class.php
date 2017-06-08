@@ -14,7 +14,7 @@ class AccountController extends Controller {
 
     #佣金列表
     public function commissionIndex(){
-        $comm = M('backmoney')->field("*,FROM_UNIXTIME(createtime,'%Y-%m-%d %H:%i:%s') as createtime")->select();  //所有佣金记录        
+        $comm = M('backmoney')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->select();  //所有佣金记录        
     	$userid = M('backmoney')->getField("u2id",true);
         $userid = array_unique($userid);
         $where["id"] = array("in",$userid);
@@ -45,12 +45,12 @@ class AccountController extends Controller {
                 $this->ajaxReturn(["status"=>0,'msg'=>'起始,结束时间不准为空']);                
             }
         }else{
-            $where["createtime"] = array("between",$time); 
+            $where["create_at"] = array("between",$time); 
         }
         // if (!empty($phone)) {
             $where1["phone"] = array("like","%".$phone."%");
         // }
-        $comm = M('backmoney')->field("*,FROM_UNIXTIME(createtime,'%Y-%m-%d %H:%i:%s') as createtime")->where($where)->select();  //所有佣金记录   
+        $comm = M('backmoney')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->where($where)->select();  //所有佣金记录   
 
         if (empty($comm) || $comm == false ) {
             $comm = [];
@@ -68,13 +68,13 @@ class AccountController extends Controller {
                 }
             } 
         }
-
+        $data = [];
         foreach ($comm as $key => $value) {
-            if ($value["phone"] == "" || empty($value["phone"])) {
-                unset($comm[$key]);
+            if ($value["phone"] != "" ) {
+                $data[] = $value;
             }
         }
-        $this->ajaxReturn(["status"=>1,"data"=>$comm]);       
+        $this->ajaxReturn(["status"=>1,"data"=>$data]);       
     }
 
 }
