@@ -81,7 +81,7 @@ class MechanismController extends Controller
     	
     }
 
-     public function jiaoshi(){
+    public function jiaoshi(){
      	// var_dump($_GET);exit;
      	$pid = isset($_GET['pid'])?$_GET['pid']:''; 
      	if(!$pid){
@@ -159,6 +159,17 @@ class MechanismController extends Controller
 	    		$this->error('编辑失败');
 	    	}	
     	}elseif($type == 'add'){
+    		// $m=M('user');
+			// $m1=M('user_detail');
+			// $m->startTrans();
+			// $map['id']=1;
+			// $res=$m->where($map)->delete();
+			// $res1=$m1->delete();
+			// if($res && $res1){
+			// $m->commit();
+			// }else{
+			// $m->rollback();
+			// }
     		if($row){
     			$this->error('该机构已经添加该老师');
     		}
@@ -171,6 +182,10 @@ class MechanismController extends Controller
 	    	}	
     	}
     
+    }
+
+    public function tuiguang($id){
+
     }
    
     public function del_jiaoshi(){
