@@ -30,9 +30,11 @@ class CommonModel extends Model{
         }
         if($area){
             $where['area'] = $area;
-        }else if($city){
+        }
+        if($city){
             $where['city'] = $city;
-        }else if($province){
+        }
+        if($province){
             $where['province'] = $province;
         }
         return $where;

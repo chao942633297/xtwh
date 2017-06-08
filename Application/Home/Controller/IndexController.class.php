@@ -46,7 +46,7 @@ class IndexController extends Controller{
 
 
 
-    public function recomCourse(){     //推荐课程
+    public function recomCourse(){     //推荐课程  需传入分类id(oneId) 和 默认显示 老师列(classId=1)/机构列(classId=2)
         $input = I('get.');
         $oneId = $input['oneId'];
         $classId = $input['classId'];
