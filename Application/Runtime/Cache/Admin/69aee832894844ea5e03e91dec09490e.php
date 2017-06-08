@@ -153,8 +153,7 @@
 <div>
   <div style="margin:24px;">
    <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加机构</a>
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加老师</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加会员</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />

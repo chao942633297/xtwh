@@ -303,16 +303,18 @@
   function formatterImg(thumbnail){
     return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
   }
+ 
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'110'},
+          { label: '级别', name: 'pid',width:'110'},
           { label: '名称', name: 'name',width:'80'},
           { label: '图标', name: 'icon_img',width:'120',formatter: formatterImg },
           { label: '添加时间', name: 'create_at',width:'80'},
           { label: '修改时间', name: 'update-at',width:'80'},
-          { label: '操作', name: 'id',width:280,formatter: formatLink}
+          { label: '操作', name: 'id',width:'100',formatter: formatLink}
       ],
       viewrecords: true,
       rownumbers: true,

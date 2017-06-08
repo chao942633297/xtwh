@@ -9,6 +9,10 @@
 </style>
 <div>
   <div style="margin:24px;">
+   <div style="margin:24px;">
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加机构</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加老师</a>
+    </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
     <select class="form-control" style="width:24%;height:36px;display:inline;border-radius:2px;" id="grade">
@@ -18,14 +22,8 @@
         <option value="3">讲师</option>
         <option value="4">合伙人</option>
     </select>
-    <label>&nbsp;注册日期 :</label>
-    <input style="height:36px;" type="date" size="24px" id="insta" />至
-    <input style="height:36px;" type="date" size="24px" id="inend" />
     <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询会员</button>
-    <div style="margin:24px;">
-      <div style="margin-left:10px;width:180px;float:left;">总会员数: <em style="color:red;font-size:16px;"> {$num}</em>&nbsp;人</div>
-      <a style="margin-left:240px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加会员</a>
-    </div>
+   
   </div>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
@@ -40,7 +38,7 @@
     <div class="modal-content" style="width:80%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑会员信息　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">添加 | 编辑机构　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
         </div>
          <div class="modal-body">
             <table class="modal-table" style="width:80%;">
