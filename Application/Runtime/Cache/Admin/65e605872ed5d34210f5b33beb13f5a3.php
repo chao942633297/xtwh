@@ -155,7 +155,7 @@
   <div style="margin:24px;">
    <div style="margin:24px;">
       <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jigou');?>">添加机构</a>
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加老师</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jiaoshi');?>">添加老师</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
@@ -248,7 +248,7 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' onclick='fall("+id+");'>添加课程</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
+    return "<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
   };
  
   function deleteUser(id){
