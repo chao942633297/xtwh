@@ -15,20 +15,27 @@ class MechanismController extends Controller
     	$this->display();
     }
 
+    public function edit_jigou(){
+    	$data = M('user1')->where(array('id'=>$_GET['id']))->find();
+    	$this->assign('data',$data);
+    	$this->display();
+    }
 
-    public function do_jigou(){
-    	
+    public function do_jigou(){  
+
+    	$type = $_POST['type']; 	
     	$data = array();
     	$data['title']	  = trim($_POST['title']);
-    	$data['province'] = trim($_POST['hcity']);
-    	$data['city']     = trim($_POST['hproper']);
-    	$data['area']     = trim($_POST['harea']);    	
-    	$data['address']  = trim($_POST['hcity']).trim($_POST['hproper']).trim($_POST['harea']).trim($_POST['address']);
+    	if($_POST['hcity']){
+    		$data['province'] = trim($_POST['hcity']);
+	    	$data['city']     = trim($_POST['hproper']);
+	    	$data['area']     = trim($_POST['harea']); 
+    	}
+    	   	
+    	$data['address']  = trim($_POST['address']);
         $data['detail']   = trim($_POST['detail']);
-    	$row = M('user1')->where(array('title'=>$_POST['title']))->select();
-    	if($row){
-    		$this->success('机构已存在');
-    	}  
+    	
+    	
     	if(!empty($_FILES['photo']['name'])){ 	
     		$upload = new \Think\Upload();
 			$upload->maxSize   =     3145728 ;  
@@ -45,18 +52,33 @@ class MechanismController extends Controller
 			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
 			  	}
 			}
+			$data['logo']  = $path;
 		}
-		$data['logo']  = $path;
-		$data['class'] = 2;
-    	$data['create_at'] = time();
-
-    	$r = M('user1')->add($data);
-
-    	if($r){
-    		$this->success('添加成功');
-    	}else{
-    		$this->error('添加失败');
-    	}	
+		
+		$data['class'] = 2;    	
+    	if($type == 'add'){
+    		$row = M('user1')->where(array('title'=>$_POST['title']))->select();
+    		if($row){    		
+    			$this->error('机构已存在');
+    		}  
+    		$data['create_at'] = time();
+    		$r = M('user1')->add($data);
+	    	if($r){
+	    		$this->success('添加成功','/Admin/Mechanism/index');
+	    	}else{
+	    		$this->error('添加失败');
+	    	}	
+    	}elseif($type == 'edit'){
+    		
+    		$data['update_at'] = time();
+    		$r = M('user1')->where(array('id'=>$_POST['id']))->save($data);
+	    	if($r){
+	    		$this->success('修改成功','/Admin/Mechanism/index');
+	    	}else{
+	    		$this->error('修改失败');
+	    	}	
+    	}
+    	
     }
 
      public function jiaoshi(){

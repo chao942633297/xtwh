@@ -169,7 +169,7 @@ ul, ol, dl { list-style: none; }
 	<div class="modal-header">
       <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
     </div>
-    <form action="<?php echo U('User/do_jiaoshi');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
+    <form action="<?php echo U('Teacher/do_jiaoshi');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
 		<table style="width: 100%;">
           <tr style="margin-bottom:5px;">
@@ -209,7 +209,7 @@ ul, ol, dl { list-style: none; }
 	             
 		</table>
 	    </div> 
-        <input type="hidden" name="pid" value="0">  
+        <input type="hidden" name="type" value="add">  
 	    <input type="hidden" name="class" value="1">   
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>

@@ -209,6 +209,7 @@ ul, ol, dl { list-style: none; }
 	             
 		</table>
 	    </div> 
+	    <input type="hidden" name="type" value="add">
         <input type="hidden" name="pid" value="<?php echo ($pid); ?>">  
 	    <input type="hidden" name="class" value="1">   
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
