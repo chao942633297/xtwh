@@ -49,6 +49,7 @@ class CategoryController extends Controller
     	$this->display();
     }
 
+   
     public function add(){
     	$_POST['name'] = trim($_POST['name']);
     	$row = M('category')->where(array('name'=>$_POST['name']))->find();

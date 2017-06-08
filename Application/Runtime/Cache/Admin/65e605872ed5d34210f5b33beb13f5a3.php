@@ -142,6 +142,7 @@
 </head>
 <body>
 
+
 <form id="fmform" action="" method="POST" enctype="multipart/form-data">
     <input type="hidden" value="fmimg" name="imgtype" value="" />
     <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
@@ -153,7 +154,7 @@
 <div>
   <div style="margin:24px;">
    <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加机构</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jigou');?>">添加机构</a>
       <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" onclick="addUser()">添加老师</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
@@ -178,7 +179,7 @@
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="width:80%;margin:auto;">
+    <div class="modal-content" style="width:100%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel">添加 | 编辑机构　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
@@ -186,32 +187,25 @@
          <div class="modal-body">
             <table class="modal-table" style="width:80%;">
               <tr>
-              <td>手机号<span style="color:red">&nbsp;*</span></td>
+              <td>机构名称<span style="color:red">&nbsp;*</span></td>
               <td>
-                <input type="tel" class="form-control" id="tel" placeholder="请输入正确手机号"></td>
+                <input type="text" class="form-control" id="tel" placeholder="请输机构名称"></td>
             </tr>
-              <tr>
-              <td>真实姓名<span style="color:red">&nbsp;*</span></td>
-              <td><input type="hidden" name="userid" id="userid"/>
-                <input type="text" class="form-control" name="rname" placeholder="真实姓名" id="rname"></td>
-            </tr>
-              
-            <tr id="pwdhide"> 
-              <td>密码<span style="color:red">&nbsp;*</span></td>
-              <td><input type="password" class="form-control"  name="password" id="password" placeholder="六位以上的数组和字母"></td>
-              </tr>
-            <tr>  
-              <td>昵称<span style="color:red">&nbsp;*</span></td>
-                <td>
-                <input type="text" class="form-control"  name="nickname" id="nickname" placeholder="昵称"></td>
-              </tr>
-              <tr>
-              <td>头像</td>
+            <tr>
+              <td>封面</td>
               <td><img id="imgurl" name="imgurl" style="width: 130px;height: 130px;margin:5px auto;" class="form-control" src="/Public/images/default.png" onclick="javascript:$('#fmimg').click();"/>
               <input id="thumbnail" type="hidden" name="thumbnail" value="" />
               <span style="color:red;">上传图片尺寸为:1145 * 500 px</span>
-                            </td>
+               </td>
             </tr>
+              <tr>
+                <td>机构地址<span style="color:red">&nbsp;*</span></td>
+                <td><input id="city-picker3" class="form-control" readonly type="text" value="江苏省/常州市/溧阳市" data-toggle="city-picker"></td>
+              </tr>          
+            <tr style="margin-bottom: 10px;">        
+            <td>产品简述</td>
+            <td><textarea style="resize:none;width:410px;margin-bottom: 10px; " type="text" rows="4" class="form-control" name="desc" id="desc" ></textarea> 
+           </tr>            
               <tr>
                 <td>会员等级</td>
                     <td>
@@ -248,7 +242,20 @@
 </div>
 </body>
 </html>
+
+
 <script type="text/javascript">
+var area2 = new LArea();
+    area2.init({
+        'trigger': '#demo2',
+        'valueTo': '#value2',
+        'keys': {
+            id: 'value',
+            name: 'text'
+        },
+        'type': 2,
+        'data': [provs_data, citys_data, dists_data]
+    });
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
     return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' onclick='fall("+id+");'>查看下级</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>我的粉丝</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>我的关注</a>";
