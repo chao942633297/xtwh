@@ -270,14 +270,14 @@
 			      <h4 class="panel-title">
 			        <a role="button" data-toggle="collapse" data-parent="#accordion"  href="#collapsefor" aria-expanded="true" aria-controls="collapsefor" style="font-weight:700;">
 			        	<span class="glyphicon glyphicon-facetime-video"></span>
-			          课程视频发布/管理
+			          平台录播视频
 			        </a>
 			      </h4>
 			    </div>
 			    <div id="collapsefor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingfor">
 			      <div class="panel-body" style="padding: 0px;">
 			         <ul class="navul">
-			        	<li><a href="javascript:" funtype="课程视频发布/管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Course/index');?>" class="glyphicon glyphicon-film" onclick="OpenPage($(this));">&nbsp;课程列表</a></li>
+			        	<li><a href="javascript:" funtype="课程视频发布/管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Course/platform');?>" class="glyphicon glyphicon-film" onclick="OpenPage($(this));">&nbsp;课程列表</a></li>
 			        </ul>
 			      </div>
 			    </div>

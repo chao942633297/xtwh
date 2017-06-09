@@ -106,8 +106,10 @@ class CourseController extends Controller {
 				$this->error('修改失败');
 			}
 		}
-		
-		
-		
+				
+    }
+
+    public function platform(){
+    	echo 22;
     }
 }
