@@ -97,7 +97,7 @@ class TeacherController extends Controller
     	$da['password']    = md5('a123456');
     	$da['twopassword'] = md5('a123456');
     	$da['nickname']    = $r['title'];
-    	$da['class']       = 2;//机构
+    	$da['class']       = 3;//教师
     	$da['grade']       = 0;//路人甲
     	$da['address']     = $r['address'];
     	$da['province']    = $r['province'];

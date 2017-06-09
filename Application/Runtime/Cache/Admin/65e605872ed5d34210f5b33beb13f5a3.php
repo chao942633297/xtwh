@@ -154,8 +154,7 @@
 <div>
   <div style="margin:24px;">
    <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jigou');?>">添加机构</a>
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jiaoshi');?>">添加老师</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('User/jigou');?>">添加会员</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
@@ -248,7 +247,7 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
+    return "<a class='btn btn-success' href='info/id/"+id+"'>激活</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
   };
  
   function deleteUser(id){
@@ -281,28 +280,61 @@
   function formatterImg(thumbnail){
     return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
   }
+  function formatlevel(li){
+    if(li == 0){
+      return '路人甲';
+    }else if(li == 1){
+      return '<font color="#CECEFF">VIP</font>';
+    }else if(li == 2){
+      return '<font color="#0000C6">VIP-银卡</font>';
+    }else if(li == 3){
+      return '<font color="#D9B300">VIP-金卡</font>';
+    }else if(li == 4){
+      return '<font color="#930000">VIP-钻石</font>';
+    }else if(li == 5){
+      return '<font color="#FFC1E0">合伙人</font>';
+    }
+  }
+  function formatclass(ci){
+    if(ci == 3){
+      return '教师';
+    }else if(ci == 2){
+      return '机构';
+    }else if(ci == 1){
+      return '家长';
+    }else if(ci == 0){
+      return '成人';
+    }
+  }
+  function formatstatus(si){
+    if(si == 0){
+      return '<font color="#EA0000">未激活</font>';
+    }else if(si == 1){
+      return '<font color="#00DB00">激活</font>';
+    }
+  }
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'110'},
           { label: '昵称', name: 'nickname',width:'150'},
-          { label: '封面', name: 'heading',width:'120',formatter: formatterImg },
+          { label: '头像', name: 'headimg',width:'120',formatter: formatterImg },
           { label: '手机号',name: 'phone',width:'150'},
-          { label: '真是姓名',name: 'name',width:'80'},
-          { label: '身份',name: 'class',width:'80'},
-          { label: '级别',name: 'grade',width:'80'},
+          { label: '真是姓名',name: 'name',width:'120'},
+          { label: '身份',name: 'class',width:'150',formatter: formatclass},
+          { label: '级别',name: 'grade',width:'150',formatter: formatlevel},
           { label: '直营余额',name: 'onemoney',width:'120'},
           { label: '非直营余额',name: 'twomoney',width:'120'},
-          { label: '状态',name: 'status',width:'80'},         
-          { label: '省份', name: 'province',width:'300'},
-          { label: '城市', name: 'city',width:'100'},
-          { label: '区县', name: 'area',width:'100'},
-          { label: '详细地址', name: 'address',width:'300'},        
+          { label: '状态',name: 'status',width:'120',formatter: formatstatus},         
+          // { label: '省份', name: 'province',width:'300'},
+          // { label: '城市', name: 'city',width:'100'},
+          // { label: '区县', name: 'area',width:'100'},
+          // { label: '详细地址', name: 'address',width:'300'},        
           { label: '操作', name: 'id',width:380,formatter: formatLink}
       ],
       viewrecords: true,
-      rownumbers: true,
+      rownumbers: false,
       rownumWidth: 35,
       height: document.documentElement.clientHeight-135,
       autowidth:true,
