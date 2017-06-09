@@ -168,7 +168,11 @@
 		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字" />	</td>		
     <td><input type="button" name="" id="searchsub" class="btn btn-primary" value="查询"></td>
     <td><input type="reset" name="" class="btn btn-primary" value="重置"></td>
-	</tr>	
+	</tr>
+  <tr>
+    <td style="padding-bottom: 10px;padding-left:40px;">总计金额:　</td>
+    <td><strong style="color:red ;margin:0px;padding:0px;"><?php echo ($summoney); ?></strong> <span>元</span></td>
+  </tr>	
 </table>
   <input type="hidden" name="type" id="type" value="<?php echo ($type); ?>" >   <!--直营非直营标识 -->
 </form>
