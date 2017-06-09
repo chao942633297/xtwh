@@ -1,4 +1,147 @@
-<include file="Public/head" />
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>杏坛文化</title>
+	<meta name="description" content="杏坛文化" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="/Public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="/Public/other/other.css" rel="stylesheet"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="/Public/jqGrid/css/ui.jqgrid-bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/Public/jedate/skin/jedate.css">
+	<link rel="stylesheet" type="text/css" href="/Public/layui/css/layui.css">
+	<script src="/Public/jquery/jquery-2.0.3.min.js"></script>
+	<script src="/Public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/Public/bootstrap/js/bootstrap-typeahead.js"></script>
+	<script src="/Public/jquery/jquery.form.js"></script>
+	<script src="/Public/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <script src="/Public/jqGrid/js/jquery.jqGrid.min.js"></script>
+	<script src="/Public/layui/layui.js"></script>
+<script type="text/javascript" src="/Public/jedate/jquery.jedate.js"></script>
+<script type="text/javascript">
+		// var db_root="http://localhost/ydys_yg/statics/uploads/";
+	</script>
+	<style>
+		div[class="row"]{
+			margin-left: 0px;
+			width: 100%;
+		}
+		.maindiv{
+			width: 100%;padding:0px;
+		}
+		#nav{
+			width: 100%;height: 80px;background-color:#7C26BD;margin-left: 0px;
+		}
+		.headtitle{
+			float:left;
+			font-size: 30px;
+			font-weight: 800;
+			color: #FFFFFF;
+			padding-top: 25px;
+			margin-left: 20px;
+		}
+		.headright{
+			float: right;color: #FFFFFF;margin-right: 10px;margin-top: 43px;font-size: 18px;
+		}
+		.contenthead{
+			background-color: #F5F5F5;height: 40px;border: 1px solid #eee; padding-top: 10px; font-size: 16px;font-weight: 700px;padding-left: 10px;
+			margin-left: 0px;
+			width: 100%;
+		}
+		.navul{
+				padding-left: 0px;
+		}
+		.navul li{
+			list-style-type: none;
+			line-height: 40px;
+			background-color: #eee;
+			padding-left: 15px;
+			border: 1px solid #ddd;
+
+		}
+		.navul li a{
+			color: #000000;
+		}
+
+		.home_content li {
+			width: 49%;
+			float: left;
+			border-bottom: 1px solid #ebebeb;
+			line-height: 30px;
+			overflow: hidden;
+			text-indent: 10px;
+		}
+		.home_content li span.ture,
+		.home_content li span.flase {
+			line-height: 30px;
+			display: inline-block;
+			padding-left: 10px;
+			/*background: url(../../../Public/images/filestate.png) no-repeat;*/
+		}
+		.home_content li span.ture {
+			background-position: 0 8px;
+		}
+		.home_content li span.flase {
+			background-position: 0 -18px;
+		}
+		.formdiv{
+			width: 500px;
+			margin-left: auto;
+			margin-right: auto;
+			border: 1px solid #eee;
+			margin-top: 5px;
+			padding: 10px;
+		}
+		.formdiv table{
+			width: 100%;
+		}
+		.formdiv table tr{
+			height: 50px;
+		}
+		.formdiv table tr td:first-child{
+			float: right;
+			padding-top: 15px;
+			padding-right: 5px;
+		}
+		.listtable{}
+		.listtable th{
+			background-color: #eee;
+			text-align: center;
+		}
+
+		.hx_table table{
+
+				margin:10px 276px 15px 176px;
+				width:800px;
+				height:86px;
+		}
+		.hx_table table tr:first-child{
+			width:70px;
+			background-color:rgba(51, 153, 204,1);
+		}
+		.hx_table table tr:nth-child(2){
+
+			width:70px;
+			background-color:rgba(51, 153, 204,1);
+		}
+		.hx_table table tr:nth-child(3){
+			width:70px;
+			background-color:rgba(51, 153, 204,0.5);
+		}
+
+		.hx_table table tr td{
+				border-right:80px solid white;
+				border-left:80px solid white;
+				font-family:'ArialMT', 'Arial';
+				font-size:16px;
+				color:#FFFFFF;
+			  text-align:center; /*设置水平居中*/
+ 	     vertical-align:middle;/*设置垂直居中*/
+		}
+	</style>
+</head>
+<body>
+
 <form id="fmform" action="" method="POST" enctype="multipart/form-data">
     <input type="hidden" value="fmimg" name="imgtype" value="" />
     <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
@@ -63,7 +206,7 @@
               </tr>
               <tr>
               <td>头像</td>
-              <td><img id="imgurl" name="imgurl" style="width: 130px;height: 130px;margin:5px auto;" class="form-control" src="__PUBLIC__/images/default.png" onclick="javascript:$('#fmimg').click();"/>
+              <td><img id="imgurl" name="imgurl" style="width: 130px;height: 130px;margin:5px auto;" class="form-control" src="/Public/images/default.png" onclick="javascript:$('#fmimg').click();"/>
               <input id="thumbnail" type="hidden" name="thumbnail" value="" />
               <span style="color:red;">上传图片尺寸为:1145 * 500 px</span>
                             </td>
@@ -102,7 +245,8 @@
     </div>
   </div>
 </div>
-<include file="Public/footer" />
+</body>
+</html>
 <script type="text/javascript">
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
@@ -113,7 +257,7 @@
     var vars=$("#"+fromID);
     var options={
         type:"post",
-        url:"{:U('/Admin/File/Upload')}",
+        url:"<?php echo U('/Admin/File/Upload');?>",
         dataType:'json',
         contentType:"application/json;charset=utf-8",
         success:function(data){
@@ -147,7 +291,7 @@
     //编辑用户信息
   function edit(id){
     $.ajax({
-      url: "{:U('/Admin/User/getOneUser')}",
+      url: "<?php echo U('/Admin/User/getOneUser');?>",
       dataType: "json",
       async: false,
       data: { "id": id},
@@ -187,7 +331,7 @@
   function deleteUser(id){
     if (confirm("你确定要删除吗?")) {
       $.ajax({
-        url: "{:U('/Admin/User/deleteUser')}",
+        url: "<?php echo U('/Admin/User/deleteUser');?>",
         dataType: "text",
         async: true,
         data: { "id": id},
@@ -195,7 +339,7 @@
         success: function(req) {
           if(req=="true")
           {
-            $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/User')}");
+            $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/User');?>");
           }else{
             alert('用户删除失败!');
           }
@@ -206,7 +350,7 @@
   //我的下级
   function fall(id){
     $.ajax({
-      url: "{:U('/Admin/User/getOneFall')}",
+      url: "<?php echo U('/Admin/User/getOneFall');?>",
       dataType: "json",
       async: false,
       data: { "id": id},
@@ -214,7 +358,7 @@
       success: function(data) {
         // alert(data);
         if(data >0){
-          $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/fall')}"+"?falluid="+data);
+          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/fall');?>"+"?falluid="+data);
         }else{
           alert('用户下级为空!');
         }
@@ -224,7 +368,7 @@
   //我的粉丝
   function fans(id){
     $.ajax({
-      url: "{:U('/Admin/User/getOneFans')}",
+      url: "<?php echo U('/Admin/User/getOneFans');?>",
       dataType: "json",
       async: false,
       data: { "id": id},
@@ -232,7 +376,7 @@
       success: function(data) {
         // alert(data);
         if(data >0){
-          $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/fans')}"+"?fansuid="+data);
+          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/fans');?>"+"?fansuid="+data);
         }else{
           alert('用户粉丝为空!');
         }
@@ -242,7 +386,7 @@
   //我的关注人
   function follow(id){
     $.ajax({
-      url: "{:U('/Admin/User/getOneFol')}",
+      url: "<?php echo U('/Admin/User/getOneFol');?>",
       dataType: "json",
       async: false,
       data: { "id": id},
@@ -251,7 +395,7 @@
         // alert(data);
         if(data >0)
         {
-          $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/follow')}"+"?fid="+data);
+          $(window.parent.document).find("#main_iframe").attr("src","<?php echo U('/Admin/User/follow');?>"+"?fid="+data);
         }else{
           alert('用户关注人为空!');
         }
@@ -282,7 +426,7 @@
       } 
       $.ajax({
         type     : "POST",
-        url      : "{:U('/Admin/User/saveUser')}",
+        url      : "<?php echo U('/Admin/User/saveUser');?>",
         data     : {"userid":userid,"rname":rname,"nickname":nickname,"password":password,"tel":tel,"thumbnail":thumbnail,"remark":remark,"isenable":isenable,"level":level},
         dataType : "json",
         error    : function(){},
@@ -302,17 +446,14 @@
   }
   function grade(as) {
     switch(parseInt(as)){
+      case 0:
+        return "保密";
+        break;
       case 1:
-        return "学童";
+        return "男";
         break;
       case 2:
-        return "学霸";
-        break;
-      case 3:
-        return "讲师";
-        break;
-      case 4:
-        return "合伙人";
+        return "女";
         break;
     } 
   }
@@ -323,15 +464,14 @@
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
-        { label: '手机号', name: 'phone',width:'110'},
-          { label: '昵称', name: 'name',width:'80'},
-          { label: '图片', name: 'headimg',width:'120',formatter: formatterImg },
-          { label: '注册时间', name: 'createtime',width:'125',formatter: time},
-          { label: '账户余额', name: 'money',width:'100'},
-          { label: '积分', name: 'score',width:'50' },
-          { label: '累计提现', name: 'bnm',width:'70' },
-          { label: '会员等级', name: 'grade',width:'80',formatter: grade},
-          { label: '直推人数', name: 'person',width:'70'},
+          { label: '编号', name: 'id',width:'80'},
+          { label: '父母', name: 'name',width:'150'},
+          { label: '性别', name: 'sex',width:'120',formatter: grade},
+          { label: '生日', name: 'birthday',width:'150',},
+          { label: '年级', name: 'grade',width:'120',},
+          { label: '兴趣', name: 'interest',width:'120',},
+          { label: '注册时间', name: 'create_at',width:'125',formatter: time},
+          { label: '修改时间', name: 'update_at',width:'125',formatter: time},
           { label: '操作', name: 'id',width:280,formatter: formatLink}
       ],
       viewrecords: true,
@@ -344,7 +484,7 @@
       loadonce:true,
       pager: "#jqGridPager"
     });
-    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").jqGrid('setGridParam', { data: eval(<?php echo ($data); ?>)});
     $("#jqGrid").trigger('reloadGrid');
   });
 </script>
@@ -356,11 +496,11 @@
     var grade = $("#grade").val();
     var insta = $("#insta").val();
     var inend = $("#inend").val();
-    if (insta.length <0 || inend.length <0) {
+    if (insta.length <0 || inend.length <0){
       alert('请选择时间');return;
     };
     $.ajax({
-      url:"{:U('/Admin/User/searchUser')}",
+      url:"<?php echo U('/Admin/User/searchUser');?>",
       type:'GET',
       data:{'start':insta,'end':inend,'phone':phone,'grade':grade,'name':name},
       dataType:'json',
