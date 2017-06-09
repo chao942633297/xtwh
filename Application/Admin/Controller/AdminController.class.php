@@ -65,4 +65,37 @@ class AdminController extends Controller {
 			$this->error('更新密码失败！');
 		}
 	}
+
+
+	#轮播图
+	public function lunbo(){
+		$data = M('lunbo')->select();
+		$this->assign("data",json_encode($data));
+		$this->display();
+	}
+
+
+	public function addLunbo1(){
+		$this->display();
+	}
+
+	#添加轮播图
+	public function addlb(){
+		$data["img"] = I("img");
+		$data["createtime"] = time();
+		$yes = M('lunbo')->add($data);
+		$this->ajaxReturn($yes);
+	}
+
+	#删除轮播图
+	public function deleteLunbo(){
+		$id  = I('id');
+		$res = M('lunbo')->where("id=%d",$id)->delete();
+		if ($res) {
+			echo true;
+		}else{
+			echo false;
+		}
+	}
+
 }

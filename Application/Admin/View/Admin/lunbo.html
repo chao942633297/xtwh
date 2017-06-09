@@ -1,0 +1,69 @@
+<include file="Public/head" />
+<!-- 上传轮播图 -->
+<form id="fmform" action="" method="POST" enctype="multipart/form-data">
+    <input type="hidden" value="fmimg" name="imgtype" value="" />
+    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
+</form>
+  <div>
+    <a href="{:U('Admin/Admin/addLunbo1')}" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加轮播图</a>
+  </div>
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
+      <table id="jqGrid" style="width: 100%;"></table>
+      <div id="jqGridPager"></div>  
+      </div>
+      <div role="tabpanel" class="tab-pane" id="edituser">  
+      </div>
+  </div>
+<include file="Public/footer" />
+<script type="text/javascript">
+
+	function  formatImg (name) {
+    return "<img src='"+name+"' width='100px' height='100px' />";		
+	}
+
+  function  formatLink(id) {
+    return "<a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='deleteLunbo("+id+")'>删除</a>";
+  }
+  function  deleteLunbo(id) {
+    if (confirm("确定删除吗?")) {
+      $.ajax({
+        url:"{:U('Admin/Admin/deleteLunbo')}",
+        type:"get",
+        data:{"id":id},
+        success:function(res){
+          if (res == true ){
+            $("#com"+id).parent().parent().remove();
+          }else{
+            alert("删除失败!");
+          }
+        }
+      });
+    }
+  }
+  $(document).ready(function($) { 
+    $("#jqGrid").jqGrid({
+      styleUI : 'Bootstrap',
+      colModel: [
+          { label: '序号', name: 'id',width:'80'},
+          { label: '轮播图', name: 'img',width:'80',formatter: formatImg},
+          // { label: '链接地址', name: 'url',width:'300' },              
+          { label: '操作', name: 'id',width:100,formatter: formatLink}
+      ],
+      viewrecords: true,
+      rownumbers: true,
+      rownumWidth: 35,
+      height: document.documentElement.clientHeight-135,
+      autowidth:true,
+      rowNum: 9,
+      datatype: 'local',
+      loadonce:true,
+      pager: "#jqGridPager"
+    });
+    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").trigger('reloadGrid');
+
+
+  });
+</script>
+

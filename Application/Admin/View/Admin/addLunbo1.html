@@ -1,0 +1,61 @@
+<include file="Public/head" />
+<!-- 上传轮播图 -->
+<form id="fmform" action="" method="POST" enctype="multipart/form-data">
+    <input type="hidden" value="fmimg" name="imgtype" value="" />
+    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
+</form>
+        <div role="tabpanel" class="tab-pane" id="edituser">
+            <div  style="width: 100%;text-align: center;">
+                <div id="formUser" style="width: 100%;">
+                    <table  class="table table-bordered" style="width: 100%;">
+                        <tr>
+                            <td><img id="imgurl" name="imgurl" style="width: 200px;height: 200px;margin:5px auto;" class="form-control" src="__PUBLIC__/images/default.png" onclick="javascript:$('#fmimg').click();"/><!-- <span style="color:red;">上传图片尺寸为:1145 * 500 px</span> -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-lg btn-primary" style="background-color: #7C26BD;margin:5px auto;" onclick="savelunbo();">保 存</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+//上传轮播图
+function upload(fromID,imgid){
+  var vars=$("#"+fromID);
+  var options={
+      type:"post",
+      url:"{:U('/Admin/File/Upload')}",
+      dataType:'json',
+      contentType:"application/json;charset=utf-8",
+      success:function(data){
+          if(data!="false"){
+              $("#"+imgid).attr('src',data);
+          }
+      }
+  }
+  vars.ajaxSubmit(options);
+}
+
+
+function savelunbo(){
+    var img = $("#imgurl").attr("src");
+    $.ajax({
+        url:"{:U('/Admin/Admin/addlb')}",
+        data:{"img":img},
+        dataType:"json",
+        success:function(msg){
+            console.log(msg);
+            if (msg) {
+                $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/Admin/lunbo')}");
+            }else{
+                alert("添加失败");
+            }
+        }
+    });
+
+}
+</script>
+<include file="Public/footer" />
