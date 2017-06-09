@@ -279,9 +279,6 @@
 			         <ul class="navul">
 			        	<li><a href="javascript:" funtype="课程视频发布/管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Course/index');?>" class="glyphicon glyphicon-film" onclick="OpenPage($(this));">&nbsp;课程列表</a></li>
 			        </ul>
-			        <ul class="navul">
-			        	<li><a href="javascript:" funtype="课程视频发布/管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Course/addCourse');?>" class="glyphicon glyphicon-facetime-video" onclick="OpenPage($(this));">&nbsp;课程发布</a></li>
-			        </ul>
 			      </div>
 			    </div>
 			  </div>

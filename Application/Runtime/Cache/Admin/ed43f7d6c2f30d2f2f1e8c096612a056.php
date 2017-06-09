@@ -175,35 +175,35 @@ ul, ol, dl { list-style: none; }
             <td>选择课程分类</td>
             <td><select name="kecheng_id" class="form-control" id="ke" style="width:300px;margin-bottom: 10px;" >
               <option value="0">选择分类</option>
-              <?php if(is_array($data)): foreach($data as $key=>$va): ?><option value="<?php echo ($va['id']); ?>"><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
+              <?php if(is_array($row)): foreach($row as $key=>$va): ?><option value="<?php echo ($va['id']); ?>" <?php if($data['kecheng_id'] == $va['id']) echo 'selected';?>><?php echo ($va['name']); ?></option><?php endforeach; endif; ?>
             </select></td>
           </tr>
            <tr style="margin-bottom:5px;">
             <td>选择科目</td>
             <td><select name="categoryid" class="form-control" id="mu" style="width:300px;margin-bottom: 10px;" >
-              <option value="0">选择科目</option>
+              <option value="0"><?php echo ($name); ?></option>
              
             </select></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>标题</td>
-            <td><input type="text" class="form-control" name="title" placeholder="标题" id="name" value=""><font color="red">*视频标题不可以为空*</font></td>
+            <td><input type="text" class="form-control" name="title" placeholder="标题" id="name" value="<?php echo ($data['title']); ?>"><font color="red">*视频标题不可以为空*</font></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>封面</td>
-            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
+            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" src="<?php echo ($data['logo']); ?>" height="100" /></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>视频连接</td>
-            <td><input type="text" class="form-control" name="video" placeholder="乐视视频连接" id="vid" value=""><font color="red">*乐视视频连接*</font></td>
+            <td><input type="text" class="form-control" name="video" placeholder="乐视视频连接" id="vid" value="<?php echo ($data['video']); ?>"><font color="red">*乐视视频连接*</font></td>
           </tr>          
           <tr style="margin-bottom:5px;">
             <td>价格</td>
-            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value=""><font color="red">*价格不可以为空*</font></td>
+            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value="<?php echo ($data['price']); ?>"><font color="red">*价格不可以为空*</font></td>
           </tr> 
           <tr>        
              <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="description" id="des" ></textarea><font color="red">*视频简介*</font></td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="description" id="des" ><?php echo ($data['description']); ?></textarea><font color="red">*视频简介*</font></td>
          </tr> 
           
           <tr style="margin-bottom:5px;">
@@ -212,11 +212,11 @@ ul, ol, dl { list-style: none; }
           </tr>
           <tr style="margin-bottom:5px;">
             <td>会员折扣</td>
-            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value=""><font color="red">可以为空</font></td>
+            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value="<?php echo ($data['discount']); ?>"><font color="red">可以为空</font></td>
           </tr>
            <tr style="margin-bottom:5px;">
             <td>点击量</td>
-            <td><input type="text" class="form-control" name="click" placeholder="视频点击量"  value=""><font color="red"></font></td>
+            <td><input type="text" class="form-control" name="click" placeholder="视频点击量"  value="<?php echo ($data['click']); ?>"><font color="red"></font></td>
           </tr>
            <tr style="margin-bottom:5px;">
             <td>视频状态</td>
@@ -237,8 +237,9 @@ ul, ol, dl { list-style: none; }
 	             
 		</table>
 	    </div> 
-	    <input type="hidden" name="user_id" value="<?php echo ($userid); ?>">
-        <input type="hidden" name="type" value="add">   
+	    <input type="hidden" name="id" value="<?php echo ($data['id']); ?>">
+	    <input type="hidden" name="user_id" value="<?php echo ($data['user_id']); ?>">
+        <input type="hidden" name="type" value="edit">   
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 </body>

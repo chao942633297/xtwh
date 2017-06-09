@@ -154,7 +154,7 @@
 <div>
   <div style="margin:24px;">
    <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('Course/add');?>">添加视频</a>
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="<?php echo U('Course/add',array('userid'=>$userid));?>">添加视频</a>
     </div>
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
     <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
@@ -177,7 +177,7 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='/Admin/Course/index/id/"+id+"'>课程列表</a>&nbsp;<a class='btn btn-primary' href='edit_jiaoshi/id/"+id+"'>编辑</a>";
+    return "<a class='btn btn-primary' href='/Admin/Course/edit/id/"+id+"'>编辑</a>";
   };
  
   function deleteUser(id){
@@ -215,18 +215,20 @@
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'110'},
-          { label: '名称', name: 'title',width:'150'},
-          { label: '手机', name: 'phone',width:'150'},
+          { label: '标题', name: 'title',width:'150'},         
           { label: '封面', name: 'logo',width:'120',formatter: formatterImg },
-          { label: '简介', name: 'detail',width:'300'},
-          { label: '省份', name: 'province',width:'100'},
-          { label: '城市', name: 'city',width:'100'},
-          { label: '区县', name: 'area',width:'100'},
-          { label: '详细地址', name: 'address',width:'300'},
-          { label: '操作', name: 'id',width:380,formatter: formatLink}
+          { label: '课程', name: 'kecheng_id',width:'150'}, 
+          { label: '科目', name: 'categoryid',width:'150'},
+          { label: '连接', name: 'video',width:'300'},
+          { label: '价格', name: 'price',width:'100'},
+          { label: '会员折扣', name: 'discount',width:'100'},
+          { label: '开课时间', name: 'start_time',width:'100'},
+          { label: '状态', name: 'status',width:'100'},
+          { label: '规则', name: 'line',width:'100'},
+          { label: '操作', name: 'id',width:200,formatter: formatLink}
       ],
       viewrecords: true,
-      rownumbers: true,
+      rownumbers: false,
       rownumWidth: 35,
       height: document.documentElement.clientHeight-135,
       autowidth:true,
