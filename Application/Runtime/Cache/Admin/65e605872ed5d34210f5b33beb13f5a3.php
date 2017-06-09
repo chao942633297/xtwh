@@ -181,57 +181,34 @@
     <div class="modal-content" style="width:100%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑机构　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">激活　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
         </div>
          <div class="modal-body">
-            <table class="modal-table" style="width:80%;">
-              <tr>
-              <td>机构名称<span style="color:red">&nbsp;*</span></td>
-              <td>
-                <input type="text" class="form-control" id="tel" placeholder="请输机构名称"></td>
-            </tr>
-            <tr>
-              <td>封面</td>
-              <td><img id="imgurl" name="imgurl" style="width: 130px;height: 130px;margin:5px auto;" class="form-control" src="/Public/images/default.png" onclick="javascript:$('#fmimg').click();"/>
-              <input id="thumbnail" type="hidden" name="thumbnail" value="" />
-              <span style="color:red;">上传图片尺寸为:1145 * 500 px</span>
-               </td>
-            </tr>
-              <tr>
-                <td>机构地址<span style="color:red">&nbsp;*</span></td>
-                <td><input id="city-picker3" class="form-control" readonly type="text" value="江苏省/常州市/溧阳市" data-toggle="city-picker"></td>
-              </tr>          
-            <tr style="margin-bottom: 10px;">        
-            <td>产品简述</td>
-            <td><textarea style="resize:none;width:410px;margin-bottom: 10px; " type="text" rows="4" class="form-control" name="desc" id="desc" ></textarea> 
-           </tr>            
+            <table class="modal-table" style="width:80%;">                   
               <tr>
                 <td>会员等级</td>
                     <td>
-                        <select class="form-control"  name="level" id="level" style="width:80%;margin-bottom:10px">
-                          <option value="1" >学童</option>
-                          <option value="2" >学霸</option>
-                          <option value="3" >讲师</option>
-                          <option value="4" >合伙人</option>
+                        <select class="form-control"  name="grade" id="gr" style="width:80%;margin-bottom:10px">
+                          <option value="0" >选择级别</option>
+                          <option value="1" >VIP</option>
+                          <option value="2" >VIP--银卡</option>
+                          <option value="3" >VIP--金卡</option>
+                          <option value="5" >合伙人</option>
+
                         </select>
-                    </td>               
-              </tr>
-              <tr id="isNo">
-                <td>是否可用</td>
-                    <td>
-                        <select class="form-control"  name="isenable" id="isenable" style="width:80%;margin-bottom:10px">
-                  <option value="0" >不可用</option>
-                  <option value="1" >可用</option>
-                        </select>
-                    </td>               
-              </tr>
-            <tr>  
-              <td>备注</td>
-              <td><input type="text" class="form-control" name="remark" id="remark" placeholder="备注"></td>
-                  </tr>            
+                       <font color="red">*本激活的等级只能比会员本身的等级高，不可以给会员降级*</font>   
+                    </td> 
+
+              </tr> 
+
+            <tr style="margin-bottom:5px;">
+            <td>激活金额</td>
+            <td><input type="text" class="form-control" name="onemoney" placeholder="激活金额" id="ph" value="" onblur="if(isNaN(this.value))this.value=''"/><font color="red">*金额不可以为空且只能输入数字*</font></td>
+          </tr>                   
             </table>
         </div>
         <div class="modal-footer">
+          <input type="hidden" name="id" value="" id="nid">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
           <button type="button" class="btn btn-primary" onclick="saveUser();">保存</button>
         </div>         
@@ -247,9 +224,11 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='javascript:void();' onclick='jihuo();'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
+    return "<a class='btn btn-success' href='javascript:void();' onclick='jihuo("+id+");'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
   };
- function jihuo() {  
+ function jihuo(id) { 
+    $("#nid").val('');
+    $("#nid").val(id);
     $('.bs-example-modal-lg').modal().show(); 
   }
  function follow(id){
@@ -271,6 +250,41 @@
         }
         });     
     }
+  }
+  function saveUser(){
+    var id = $("#nid").val();
+    var le = $("#gr").val();
+    var ph = $("#ph").val();
+    if(id == ''){
+      alert('数据错误');
+      return false;
+    }
+    if(le == 0){
+      alert('选择激活级别');
+      return false;
+    }
+    if(ph == ''){
+      alert('金额不可为空');
+      return false;
+    }
+     // alert('22');return;
+     $.ajax({
+        type: "POST", 
+        url: "<?php echo U('/Admin/User/jihuo');?>",   
+        data: {"id":$("#nid").val() ,'grade':$("#gr").val(),'onemoney':$("#ph").val()},       
+        dataType: "json", 
+
+        success: function(data) {
+          
+          if(data['code'] == 1){
+            alert(data['msg']);
+          }else{
+            alert(data['msg']);
+          }
+        },error : function (){
+          alert('响应失败');
+        }
+      });     
   }
   function deleteUser(id){
     if (confirm("你确定要删除吗?")) {
