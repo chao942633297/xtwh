@@ -64,7 +64,13 @@ class MechanismController extends Controller
     		$data['create_at'] = time();
     		$r = M('user1')->add($data);
 	    	if($r){
-	    		$this->success('添加成功','/Admin/Mechanism/index');
+	    		$d = $this->tuiguang($id);
+	    		if($d){
+	    			$this->success('添加成功','/Admin/Mechanism/index');
+	    		}else{
+	    			$this->error('添加失败');
+	    		}
+	    		
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
@@ -159,24 +165,13 @@ class MechanismController extends Controller
 	    		$this->error('编辑失败');
 	    	}	
     	}elseif($type == 'add'){
-    		// $m=M('user');
-			// $m1=M('user_detail');
-			// $m->startTrans();
-			// $map['id']=1;
-			// $res=$m->where($map)->delete();
-			// $res1=$m1->delete();
-			// if($res && $res1){
-			// $m->commit();
-			// }else{
-			// $m->rollback();
-			// }
     		if($row){
     			$this->error('该机构已经添加该老师');
     		}
     		$data['create_at'] = time();
     		$r = M('user1')->add($data);
-	    	if($r){
-	    		$this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);
+	    	if($r){	    		
+	    		$this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);	    		
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
@@ -185,8 +180,42 @@ class MechanismController extends Controller
     }
 
     public function tuiguang($id){
-
+    	$r = M('user1')->where(array('id'=>$id))->find();
+    	$da = array();
+    	$da['u1id']        = $id;
+    	$da['nickname']    = $r['title'];
+    	$da['password']    = md5('a123456');
+    	$da['twopassword'] = md5('a123456');
+    	$da['nickname']    = $r['title'];
+    	$da['class']       = 2;//机构
+    	$da['grade']       = 0;//路人甲
+    	$da['address']     = $r['address'];
+    	$da['province']    = $r['province'];
+    	$da['city']        = $r['city'];
+    	$da['area']        = $r['area'];
+    	$da['headimg']     = $r['headimg'];
+    	$da['create_at']   = time();
+    	$res = M('user2')->where(array('u1id'=>$id))->find();
+    	if(!$res){
+    		$row = M('user2')->add($da);
+    		if($row){
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}
+    	
     }
+
+ //  public  function getpassword( $length = 6 ) { 
+		 
+	// 	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; 
+	// 	$password = ''; 
+	// 	for ( $i = 0; $i < $length; $i++ ){
+	// 		$password .= $chars[ mt_rand(0, strlen($chars) - 1) ]; 
+	// 	} 
+	// 	return $password; 
+	// } 
    
     public function del_jiaoshi(){
     	$r = M('user1')->where(array('id'=>$_GET['id']))->delete();

@@ -210,13 +210,6 @@
   function formatterImg(thumbnail){
     return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
   }
-  function formattui(pi){
-    if(pi==0){
-      return '否';
-    }else if(pi==1){
-      return '是';
-    }
-  }
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
@@ -229,7 +222,6 @@
           { label: '城市', name: 'city',width:'100'},
           { label: '区县', name: 'area',width:'100'},
           { label: '详细地址', name: 'address',width:'300'},
-          { label: '是否推广', name: 'tui',width:'300',formatter: formattui},
           { label: '操作', name: 'id',width:380,formatter: formatLink}
       ],
       viewrecords: true,
