@@ -59,8 +59,8 @@ class TeacherController extends Controller
     	if($type == 'edit'){
     		// var_dump($data);exit;
     		$data['update_at'] = time();
-    		$r = M('user1')->where(array('id'=>$_POST['id']))->save($data);
-	    	if($r){
+    		$id = M('user1')->where(array('id'=>$_POST['id']))->save($data);
+	    	if($id){
 	    		// var_dump($data);exit;
 	    		$zid = M('user1')->where(array('id'=>$_POST['id']))->find();
 	    		
@@ -71,15 +71,52 @@ class TeacherController extends Controller
     	}elseif($type == 'add'){
     		
     		$data['create_at'] = time();
-    		$r = M('user1')->add($data);
-	    	if($r){
-	    		$this->success('添加成功','/Admin/Teacher/index');
+    		$id = M('user1')->add($data);
+	    	if($id){
+	    		$r = $this->tuiguang($id);
+	    		if($r){
+	    			$this->success('添加成功','/Admin/Teacher/index');
+	    		}else{
+	    			M('user1')->where(array('id'=>$id))->delete();
+	    			$this->error('添加失败');
+	    		}
+	    		
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
     	}
     
     }
+
+     public function tuiguang($id){
+    	$r = M('user1')->where(array('id'=>$id))->find();
+        
+    	$da = array();
+    	$da['u1id']        = $id;
+    	$da['nickname']    = $r['title'];
+    	$da['password']    = md5('a123456');
+    	$da['twopassword'] = md5('a123456');
+    	$da['nickname']    = $r['title'];
+    	$da['class']       = 2;//机构
+    	$da['grade']       = 0;//路人甲
+    	$da['address']     = $r['address'];
+    	$da['province']    = $r['province'];
+    	$da['city']        = $r['city'];
+    	$da['area']        = $r['area'];
+    	$da['headimg']     = $r['headimg'];
+    	$da['create_at']   = time();
+    	$res = M('user2')->where(array('u1id'=>$id))->find();
+    	if(!$res){
+    		$row = M('user2')->add($da);
+    		if($row){
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}
+    	
+    }
+
 
     public function kecheng(){
     	$data = M('category')->where('pid = 0 AND is_service = 1')->select();   	

@@ -62,15 +62,16 @@ class MechanismController extends Controller
     			$this->error('机构已存在');
     		}  
     		$data['create_at'] = time();
-    		$r = M('user1')->add($data);
-	    	if($r){
+    		$id = M('user1')->add($data);
+
+	    	if($id){
 	    		$d = $this->tuiguang($id);
 	    		if($d){
 	    			$this->success('添加成功','/Admin/Mechanism/index');
 	    		}else{
+                    M('user1')->where(array('id'=>$id))->delete();
 	    			$this->error('添加失败');
-	    		}
-	    		
+	    		}	    		
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
@@ -181,6 +182,7 @@ class MechanismController extends Controller
 
     public function tuiguang($id){
     	$r = M('user1')->where(array('id'=>$id))->find();
+        
     	$da = array();
     	$da['u1id']        = $id;
     	$da['nickname']    = $r['title'];
