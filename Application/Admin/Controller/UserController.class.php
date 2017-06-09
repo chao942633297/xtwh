@@ -6,7 +6,7 @@ class UserController extends Controller
 {
     public function index(){
        $data = M('user2')->select();
-       var_dump($data);
+       // var_dump($data);
        $this->assign('data',json_encode($data));
        
        $this->display();

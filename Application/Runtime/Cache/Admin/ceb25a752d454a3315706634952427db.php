@@ -221,8 +221,8 @@
 			        <ul class="navul">
 			        	<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Teacher/index');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;老师</a></li>
 			        	<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Mechanism/index');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;机构管理</a></li>
-						<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/User/userall');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;三级分销会员管理</a></li>
-						<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/User/xueyuan');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;学员管理-(家长的子账号)</a></li>
+						<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/User/index');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;三级分销会员管理</a></li>
+						<li><a href="javascript:" funtype="用户管理" funtypeicon="glyphicon glyphicon-cog"  data-url="<?php echo U('Admin/Xueyuan/index');?>" class="glyphicon glyphicon-user" onclick="OpenPage($(this));">&nbsp;学员管理-(家长的子账号)</a></li>
 			        </ul>
 			      </div>
 			    </div>

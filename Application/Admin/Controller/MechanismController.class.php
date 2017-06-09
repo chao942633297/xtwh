@@ -195,7 +195,7 @@ class MechanismController extends Controller
     	$da['province']    = $r['province'];
     	$da['city']        = $r['city'];
     	$da['area']        = $r['area'];
-    	$da['headimg']     = $r['headimg'];
+    	$da['headimg']     = $r['logo'];
     	$da['create_at']   = time();
     	$res = M('user2')->where(array('u1id'=>$id))->find();
     	if(!$res){
