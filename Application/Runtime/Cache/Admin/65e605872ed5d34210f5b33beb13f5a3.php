@@ -247,7 +247,7 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='info/id/"+id+"'>激活</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
+    return "<a class='btn btn-success' href='info/id/"+id+"'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
   };
  
   function deleteUser(id){
