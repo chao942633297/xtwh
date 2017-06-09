@@ -169,41 +169,39 @@ ul, ol, dl { list-style: none; }
 	<div class="modal-header">
       <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
     </div>
-    <form action="<?php echo U('Teacher/do_jiaoshi');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
+    <form action="<?php echo U('User/insert');?>" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
 		<table style="width: 100%;">
+		  <tr style="margin-bottom:5px;">
+            <td>手机号码</td>
+            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""><font color="red">*不可以为空*</font></td>
+          </tr>
           <tr style="margin-bottom:5px;">
             <td>会员昵称</td>
-            <td><input type="text" class="form-control" name="nickname" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
+            <td><input type="text" class="form-control" name="nickname" placeholder="会员昵称" id="name" value=""><font color="red">*可以为空*</font></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>真实姓名</td>
-            <td><input type="text" class="form-control" name="name" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
+            <td><input type="text" class="form-control" name="name" placeholder="真实姓名" id="name" value=""><font color="red">*可以为空*</font></td>
           </tr>
-           <tr style="margin-bottom:5px;">
+          <tr style="margin-bottom:5px;">
             <td>推荐人编号</td>
-            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
-          </tr>
-          <tr>        
-             <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
-         </tr> 
-         <tr style="margin-bottom:5px;">
-            <td>封面</td>
+            <td><input type="text" class="form-control" name="refereeid"  id="" value="0"><font color="red">*0位平台推荐*</font></td>
+          </tr>         
+        
+          <tr style="margin-bottom:5px;">
+            <td>头像</td>
             <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
+          </tr> 
+  		  <tr style="margin-bottom:5px;">         
+            <td>身份</td>
+            <td><select class="form-control" style="width:200px;margin-bottom:10px;" id="ty" name="type"> 
+                  <option value="0">成人</option>           
+                  <option value="1">家长</option>              
+                  <option value="2">机构</option> 
+                  <option value="3">教师</option>         
+            </select></td>
           </tr>  
-          <tr style="margin-bottom:5px;">
-            <td>教龄</td>
-            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>座右铭</td>
-            <td><input type="text" class="form-control" name="motto" placeholder="老师的座右铭" id="zy" value=""><font color="red"></font></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>等级</td>
-            <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value=""><font color="red">*1表示一颗星，最高五颗星*</font></td>
-          </tr>
           <tr style="margin-bottom:1px;">
             <td>选择省份/城市</td>
             <td><div ><input type="text" name="city" class="form-control" id="city" />
@@ -236,38 +234,16 @@ ul, ol, dl { list-style: none; }
 
 	//保存添加或修改的推荐信息
 	function check(){
-    var name   = $("#name").val();  
-    if(name == 0){
-      alert('教师名称不能为空');
+	var pattern = /^1[34578]\d{9}$/;   
+    var ph = $("#ph").val();  
+    if(ph == 0){
+       alert('手机号不能为空');
        return false;
     }
-     var price      = $("#desc").val();
-    if(price == 0){
-      alert('老师的介绍不能为空');
-       return false;
+    if(!pattern.test(ph)){
+      alert('手机号码格式不对');
+      return false;
     }
-     var up_img = $("#up_img").val();
-    if(up_img == 0){
-      alert('必须上传一张封面');
-       return false;
-    }
-    var jl = $("#jl").val();
-    if(jl== 0){
-      alert('教龄');
-       return false;
-    }
-    var zy = $("#zy").val();
-    if(zy== 0){
-      alert('座右铭不能为空');
-       return false;
-    }
-    var up_img = $("#city").val();
-    if(up_img == 0){
-      alert('选择地址');
-       return false;
-    }
-   
-   
 	  return true; 	
 	}
 

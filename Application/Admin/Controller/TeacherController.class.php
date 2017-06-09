@@ -105,6 +105,7 @@ class TeacherController extends Controller
     	$da['city']        = $r['city'];
     	$da['area']        = $r['area'];
     	$da['headimg']     = $r['logo'];
+    	$da['sourec']      = 1;
     	$da['create_at']   = time();
     	$res = M('user2')->where(array('u1id'=>$id))->find();
     	if(!$res){

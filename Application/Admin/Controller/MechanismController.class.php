@@ -188,7 +188,7 @@ class MechanismController extends Controller
     
     }
 
-    public function tuiguang($id,$){
+    public function tuiguang($id){
     	$r = M('user1')->where(array('id'=>$id))->find();
         
     	$da = array();
@@ -204,6 +204,7 @@ class MechanismController extends Controller
     	$da['city']        = $r['city'];
     	$da['area']        = $r['area'];
     	$da['headimg']     = $r['logo'];
+        $da['sourec']      = 1;
     	$da['create_at']   = time();
     	$res = M('user2')->where(array('u1id'=>$id))->find();
     	if(!$res){

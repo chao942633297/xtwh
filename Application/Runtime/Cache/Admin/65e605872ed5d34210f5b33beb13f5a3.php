@@ -209,10 +209,10 @@
                 <td>会员等级</td>
                     <td>
                         <select class="form-control"  name="level" id="level" style="width:80%;margin-bottom:10px">
-                  <option value="1" >学童</option>
-                  <option value="2" >学霸</option>
-                  <option value="3" >讲师</option>
-                  <option value="4" >合伙人</option>
+                          <option value="1" >学童</option>
+                          <option value="2" >学霸</option>
+                          <option value="3" >讲师</option>
+                          <option value="4" >合伙人</option>
                         </select>
                     </td>               
               </tr>
@@ -247,9 +247,31 @@
 
   // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='info/id/"+id+"'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
+    return "<a class='btn btn-success' href='javascript:void();' onclick='jihuo();'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
   };
- 
+ function jihuo() {  
+    $('.bs-example-modal-lg').modal().show(); 
+  }
+ function follow(id){
+    if (confirm("你确定要重置密码？")) {
+      $.ajax({
+        type: "GET", 
+        url: "<?php echo U('/Admin/User/reset_pwd');?>",   
+        data: {"id": id},       
+        dataType: "json", 
+        success: function(data) {
+
+          if(data['code'] == 1){
+            alert(data['msg']);
+          }else{
+            alert(data['msg']);
+          }
+        },error : function (){
+          alert('数据错误');
+        }
+        });     
+    }
+  }
   function deleteUser(id){
     if (confirm("你确定要删除吗?")) {
       $.ajax({
@@ -313,6 +335,13 @@
       return '<font color="#00DB00">激活</font>';
     }
   }
+  function formatsource(so){
+    if(so == 0){
+      return '前台注册';
+    }else if(so == 1){
+      return '后台注册';
+    }
+  }
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
@@ -327,7 +356,7 @@
           { label: '直营余额',name: 'onemoney',width:'120'},
           { label: '非直营余额',name: 'twomoney',width:'120'},
           { label: '状态',name: 'status',width:'120',formatter: formatstatus},         
-          // { label: '省份', name: 'province',width:'300'},
+          { label: '来源', name: 'source',width:'300',formatter: formatsource},
           // { label: '城市', name: 'city',width:'100'},
           // { label: '区县', name: 'area',width:'100'},
           // { label: '详细地址', name: 'address',width:'300'},        
