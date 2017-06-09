@@ -47,13 +47,14 @@ class TeacherController extends Controller
 			$data['province'] = trim($_POST['hcity']);
 	    	$data['city']     = trim($_POST['hproper']);
 	    	$data['area']     = trim($_POST['harea']);    		    	
-		}    
-		$data['address']  = trim($_POST['address']);
-        $data['detail']   = trim($_POST['detail']);		
-		$data['teacherage']     = trim($_POST['teacherage']);
-		$data['motto']     = trim($_POST['motto']);
-		$data['level']     = trim($_POST['level']);
-		$data['class']     = 1;  	
+		}  
+		$data['phone']        = $_POST['phone'];  
+		$data['address']      = trim($_POST['address']);
+        $data['detail']       = trim($_POST['detail']);		
+		$data['teacherage']   = trim($_POST['teacherage']);
+		$data['motto']        = trim($_POST['motto']);
+		$data['level']        = trim($_POST['level']);
+		$data['class']        = 1;  	
     	$row = M('user1')->where(array('title'=>$data['title'],'pid'=>$_POST['pid']))->find();
     	
     	if($type == 'edit'){
@@ -96,7 +97,7 @@ class TeacherController extends Controller
     	$da['nickname']    = $r['title'];
     	$da['password']    = md5('a123456');
     	$da['twopassword'] = md5('a123456');
-    	$da['nickname']    = $r['title'];
+    	$da['phone']       = $r['phone'];
     	$da['class']       = 3;//教师
     	$da['grade']       = 0;//路人甲
     	$da['address']     = $r['address'];

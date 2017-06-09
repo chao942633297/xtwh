@@ -31,11 +31,9 @@ class MechanismController extends Controller
 	    	$data['city']     = trim($_POST['hproper']);
 	    	$data['area']     = trim($_POST['harea']); 
     	}
-    	   	
-    	$data['address']  = trim($_POST['address']);
-        $data['detail']   = trim($_POST['detail']);
-    	
-    	
+    	$data['phone']        = $_POST['phone'];    	
+    	$data['address']      = trim($_POST['address']);
+        $data['detail']       = trim($_POST['detail']);  	
     	if(!empty($_FILES['photo']['name'])){ 	
     		$upload = new \Think\Upload();
 			$upload->maxSize   =     3145728 ;  
@@ -103,7 +101,9 @@ class MechanismController extends Controller
      	if(!$id){
      		$this->error('数据读取错误');
      	} 
-     	$data = M('user1')->where('pid = '.$id)-> select();
+     	$data = M('user1')->where('pid = '.$id)->select();
+        $name = M('user1')->where('id = '.$id)->find();
+        $this->assign('name',$name['title']);
     	$this->assign('pid',$id);
     	$this->assign('data',json_encode($data));
     	$this->display();
@@ -144,13 +144,14 @@ class MechanismController extends Controller
 	    	$data['city']     = trim($_POST['hproper']);
 	    	$data['area']     = trim($_POST['harea']);    	
 	    	
-		}    
-		$data['address']  = trim($_POST['address']);
-        $data['detail']   = trim($_POST['detail']);		
-		$data['teacherage']     = trim($_POST['teacherage']);
-		$data['motto']     = trim($_POST['motto']);
-		$data['level']     = trim($_POST['level']);
-		$data['class']     = $_POST['class'];  	
+		}   
+        $data['phone']       = $_POST['phone']; 
+		$data['address']     = trim($_POST['address']);
+        $data['detail']      = trim($_POST['detail']);		
+		$data['teacherage']  = trim($_POST['teacherage']);
+		$data['motto']       = trim($_POST['motto']);
+		$data['level']       = trim($_POST['level']);
+		$data['class']       = $_POST['class'];  	
     	$row = M('user1')->where(array('title'=>$data['title'],'pid'=>$_POST['pid']))->find();
     	
     	if($type == 'edit'){
@@ -170,9 +171,16 @@ class MechanismController extends Controller
     			$this->error('该机构已经添加该老师');
     		}
     		$data['create_at'] = time();
-    		$r = M('user1')->add($data);
-	    	if($r){	    		
-	    		$this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);	    		
+    		$id = M('user1')->add($data);
+	    	if($id){
+            	// $r = $this->tuiguang($id);
+             //    if($r){
+                  $this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);      
+              // }else{
+              //   M('user1')->where(array('id'=>$id))->delete();
+              //    $this->error('添加失败');
+              // }
+	    		    		
 	    	}else{
 	    		$this->error('添加失败');
 	    	}	
@@ -180,7 +188,7 @@ class MechanismController extends Controller
     
     }
 
-    public function tuiguang($id){
+    public function tuiguang($id,$){
     	$r = M('user1')->where(array('id'=>$id))->find();
         
     	$da = array();
@@ -188,7 +196,7 @@ class MechanismController extends Controller
     	$da['nickname']    = $r['title'];
     	$da['password']    = md5('a123456');
     	$da['twopassword'] = md5('a123456');
-    	$da['nickname']    = $r['title'];
+    	$da['phone']       = $r['phone'];
     	$da['class']       = 2;//机构
     	$da['grade']       = 0;//路人甲
     	$da['address']     = $r['address'];

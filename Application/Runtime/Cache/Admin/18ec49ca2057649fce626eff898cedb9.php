@@ -176,6 +176,10 @@ ul, ol, dl { list-style: none; }
             <td>教师名称</td>
             <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
           </tr>
+           <tr style="margin-bottom:5px;">
+            <td>手机号码</td>
+            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""><font color="red">*不可以为空*</font></td>
+          </tr>
           <tr>        
              <td>简介</td>
              <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
@@ -234,6 +238,16 @@ ul, ol, dl { list-style: none; }
     if(name == 0){
       alert('教师名称不能为空');
        return false;
+    }
+    var pattern = /^1[34578]\d{9}$/;   
+    var ph = $("#ph").val();  
+    if(ph == 0){
+       alert('手机号不能为空');
+       return false;
+    }
+    if(!pattern.test(ph)){
+      alert('手机号码格式不对');
+      return false;
     }
      var price      = $("#desc").val();
     if(price == 0){

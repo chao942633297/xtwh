@@ -176,6 +176,10 @@ ul, ol, dl { list-style: none; }
             <td>机构名称</td>
             <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value="<?php echo ($data['title']); ?>"><font color="red">*机构名称不可以为空，名称不可以相同*</font></td>
           </tr>
+           <tr style="margin-bottom:5px;">
+            <td>手机号码</td>
+            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value="<?php echo ($data['phone']); ?>"><font color="red">*不可以为空*</font></td>
+          </tr>
           <tr style="margin-bottom:1px;">
             <td>选择省份/城市</td>
             <td><div ><input type="text" name="city" class="form-control" id="city" value="<?php echo ($data['province']); ?>-<?php echo ($data['city']); ?>-<?php echo ($data['area']); ?>" />
@@ -220,6 +224,16 @@ ul, ol, dl { list-style: none; }
     if(name == 0){
       alert('机构名称不能为空');
        return false;
+    }
+    var pattern = /^1[34578]\d{9}$/;   
+    var ph = $("#ph").val();  
+    if(ph == 0){
+       alert('手机号不能为空');
+       return false;
+    }
+    if(!pattern.test(ph)){
+      alert('手机号码格式不对');
+      return false;
     }
     var up_img = $("#city").val();
     if(up_img == 0){

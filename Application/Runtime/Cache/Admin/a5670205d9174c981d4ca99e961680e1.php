@@ -216,6 +216,7 @@
       colModel: [
           { label: '编号', name: 'id',width:'110'},
           { label: '名称', name: 'title',width:'150'},
+          { label: '手机', name: 'phone',width:'150'},
           { label: '封面', name: 'logo',width:'120',formatter: formatterImg },
           { label: '简介', name: 'detail',width:'300'},
           { label: '省份', name: 'province',width:'100'},
