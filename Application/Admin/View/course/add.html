@@ -1,0 +1,187 @@
+<include file="Public/head" />
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css">
+<script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script>
+<script src="__PUBLIC__/js/uploadPreview.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/uploadPreview.min.js" type="text/javascript"></script>
+ <script>
+       window.onload = function () { 
+            new uploadPreview({ UpBtn: "up_img", DivShow: "imgdiv", ImgShow: "imgShow" });
+        }
+    </script>
+<style type="text/css">
+	table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+	table tr > td:last-child input{width:60%;margin-bottom:10px;	}
+ul, ol, dl { list-style: none; }
+._citys { width: 450px; display: inline-block; border: 2px solid #eee; padding: 5px; position: relative; background: #fff;}
+._citys span { color: #56b4f8; height: 15px; width: 15px; line-height: 15px; text-align: center; border-radius: 3px; position: absolute; right: 10px; top: 10px; border: 1px solid #56b4f8; cursor: pointer; }
+._citys0 { width: 100%; height: 34px; display: inline-block; border-bottom: 2px solid #56b4f8; padding: 0; margin: 0; }
+._citys0 li { display: inline-block; line-height: 34px; font-size: 15px; color: #888; width: 80px; text-align: center; cursor: pointer; }
+.citySel { background-color: #56b4f8; color: #fff !important; }
+._citys1 { width: 100%; display: inline-block; padding: 10px 0; }
+._citys1 a { width: 83px; height: 35px; display: inline-block; background-color: #f5f5f5; color: #666; margin-left: 6px; margin-top: 3px; line-height: 35px; text-align: center; cursor: pointer; font-size: 13px; overflow: hidden; }
+._citys1 a:hover { color: #fff; background-color: #56b4f8; }
+.AreaS { background-color: #56b4f8 !important; color: #fff !important; }
+</style>
+	<div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">视频　添加 | 编辑</h4>
+    </div>
+    <form action="{:U('Teacher/do_jiaoshi')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
+     <div class="modal-body">       
+		<table style="width: 100%;">
+		<tr style="margin-bottom:5px;">
+            <td>选择课程分类</td>
+            <td><select name="kecheng_id" class="form-control" id="ke" style="width:300px;margin-bottom: 10px;" >
+              <option value="0">选择分类</option>
+              <foreach name="data" item="va" >
+                <option value="{$va['id']}">{$va['name']}</option>
+              </foreach>
+            </select></td>
+          </tr>
+           <tr style="margin-bottom:5px;">
+            <td>选择科目</td>
+            <td><select name="categoryid" class="form-control" id="mu" style="width:300px;margin-bottom: 10px;" >
+              <option value="0">选择科目</option>
+             
+            </select></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>标题</td>
+            <td><input type="text" class="form-control" name="title" placeholder="标题" id="name" value=""><font color="red">*视频标题不可以为空*</font></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>封面</td>
+            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>视频连接</td>
+            <td><input type="text" class="form-control" name="video" placeholder="乐视视频连接" id="name" value=""><font color="red">*乐视视频连接*</font></td>
+          </tr>          
+          <tr style="margin-bottom:5px;">
+            <td>价格</td>
+            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="name" value=""><font color="red">*价格不可以为空*</font></td>
+          </tr> 
+          <tr>        
+             <td>简介</td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="description" id="desc" ></textarea><font color="red">*视频简介*</font></td>
+         </tr> 
+          
+          <tr style="margin-bottom:5px;">
+            <td>开课时间</td>
+            <td><input type="text" class="form-control" name="start_time" placeholder="线下开课时间" id="jl" value=""><font color="red">*课程线下开课时间*</font></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>会员折扣</td>
+            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣" id="zy" value=""><font color="red">可以为空</font></td>
+          </tr>
+           <tr style="margin-bottom:5px;">
+            <td>点击量</td>
+            <td><input type="text" class="form-control" name="click" placeholder="视频点击量" id="zy" value=""><font color="red"></font></td>
+          </tr>
+           <tr style="margin-bottom:5px;">
+            <td>视频状态</td>
+            <td><select name="status" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
+                <option value="0">上架</option>
+              
+                <option value="1">下架</option>          
+            </select></td>
+          </tr>
+           <tr style="margin-bottom:5px;">
+            <td>授课方式</td>
+            <td><select name="line" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
+                <option value="0">线上</option>
+              
+                <option value="1">线下</option>          
+            </select></td>
+          </tr>  
+	             
+		</table>
+	    </div> 
+        <input type="hidden" name="type" value="add">   
+		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
+</form>
+<include file="Public/footer" />
+<script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+<script src="__PUBLIC__/js/jquery-1.11.3.min.js"></script>
+<script src="__PUBLIC__/js/Popt.js"></script>
+<script src="__PUBLIC__/js/cityJson.js"></script>
+<script src="__PUBLIC__/js/citySet.js"></script>
+<script type="text/javascript">
+	$("#city").click(function (e) {
+		SelCity(this,e);
+	    console.log("inout",$(this).val(),new Date())
+	});
+ $("#ke").change(function(){
+    // alert($(this).val());
+    var id = $("#ke").val();
+    if(id != 0){
+          $.ajax({
+            type     : "POST",
+            url      : "{:U('Course/kemu')}",
+            data     : {"id":id,},
+            dataType : "json",
+            success  : function(data){   
+                $("#mu option").remove();          
+                for (var i = data.length - 1; i >= 0; i--) {
+
+                  $("#mu").append("<option value='" + data[i]['id'] + "'>" + data[i]['name'] + "</option>");               
+                }
+            }, error : function(){
+              alert('数据获取失败');
+            }
+          }); 
+      }else{
+         $("#mu option").remove();
+         $("#mu").append("<option value='0'>选择科目</option>");    
+      }
+  });
+	//保存添加或修改的推荐信息
+	function check(){
+    var name   = $("#name").val();  
+    if(name == 0){
+      alert('教师名称不能为空');
+       return false;
+    }
+    var pattern = /^1[34578]\d{9}$/;   
+    var ph = $("#ph").val();  
+    if(ph == 0){
+       alert('手机号不能为空');
+       return false;
+    }
+    if(!pattern.test(ph)){
+      alert('手机号码格式不对');
+      return false;
+    }
+    var price  = $("#desc").val();
+    if(price == 0){
+      alert('老师的介绍不能为空');
+       return false;
+    }
+     var up_img = $("#up_img").val();
+    if(up_img == 0){
+      alert('必须上传一张封面');
+       return false;
+    }
+    var jl = $("#jl").val();
+    if(jl== 0){
+      alert('教龄');
+       return false;
+    }
+    var zy = $("#zy").val();
+    if(zy== 0){
+      alert('座右铭不能为空');
+       return false;
+    }
+    var up_img = $("#city").val();
+    if(up_img == 0){
+      alert('选择地址');
+       return false;
+    }
+   
+   
+	  return true; 	
+	}
+
+</script>
+
