@@ -130,6 +130,13 @@ class LoginController extends Controller{
         }
     }
 
+    public function loginOut(){      //退出登录
+        session_destroy();
+        cookie('mobile',null);
+        cookie('pwd',null);
+        jsonpReturn('1','退出成功');
+    }
+
 
 
 

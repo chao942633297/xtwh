@@ -94,11 +94,6 @@ class PartnerController extends Controller{
 
 
 
-
-
-
-
-
     public function mySubData(){    //我的学员 //我的营业额
         $userId = session('home_user_id');
         $turnover = I('get.turnover');          //   需传入 turnover=1
@@ -132,9 +127,35 @@ class PartnerController extends Controller{
 
 
 
+    public function submitOrder(){        //提交订单页面,   需传入商品id , 地址id(不传则选择默认)
+        $input = I('get.');
+        $userId = session('home_user_id');
+        $addrId = $input['addrId'];
+        $goodId = $input['goodId'];
+        if($addrId){
+            $where['id'] = $addrId;
+        }else{
+            $where['u2id'] = $userId;
+            $where['default'] = 1;
+        }
+        $addrData = D('Address')->where($where)->find();
+        $goodData = D('Good')->where(array('id'=>$goodId))->find();
+
+    }
+
+    public function goodDetail(){       //商品详情  需传入商品id(goodId)
+        $input = I('get.');
+        $goodId = $input['goodId'];
+        $goodData = D('Good')->where(array('id'=>$goodId))->find();
+        if($goodData){
+            jsonpReturn('1','查询成功',$goodData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
 
 
-
+    
 
 
 
