@@ -2,7 +2,7 @@
 namespace Home\Model;
 use Think\Model;
 class CommonModel extends Model{
-
+    protected $tableName='User1';
     public function getLoopCate($pid = '0'){    //获取视频的分类
         $category = D('Category');
         $topCate = $category->where(array('pid'=>$pid,'is_service'=>1))->select();
@@ -18,24 +18,24 @@ class CommonModel extends Model{
     }
 
     public function getSearchCond($input){
+        $where = array();
         if($input){
             $cateId = $input['cateId'];
             $province = $input['province'];
             $city = $input['city'];
             $area = $input['area'];
-        }
-        $where = array();
-        if($cateId){
-            $where['categoryid'] = $cateId;
-        }
-        if($area){
-            $where['area'] = $area;
-        }
-        if($city){
-            $where['city'] = $city;
-        }
-        if($province){
-            $where['province'] = $province;
+            if($cateId){
+                $where['categoryid'] = $cateId;
+            }
+            if($area){
+                $where['area'] = $area;
+            }
+            if($city){
+                $where['city'] = $city;
+            }
+            if($province){
+                $where['province'] = $province;
+            }
         }
         return $where;
     }

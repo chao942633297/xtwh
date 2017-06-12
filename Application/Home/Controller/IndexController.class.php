@@ -14,12 +14,31 @@ class IndexController extends Controller{
         }
     }
 
+
+    public function searchList(){    //查询列表           首页搜素需传入(classId =2)/找老师(classId =1)/找机构(classId =2)共用
+        $input = I('get.');
+        //查询分类需要二级分类id,cateId查询区域需要省province市city区area
+        $classId = $input['classId'];
+        $user = D('User1');
+        $common = D('Common');
+
+        $where = $common->getSearchCond($input);
+        $where['class'] = $classId;
+        $userData = $user->where($where)->select();
+        if($userData){
+            jsonpReturn('1','查询成功',$userData);
+        }
+    }
+
+
+
+
+
     public function findActive(){    //找活动
 
     }
 
-    public function findService(){        //找服务
-        $input = I('get.');
+    public function findService(){        //找服务 页面  返回分类表 一级分类
         $category = D('Category');
         $where['pid'] = '0';
         $where['is_service'] = '2';
@@ -29,7 +48,7 @@ class IndexController extends Controller{
         }
     }
 
-    public function searchService(){      //找服务内搜索
+    public function searchService(){      //找服务内搜索   传入服务id
         $input = I('get.');
         $course = D('Course');
         $cateId = $input['cateId'];
@@ -47,9 +66,10 @@ class IndexController extends Controller{
 
 
     public function recomCourse(){     //推荐课程  需传入分类id(oneId) 和 默认显示 老师列(classId=1)/机构列(classId=2)
-        $input = I('get.');
+        $input = I('get.');            //查询分类需要二级分类id,cateId查询区域需要省province市city区area
         $oneId = $input['oneId'];
-        $classId = $input['classId'];
+        $classId = $input['classId'] ? $input['classId'] : 1 ;
+
         $common = D('Common');
         $category = D('Category');
         $user = D('User1');
@@ -60,25 +80,14 @@ class IndexController extends Controller{
         }
         $where['class'] = $classId ? $classId : 1;
         $userData = $user->where($where)->select();
+        dump($userData);die;
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
     }
 
 
-    public function searchList(){    //查询列表           首页搜素需传入(classId =2)/找老师(classId =1)/找机构(classId =2)共用
-        $input = I('get.');
-        //查询分类需要二级分类id,cateId查询区域需要省province市city区area
-        $classId = $input['classId'];
-        $user = D('User1');
-        $common = D('Common');
-        $where = $common->getSearchCond($input);
-        $where['class'] = $classId;
-        $userData = $user->where($where)->select();
-        if($userData){
-            jsonpReturn('1','查询成功',$userData);
-        }
-    }
+
 
 
 

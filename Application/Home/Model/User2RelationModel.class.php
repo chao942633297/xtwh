@@ -8,8 +8,8 @@ class User2RelationModel extends RelationModel{
             'mapping_type'=>self::BELONGS_TO,
             'class_name'=>'user1',
             'foreign_key'=>'u1id',
-
         ),
+
     );
 
 }
