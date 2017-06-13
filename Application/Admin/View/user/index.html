@@ -1,30 +1,32 @@
 <include file="Public/head" />
 
-<form id="fmform" action="" method="POST" enctype="multipart/form-data">
-    <input type="hidden" value="fmimg" name="imgtype" value="" />
-    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
-</form>
 <style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-  table tr > td:last-child input{width:80%;margin-bottom:10px;  }
+  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;}
 </style>
 <div>
-  <div style="margin:24px;">
-   <div style="margin:24px;">
-      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" href="{:U('User/add')}">添加会员</a>
-    </div>
-    <input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
-    <input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />
-    <select class="form-control" style="width:24%;height:36px;display:inline;border-radius:2px;" id="grade">
-        <option value="">请选择会员等级</option>
-        <option value="1">学童</option>
-        <option value="2">学霸</option>
-        <option value="3">讲师</option>
-        <option value="4">合伙人</option>
-    </select>
-    <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询会员</button>
-   
-  </div>
+<div>
+  <table>
+    <tr>
+      <td><a style="width:70%" type="button" class="btn btn-primary" href="{:U('User/add')}">添加会员</a></td>
+    </tr>
+    <tr>
+      <td><input type="text" placeholder="输入会员手机号过滤查询" id="phone" class="form-control" /></td>
+      <td>
+        <select class="form-control" name="grade" id="grade">
+          <option value="-1">请选择会员等级</option>
+          <option value="0">路人甲</option>
+          <option value="1">VIP</option>
+          <option value="2">VIP银卡</option>
+          <option value="3">VIP金卡</option>
+          <option value="4">VIP钻卡</option>
+          <option value="5">合伙人</option>
+        </select>
+      </td>
+      <td><button id="submit_search" class="btn btn-primary" onclick="searchState();">查询会员</button></td>
+    </tr>
+  </table>
+</div>
+
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
@@ -35,39 +37,24 @@
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="width:100%;margin:auto;">
+    <div class="modal-content" style="width:60%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">激活　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">修改上级</h4>
         </div>
          <div class="modal-body">
-            <table class="modal-table" style="width:80%;">                   
-              <tr>
-                <td>会员等级</td>
-                    <td>
-                        <select class="form-control"  name="grade" id="gr" style="width:80%;margin-bottom:10px">
-                          <option value="0" >选择级别</option>
-                          <option value="1" >VIP</option>
-                          <option value="2" >VIP--银卡</option>
-                          <option value="3" >VIP--金卡</option>
-                          <option value="5" >合伙人</option>
-
-                        </select>
-                       <font color="red">*本激活的等级只能比会员本身的等级高，不可以给会员降级*</font>   
-                    </td> 
-
-              </tr> 
-
-            <tr style="margin-bottom:5px;">
-            <td>激活金额</td>
-            <td><input type="text" class="form-control" name="onemoney" placeholder="激活金额" id="ph" value="" onblur="if(isNaN(this.value))this.value=''"/><font color="red">*金额不可以为空且只能输入数字*</font></td>
-          </tr>                   
+            <table class="modal-table" style="width:80%;">
+                <tr>
+                  <td>上级手机号:</td>
+                  <td><input type="text" name="phone1" class="form-control" id="phone1" placeholder="请输入十一位手机号"></td>
+                  <input type="hidden" name="pid" id="pid" value="">
+                </tr>                                     
             </table>
         </div>
         <div class="modal-footer">
-          <input type="hidden" name="id" value="" id="nid">
-          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          <button type="button" class="btn btn-primary" onclick="saveUser();">保存</button>
+          <input type="hidden" name="id1" value="" id="id1">  
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="close1">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="savePid();">保存</button>
         </div>         
       </div>
     </div>
@@ -78,28 +65,48 @@
 
 <script type="text/javascript">
 
-  // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-success' href='javascript:void();' onclick='jihuo("+id+");'>激活</a>&nbsp;<a class='btn btn-success' href='info/id/"+id+"'>详情</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='fans("+id+");'>编辑</a>&nbsp;<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>重置密码</a>";
+    var url = "{:U('Admin/User/info')}?id="+id;
+    return "<a class='btn btn-primary' href='"+url+"'>编辑</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='updatePid("+id+");'>修改上级</a>&nbsp;<a class='btn btn-danger' id='del"+id+"'' href='javascript:' onclick='del("+id+");'>删除</a>";
   };
- function jihuo(id) { 
-    $("#nid").val('');
-    $("#nid").val(id);
+  function updatePid(id) { 
+    $("#id1").val(id);
     $('.bs-example-modal-lg').modal().show(); 
   }
- function follow(id){
-    if (confirm("你确定要重置密码？")) {
+  function savePid(){
+     $('#close1').click(); 
+     var phone1 = $("#phone1").val();
+     var id = $("#id1").val();
+     var pattern = /^1[34578]\d{9}$/; 
+     if (!pattern.test(phone1)) {
+      alert("手机号不符合规则");return false;
+     }
+     $.ajax({
+      url:"{:U('Admin/User/updatePid')}",
+      type:"POST",
+      data:{phone:phone1,id:id},
+      success:function(msg){
+          alert(msg.msg);
+        // console.log(msg);
+        if (msg.status) {
+          location = "{:U('Admin/User/index')}";
+        }
+      }
+     });
+  }
+ function del(id){
+    if (confirm("你确定要删除？")) {
       $.ajax({
         type: "GET", 
-        url: "{:U('/Admin/User/reset_pwd')}",   
+        url: "{:U('/Admin/User/del')}",   
         data: {"id": id},       
         dataType: "json", 
-        success: function(data) {
-
-          if(data['code'] == 1){
-            alert(data['msg']);
+        success: function(msg) {
+          console.log(msg);
+          if (msg) {
+            $("#del"+id).parent().parent().remove();
           }else{
-            alert(data['msg']);
+            alert("删除失败!");
           }
         },error : function (){
           alert('数据错误');
@@ -107,71 +114,8 @@
         });     
     }
   }
-  function saveUser(){
-    var id = $("#nid").val();
-    var le = $("#gr").val();
-    var ph = $("#ph").val();
-    if(id == ''){
-      alert('数据错误');
-      return false;
-    }
-    if(le == 0){
-      alert('选择激活级别');
-      return false;
-    }
-    if(ph == ''){
-      alert('金额不可为空');
-      return false;
-    }
-     // alert('22');return;
-     $.ajax({
-        type: "POST", 
-        url: "{:U('/Admin/User/jihuo')}",   
-        data: {"id":$("#nid").val() ,'grade':$("#gr").val(),'onemoney':$("#ph").val()},       
-        dataType: "json", 
-
-        success: function(data) {
-          
-          if(data['code'] == 1){
-            alert(data['msg']);
-          }else{
-            alert(data['msg']);
-          }
-        },error : function (){
-          alert('响应失败');
-        }
-      });     
-  }
-  function deleteUser(id){
-    if (confirm("你确定要删除吗?")) {
-      $.ajax({
-        url: "{:U('/Admin/User/deleteUser')}",
-        dataType: "text",
-        async: true,
-        data: { "id": id},
-        type: "GET",   
-        success: function(req) {
-          if(req=="true")
-          {
-            $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/User')}");
-          }else{
-            alert('用户删除失败!');
-          }
-        }
-        });     
-    }
-  }
-  
-  
  
-  //时间戳转换为日期格式
-  function time(nS){
-     return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' '); 
-  }
  
-  function formatterImg(thumbnail){
-    return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
-  }
   function formatlevel(li){
     if(li == 0){
       return '路人甲';
@@ -198,35 +142,23 @@
       return '成人';
     }
   }
-  function formatstatus(si){
-    if(si == 0){
-      return '<font color="#EA0000">未激活</font>';
-    }else if(si == 1){
-      return '<font color="#00DB00">激活</font>';
-    }
-  }
-  function formatsource(so){
-    if(so == 0){
-      return '前台注册';
-    }else if(so == 1){
-      return '后台注册';
-    }
-  }
+
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'110'},
+          { label: '上级手机号', name: 'fatherphone',width:'150'},
           { label: '昵称', name: 'nickname',width:'150'},
-          { label: '头像', name: 'headimg',width:'120',formatter: formatterImg },
-          { label: '手机号',name: 'phone',width:'150'},
-          { label: '真是姓名',name: 'name',width:'120'},
+          { label: '会员手机号',name: 'phone',width:'150'},
+          { label: '真实姓名',name: 'name',width:'120'},
           { label: '身份',name: 'class',width:'150',formatter: formatclass},
           { label: '级别',name: 'grade',width:'150',formatter: formatlevel},
           { label: '直营余额',name: 'onemoney',width:'120'},
           { label: '非直营余额',name: 'twomoney',width:'120'},
-          { label: '状态',name: 'status',width:'120',formatter: formatstatus},         
-          { label: '来源', name: 'source',width:'300',formatter: formatsource},
+          { label: '基金金额',name: 'backmoney',width:'120' },
+          { label: '注册时间',name: 'create_at',width:'150' },                  
+          // { label: '来源', name: 'source',width:'300',formatter: formatsource},
           // { label: '城市', name: 'city',width:'100'},
           // { label: '区县', name: 'area',width:'100'},
           // { label: '详细地址', name: 'address',width:'300'},        
@@ -250,17 +182,15 @@
   //模糊查询会员
   function searchState(){
     var phone = $("#phone").val();
-    var name = $("#name").val();
-    var grade = $("#grade").val();
-    var insta = $("#insta").val();
-    var inend = $("#inend").val();
-    if (insta.length <0 || inend.length <0) {
-      alert('请选择时间');return;
-    };
+    var grade = $("#grade option:selected").val();
+    if (phone == "" && grade == -1 ) {
+      alert("请填写手机号或者选择等级搜索");
+      return false;
+    }
     $.ajax({
       url:"{:U('/Admin/User/searchUser')}",
       type:'GET',
-      data:{'start':insta,'end':inend,'phone':phone,'grade':grade,'name':name},
+      data:{phone:phone,grade:grade},
       dataType:'json',
       success:function(returndata){
         $("#jqGrid").clearGridData();

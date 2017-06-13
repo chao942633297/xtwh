@@ -146,6 +146,7 @@ class MoneyController extends Controller {
 
     #合作机构列表
     public function organization(){
+        // var_dump($course);
         $this->display();
     }
 

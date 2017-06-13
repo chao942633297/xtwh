@@ -24,30 +24,30 @@ ul, ol, dl { list-style: none; }
 .AreaS { background-color: #56b4f8 !important; color: #fff !important; }
 </style>
 	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
+      <h4 class="modal-title" id="myModalLabel" style="font-weight: bold;color:red">添 加 老 师　<span>*</span> 为 必 填 项</h4>
     </div>
     <form action="{:U('Teacher/do_jiaoshi')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
-		<table style="width: 100%;">
+		<table style="width: 80%;">
           <tr style="margin-bottom:5px;">
-            <td>教师名称</td>
-            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*不可以为空*</font></td>
+            <td>合作折扣( % )<span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="rebate" placeholder="只允许输入整数或者一位小数" id="rebate" value="" ></td>
+          </tr>    
+          <tr style="margin-bottom:5px;">
+            <td>教师名称 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""></td>
           </tr>
           <tr style="margin-bottom:5px;">
-            <td>手机号码</td>
-            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""><font color="red">*不可以为空*</font></td>
+            <td>手机号码 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""></td>
           </tr>
-          <tr>        
-             <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
-         </tr> 
          <tr style="margin-bottom:5px;">
             <td>封面</td>
             <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
           </tr>  
           <tr style="margin-bottom:5px;">
-            <td>教龄</td>
-            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
+            <td>教龄 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>座右铭</td>
@@ -66,7 +66,10 @@ ul, ol, dl { list-style: none; }
 	           <td>详细地址</td>
 	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
 	       </tr>  
-            
+          <tr>        
+             <td>简介</td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
+         </tr>             
 	             
 		</table>
 	    </div> 
@@ -86,8 +89,15 @@ ul, ol, dl { list-style: none; }
 	    console.log("inout",$(this).val(),new Date())
 	});
 
+  $("#rebate").bind("input propertychange",function(){
+    var rebate = $(this).val();
+    if (!/\d+(\.\d{0,1})?/.test(rebate)) {
+      $(this).val("");
+    }
+  });
 	//保存添加或修改的推荐信息
 	function check(){
+
     var name   = $("#name").val();  
     if(name == 0){
       alert('教师名称不能为空');

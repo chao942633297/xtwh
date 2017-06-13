@@ -1,0 +1,100 @@
+<include file="Public/head" />
+
+<style type="text/css">
+  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;padding-top:5px;}
+</style>
+<div>
+<div>
+  <table>
+    <tr>
+      <td><input type="text" placeholder="输入会员手机号过滤查询" id="phone" class="form-control" /></td>
+      <td><button id="submit_search" class="btn btn-primary" onclick="searchState();">查询会员</button></td>
+    </tr>
+  </table>
+</div>
+
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
+      <table id="jqGrid" style="width: 100%;"></table>
+      <div id="jqGridPager"></div>  
+      </div>
+      <div role="tabpanel" class="tab-pane" id="edituser">    
+  </div>
+<include file="Public/footer" />
+
+
+<script type="text/javascript">
+
+  function formatLink(id) {
+    var url = "{:U('Admin/User/info')}?id="+id;
+    return "<a class='btn btn-primary' href='"+url+"'>编辑</a>&nbsp;<a class='btn btn-primary' href='javascript:' onclick='updatePid("+id+");'>修改上级</a>&nbsp;<a class='btn btn-danger' id='del"+id+"'' href='javascript:' onclick='del("+id+");'>删除</a>";
+  };
+
+
+ function del(id){
+    if (confirm("你确定要删除？")) {
+      $.ajax({
+        type: "GET", 
+        url: "{:U('/Admin/User/del')}",   
+        data: {"id": id},       
+        dataType: "json", 
+        success: function(msg) {
+          console.log(msg);
+          if (msg) {
+            $("#del"+id).parent().parent().remove();
+          }else{
+            alert("删除失败!");
+          }
+        },error : function (){
+          alert('数据错误');
+        }
+        });     
+    }
+  }
+ 
+  $(document).ready(function($) { 
+    $("#jqGrid").jqGrid({
+      styleUI : 'Bootstrap',
+      colModel: [
+          { label: '编号', name: 'id',width:'110'},
+          { label: '父母手机号', name: 'fatherphone',width:'150'},
+          { label: '父母姓名', name: 'nickname',width:'150'},
+          { label: '注册时间',name: 'create_at',width:'150' },                  
+          { label: '操作', name: 'id',width:380,formatter: formatLink}
+      ],
+      viewrecords: true,
+      rownumbers: false,
+      rownumWidth: 35,
+      height: document.documentElement.clientHeight-135,
+      autowidth:true,
+      rowNum: 9,
+      datatype: 'local',
+      loadonce:true,
+      pager: "#jqGridPager"
+    });
+    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").trigger('reloadGrid');
+  });
+</script>
+<script>
+  //模糊查询会员
+  function searchState(){
+    var phone = $("#phone").val();
+    var grade = $("#grade option:selected").val();
+    if (phone == "" && grade == -1 ) {
+      alert("请填写手机号或者选择等级搜索");
+      return false;
+    }
+    $.ajax({
+      url:"{:U('/Admin/User/searchUser')}",
+      type:'GET',
+      data:{phone:phone,grade:grade},
+      dataType:'json',
+      success:function(returndata){
+        $("#jqGrid").clearGridData();
+            $("#jqGrid").jqGrid('setGridParam', { data: returndata});
+            $("#jqGrid").trigger('reloadGrid');
+      }
+    });
+  }
+</script>

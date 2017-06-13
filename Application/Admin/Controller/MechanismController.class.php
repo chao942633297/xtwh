@@ -31,6 +31,7 @@ class MechanismController extends Controller
 	    	$data['city']     = trim($_POST['hproper']);
 	    	$data['area']     = trim($_POST['harea']); 
     	}
+        $data['rebate']       = $_POST['rebate'];        
     	$data['phone']        = $_POST['phone'];    	
     	$data['address']      = trim($_POST['address']);
         $data['detail']       = trim($_POST['detail']);  	
@@ -65,7 +66,7 @@ class MechanismController extends Controller
 	    	if($id){
 	    		$d = $this->tuiguang($id);
 	    		if($d){
-	    			$this->success('添加成功','/Admin/Mechanism/index');
+	    			$this->success('添加成功',U('/Admin/Mechanism/index'));
 	    		}else{
                     M('user1')->where(array('id'=>$id))->delete();
 	    			$this->error('添加失败');
@@ -78,13 +79,25 @@ class MechanismController extends Controller
     		$data['update_at'] = time();
     		$r = M('user1')->where(array('id'=>$_POST['id']))->save($data);
 	    	if($r){
-	    		$this->success('修改成功','/Admin/Mechanism/index');
+	    		$this->success('修改成功',U('/Admin/Mechanism/index'));
+                // exit("<script>alert('修改成功!');history.go(-1)</script>");
 	    	}else{
 	    		$this->error('修改失败');
 	    	}	
     	}
     	
     }
+    //搜索
+    public function search(){
+       $phone = I('phone');
+       $map['phone'] = array('like','%'.$phone.'%');
+       $data  = M('user1')->where('pid = 0 AND class = 2')->where($map)->select();
+       if (empty($data) || $data == false ) {
+            $data= [];
+       }
+       $this->ajaxReturn($data);
+    }
+
 
     public function jiaoshi(){
      	// var_dump($_GET);exit;
@@ -108,6 +121,23 @@ class MechanismController extends Controller
     	$this->assign('data',json_encode($data));
     	$this->display();
     }
+
+
+    //模糊查询机构里的老师
+    public function searchJGLS(){
+        $pid = I('pid');
+        $title = I('nickname');
+        $where["class"] = 1;
+        $where['pid'] = $pid;
+        $where["title"] = ["like","%".$title."%"]; 
+        $data = M('user1')->where($where)->select();   
+        if (empty($data) || $data == false ) {
+            $data = [];
+        }
+        $this->ajaxReturn($data);
+    }
+
+
     public function edit_jiaoshi(){
     	$r = M('user1')->where(array('id'=>$_GET['id']))->find();
     	$this->assign('pid',$r['pid']);
@@ -151,7 +181,7 @@ class MechanismController extends Controller
 		$data['teacherage']  = trim($_POST['teacherage']);
 		$data['motto']       = trim($_POST['motto']);
 		$data['level']       = trim($_POST['level']);
-		$data['class']       = $_POST['class'];  	
+		$data['class']       = 1;  	
     	$row = M('user1')->where(array('title'=>$data['title'],'pid'=>$_POST['pid']))->find();
     	
     	if($type == 'edit'){
@@ -162,7 +192,7 @@ class MechanismController extends Controller
 	    		// var_dump($data);exit;
 	    		$zid = M('user1')->where(array('id'=>$_POST['id']))->find();
 	    		
-	    		$this->success('编辑成功','/Admin/Mechanism/tream/id/'.$zid['pid']);
+	    		$this->success('编辑成功',U('/Admin/Mechanism/tream/id/'.$_POST['pid']));
 	    	}else{
 	    		$this->error('编辑失败');
 	    	}	
@@ -175,7 +205,8 @@ class MechanismController extends Controller
 	    	if($id){
             	// $r = $this->tuiguang($id);
              //    if($r){
-                  $this->success('添加成功','/Admin/Mechanism/tream/id/'.$_POST['pid']);      
+                $this->success('添加成功',U('/Admin/Mechanism/tream/id/'.$_POST['pid'])); 
+
               // }else{
               //   M('user1')->where(array('id'=>$id))->delete();
               //    $this->error('添加失败');
@@ -242,6 +273,8 @@ class MechanismController extends Controller
     	$this->assign('data',$data);
     	$this->display();
     }
+
+
     public function kemu(){
     	if($_POST['id']){
 	    	$data = M('category')->where('pid = '.$_POST['id'])->select();   	

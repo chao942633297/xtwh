@@ -10,8 +10,8 @@
         }
     </script>
 <style type="text/css">
-	table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-	table tr > td:last-child input{width:60%;margin-bottom:10px;	}
+  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+  table tr > td:last-child input{width:60%;margin-bottom:10px;  }
 ul, ol, dl { list-style: none; }
 ._citys { width: 450px; display: inline-block; border: 2px solid #eee; padding: 5px; position: relative; background: #fff;}
 ._citys span { color: #56b4f8; height: 15px; width: 15px; line-height: 15px; text-align: center; border-radius: 3px; position: absolute; right: 10px; top: 10px; border: 1px solid #56b4f8; cursor: pointer; }
@@ -23,31 +23,27 @@ ul, ol, dl { list-style: none; }
 ._citys1 a:hover { color: #fff; background-color: #56b4f8; }
 .AreaS { background-color: #56b4f8 !important; color: #fff !important; }
 </style>
-	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">教师　添加 | 编辑</h4>
+  <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel" style="font-weight: bold;color:red">添 加 老 师　<span>*</span> 为 必 填 项</h4>
     </div>
     <form action="{:U('Mechanism/do_jiaoshi')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
-		<table style="width: 100%;">
+    <table style="width: 80%;">
           <tr style="margin-bottom:5px;">
-            <td>教师名称</td>
-            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""><font color="red">*本可以为空*</font></td>
+            <td>教师名称 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="title" placeholder="名称" id="name" value=""></td>
           </tr>
-           <tr style="margin-bottom:5px;">
-            <td>手机号码</td>
-            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""><font color="red">*不可以为空*</font></td>
+          <tr style="margin-bottom:5px;">
+            <td>手机号码 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="phone" placeholder="手机号码" id="ph" value=""></td>
           </tr>
-          <tr>        
-             <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
-         </tr> 
          <tr style="margin-bottom:5px;">
             <td>封面</td>
             <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" height="100" /></td>
           </tr>  
           <tr style="margin-bottom:5px;">
-            <td>教龄</td>
-            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""><font color="red">*不可以为空*</font></td>
+            <td>教龄 <span style="color:red;font-weight: bold">*</span></td>
+            <td><input type="text" class="form-control" name="teacherage" placeholder="教龄为数字" id="jl" value=""></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>座右铭</td>
@@ -63,17 +59,20 @@ ul, ol, dl { list-style: none; }
             </div></td>
           </tr>
            <tr>        
-	           <td>详细地址</td>
-	           <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
-	       </tr>  
-            
-	             
-		</table>
-	    </div> 
-	    <input type="hidden" name="type" value="add">
-        <input type="hidden" name="pid" value="{$pid}">  
-	    <input type="hidden" name="class" value="1">   
-		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
+             <td>详细地址</td>
+             <td><textarea style="resize:none;width:60%;height:50px;margin-top: 10px;" type="text" rows="4" class="form-control" name="address"  ></textarea><font color="red">*街道门牌*</font></td>
+         </tr>  
+          <tr>        
+             <td>简介</td>
+             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="detail" id="desc" ></textarea><font color="red">*老师的详细介绍*</font></td>
+         </tr>             
+         <input type="hidden" name="pid" value="{$pid}">
+         <input type="hidden" name="type" value="add"> 
+
+    </table>
+      </div> 
+        <input type="hidden" name="type" value="add">   
+    <button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 <include file="Public/footer" />
 <script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
@@ -83,13 +82,13 @@ ul, ol, dl { list-style: none; }
 <script src="__PUBLIC__/js/cityJson.js"></script>
 <script src="__PUBLIC__/js/citySet.js"></script>
 <script type="text/javascript">
-	$("#city").click(function (e) {
-		SelCity(this,e);
-	    console.log("inout",$(this).val(),new Date())
-	});
+  $("#city").click(function (e) {
+    SelCity(this,e);
+      console.log("inout",$(this).val(),new Date())
+  });
 
-	//保存添加或修改的推荐信息
-	function check(){
+  //保存添加或修改的推荐信息
+  function check(){
     var name   = $("#name").val();  
     if(name == 0){
       alert('教师名称不能为空');
@@ -105,7 +104,7 @@ ul, ol, dl { list-style: none; }
       alert('手机号码格式不对');
       return false;
     }
-     var price      = $("#desc").val();
+    var price  = $("#desc").val();
     if(price == 0){
       alert('老师的介绍不能为空');
        return false;
@@ -132,8 +131,8 @@ ul, ol, dl { list-style: none; }
     }
    
    
-	  return true; 	
-	}
+    return true;  
+  }
 
 </script>
 

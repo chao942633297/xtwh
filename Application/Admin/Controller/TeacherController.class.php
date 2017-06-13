@@ -11,9 +11,10 @@ class TeacherController extends Controller
        $this->display();
     }
 
-     public function jiaoshi(){
+    public function jiaoshi(){
     	$this->display();
     }
+
     public function edit_jiaoshi(){
     	$data = M('user1')->where(array('id'=>$_GET['id']))->find();
     	$this->assign('data',$data);
@@ -48,6 +49,7 @@ class TeacherController extends Controller
 	    	$data['city']     = trim($_POST['hproper']);
 	    	$data['area']     = trim($_POST['harea']);    		    	
 		}  
+        $data['rebate']       = $_POST['rebate']; 
 		$data['phone']        = $_POST['phone'];  
 		$data['address']      = trim($_POST['address']);
         $data['detail']       = trim($_POST['detail']);		
@@ -65,7 +67,8 @@ class TeacherController extends Controller
 	    		// var_dump($data);exit;
 	    		$zid = M('user1')->where(array('id'=>$_POST['id']))->find();
 	    		
-	    		$this->success('编辑成功','/Admin/Teacher/index');
+	    		$this->success('编辑成功',U("/Admin/Teacher/index"));
+                // exit("<script>alert('编辑成功!');history.go(-1)</script>");
 	    	}else{
 	    		$this->error('编辑失败');
 	    	}	
@@ -76,7 +79,7 @@ class TeacherController extends Controller
 	    	if($id){
 	    		$r = $this->tuiguang($id);
 	    		if($r){
-	    			$this->success('添加成功','/Admin/Teacher/index');
+	    			$this->success('添加成功',U('Admin/Teacher/index'));
 	    		}else{
 	    			M('user1')->where(array('id'=>$id))->delete();
 	    			$this->error('添加失败');
@@ -117,5 +120,16 @@ class TeacherController extends Controller
     		}
     	}
     	
+    }
+
+
+    public function search(){
+       $phone = I('phone');
+       $map['phone'] = array('like','%'.$phone.'%');
+       $data  = M('user1')->where('pid = 0 AND class = 1')->where($map)->select();
+       if (empty($data) || $data == false ) {
+            $data= [];
+       }
+       $this->ajaxReturn($data);
     }
 }
