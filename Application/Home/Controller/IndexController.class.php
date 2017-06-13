@@ -7,10 +7,12 @@ class IndexController extends Controller{
     public function index(){      //首页
         $category = D('Category');
         $common = D('Common');
+        $lunbo = D('Lunbo');
         $topCate = $category->where(array('pid'=>'0','is_service'=>1))->select();  //一级分类
         $cateList = $common->getLoopCate();           //分类child为子分类
+        $lunboData = $lunbo->select();
         if($cateList){
-            jsonpReturn('1','查询成功',array('topCate'=>$topCate,'cateList'=>$cateList));
+            jsonpReturn('1','查询成功',array('topCate'=>$topCate,'cateList'=>$cateList,'lunboData'=>$lunboData));
         }
     }
 
@@ -80,7 +82,6 @@ class IndexController extends Controller{
         }
         $where['class'] = $classId ? $classId : 1;
         $userData = $user->where($where)->select();
-        dump($userData);die;
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
