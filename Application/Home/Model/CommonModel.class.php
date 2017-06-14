@@ -24,8 +24,9 @@ class CommonModel extends Model{
             $province = $input['province'];
             $city = $input['city'];
             $area = $input['area'];
+            $arrId = D('Usercate')->where(array('categoryid'=>$cateId))->getField('user1_id',true);
             if($cateId){
-                $where['categoryid'] = $cateId;
+                $where['categoryid'] = array('in',$arrId);
             }
             if($area){
                 $where['area'] = $area;

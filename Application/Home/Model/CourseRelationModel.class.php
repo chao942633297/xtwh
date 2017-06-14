@@ -8,7 +8,7 @@ class CourseRelationModel extends RelationModel{
         'user1'=>array(
             'mapping_type' => self::BELONGS_TO,
             'class_name' => 'user1',
-            'foreign_key' => 'user1id',
+            'foreign_key' => 'user_id',
         ),
     );
 
