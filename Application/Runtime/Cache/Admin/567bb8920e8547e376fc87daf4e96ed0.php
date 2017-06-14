@@ -155,10 +155,16 @@
 		<!-- <td class="wstxt">结束日期:</td> -->
 		<!-- <td><input type="text" class="workinput wicon mr25 form-control" id="inpend" readonly placeholder="请选择结束日期" value="" name="end"></td> -->
 		<td>手机号:</td>	
-		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字"/>	</td>		
+		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字"/>	</td>	
+    <td>联系人:</td> 
+    <td><input type="text" class="form-control" name="name" value="" id="name" placeholder="真实姓名搜索"/>  </td>     	
     <td><input type="button" name="" id="searchsub" class="btn btn-primary" value="查询"></td>
-    <td><input type="reset" name="" class="btn btn-primary" value="重置"></td>
+    <!-- <td><input type="reset" name="" class="btn btn-primary" value="重置"></td> -->
 	</tr>	
+  <tr>
+    <td style="padding-bottom: 10px;padding-left:40px;">总计营业额:　</td>
+    <td><strong style="color:red ;margin:0px;padding:0px;"><?php echo ($summoney); ?></strong> <span>元</span></td>
+  </tr> 
 </table>
 </form>
   <div class="tab-content">
@@ -174,9 +180,7 @@
 </html>
 
 <script type="text/javascript">
-  function formatImg(url) {
-        return "<img src='"+url+"' style='height:40px;width:40px'/>";              
-  }
+
   $("#phone").bind("input propertychange",function(){
     var phone = $(this).val();
     if (!/^[0-9]*$/.test(phone)) {
@@ -185,12 +189,6 @@
   });
   //查询
   $("#searchsub").click(function(){
-      // var myform = $("#myform").serialize();
-      // console.log(myform);
-      var phone = $("#phone").val();
-      if (phone == "" ) {
-        alert("手机号不准为空");return false;
-      }
       $.ajax({
         url:"<?php echo U('Admin/Money/search');?>",
         type:"get",
@@ -209,10 +207,10 @@
       styleUI : 'Bootstrap',
       colModel: [
           // { label: '序号ID', name: 'id',width:'80'},
-          { label: '用户头像', name: 'headimg',width:'100',formatter: formatImg },
-          { label: '昵称', name: 'nickname',width:'100' },
+          { label: '机构名称', name: 'nickname',width:'100' },
+          { label: '联系人', name: 'name',width:'100' },
           { label: '手机号', name: 'phone',width:'100' },
-          { label: '佣金总额', name: 'allmoney',width:'100' }
+          { label: '营业额', name: 'money',width:'100' }
       ],
       gridview:true,  //加速显示
       viewrecords: true,  //显示总条数
@@ -230,21 +228,21 @@
   });
 
 
-var start = {
-    format: 'YYYY-MM-DD hh:mm:ss',
-    minDate: '1970-01-01 00:00:00', //设定最小日期为当前日期
-    // isinitVal:true,
-    festival:false,
-    ishmsVal:false,
-    maxDate: '2099-06-30 23:59:59', //最大日期
-};
-var end = {
-    format: 'YYYY-MM-DD hh:mm:ss',
-    // minDate: $.nowDate(0), //设定最小日期为当前日期
-    minDate: '1970-01-01 00:00:00', //设定最小日期为当前日期
-    festival:false,
-    maxDate: '2099-06-16 23:59:59', //最大日期
-};
-$('#inpstart').jeDate(start);
-$('#inpend').jeDate(end);	  
+// var start = {
+//     format: 'YYYY-MM-DD hh:mm:ss',
+//     minDate: '1970-01-01 00:00:00', //设定最小日期为当前日期
+//     // isinitVal:true,
+//     festival:false,
+//     ishmsVal:false,
+//     maxDate: '2099-06-30 23:59:59', //最大日期
+// };
+// var end = {
+//     format: 'YYYY-MM-DD hh:mm:ss',
+//     // minDate: $.nowDate(0), //设定最小日期为当前日期
+//     minDate: '1970-01-01 00:00:00', //设定最小日期为当前日期
+//     festival:false,
+//     maxDate: '2099-06-16 23:59:59', //最大日期
+// };
+// $('#inpstart').jeDate(start);
+// $('#inpend').jeDate(end);	  
 </script>

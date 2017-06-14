@@ -75,10 +75,12 @@ class IndexController extends Controller{
         $common = D('Common');
         $category = D('Category');
         $user = D('User1');
-        $arrId = $category->where(array('pid'=>$oneId))->getField('id',true);
+        $usercate = D('User1');
+        $twoCateId = $category->where(array('pid'=>$oneId))->getField('id',true);
+        $arrId = $usercate->where(array('categoryid'=>array('in',$twoCateId)))->getField('id',true);
         $where = $common->getSearchCond($input);
-        if(empty($where['categoryid'])){
-            $where['categoryid'] =array('in',$arrId);
+        if(empty($where['id'])){
+            $where['id'] =array('in',$arrId);
         }
         $where['class'] = $classId ? $classId : 1;
         $userData = $user->where($where)->select();
