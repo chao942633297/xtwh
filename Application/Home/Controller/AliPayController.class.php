@@ -9,9 +9,9 @@ use Vendor\AliPay\AlipayTradeWapPayContentBuilder;
 vendor('AliPay.Config','','.php');
 vendor('AliPay.AlipayTradeService');
 vendor('AliPay.AlipayTradeWapPayContentBuilder');
-class TestController extends Controller{
+class AliPayController extends Controller{
 
-    public function index(){
+    public function webPay(){
         $input = I('get.');
         $body = '课程';
         $subject = '杏坛文化';
