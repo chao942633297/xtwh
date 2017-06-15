@@ -869,7 +869,7 @@ class AopClient {
 	}
 
 	function parserJSONSignData($request, $responseContent, $responseJSON) {
-
+		vendor('AliPay.SignData');
 		$signData = new SignData();
 
 		$signData->sign = $this->parserJSONSign($responseJSON);
