@@ -27,9 +27,10 @@
  * 		postXmlCurl(),以post方式提交xml到对应的接口url
  * 		postXmlSSLCurl(),使用证书，以post方式提交xml到对应的接口url
 */
-	include_once("SDKRuntimeException.php");
-	include_once("WxPayPubConfig.php");
+namespace Vendor\Weixinpay\WxPayConf_pub;
+use Vendor\Weixinpay\WxPayConf_pub;
 
+vendor('Weixinpay.WxPayPubConfig');
 /**
  * 所有接口的基类
  */
@@ -776,6 +777,7 @@ class JsApi_pub extends Common_util_pub
 
 	function __construct() 
 	{
+
 		//设置curl超时时间
 		$this->curl_timeout = WxPayConf_pub::CURL_TIMEOUT;
 	}

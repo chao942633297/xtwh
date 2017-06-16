@@ -102,18 +102,18 @@ class ShopController extends Controller{
     }
 
 
-    public function selectPay(){     //选择支付   需传入支付方式(payType),订单id(orderId)
-        $input= I('get.');
-        $orderId = $input['orderId'];
-        $payType = $input['payType'];
-        if($payType == '支付宝'){
-             //支付宝支付
-        }else if($payType == '微信'){
-            //微信支付
-        }else if($payType == '余额'){
-            //余额支付
-        }
-    }
+//    public function selectPay(){     //选择支付   需传入支付方式(payType),订单id(orderId)
+//        $input= I('get.');
+//        $orderId = $input['orderId'];
+//        $payType = $input['payType'];
+//        if($payType == '支付宝'){
+//             //支付宝支付
+//        }else if($payType == '微信'){
+//            //微信支付
+//        }else if($payType == '余额'){
+//            //余额支付
+//        }
+//    }
 
 
 
