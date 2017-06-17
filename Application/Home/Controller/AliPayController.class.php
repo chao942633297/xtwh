@@ -15,12 +15,13 @@ vendor('AliPay.AlipayTradeWapPayContentBuilder');
 vendor('AliPay.AlipayFundTransToaccountTransferRequest');
 class AliPayController extends Controller{
 
-    public function webPay(){             //支付宝支付
-        $input = I('get.');
+    public function webPay($orderId){             //支付宝支付
+        $order = D('Order');
+        $orderData = $order->where(array('id'=>$orderId))->find();
         $body = '课程';
         $subject = '杏坛文化';
-        $out_trade_no = 'G608905744125812';
-        $total_amount = '0.01';
+        $out_trade_no = $orderData['ordercode'];
+        $total_amount = $orderData['goodprice'];
         $timeout_express = '1m';
         $config = Config::config();
         $payRequestBuilder =new AlipayTradeWapPayContentBuilder();
