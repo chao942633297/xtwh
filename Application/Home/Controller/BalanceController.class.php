@@ -1,130 +1,111 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Think\Exception;
+
 class BalanceController extends Controller{
 
     public function balancePay(){
         $input = I('get.');
-        $order = D('OrderRelation');
-        $backmoney = D('Backmoney');
         $orderId = $input['inputId'];
         $orderId = '17';
-        $orderData = $order->where(array('id'=>$orderId))->relation(array('user2','course'))->find();
-        dump($orderData);
+
+        $order = D('OrderRelation');
+        $backmoney = D('Backmoney');
+        $orderData = $order->where(array('id' => $orderId))->relation(array('user2', 'course'))->find();
 
         $userMoney = $orderData['user2']['onemoney'];   //用户钱包余额
-        $rebateMoney = D('Backmoney')->where(array('u2id'=>$orderData['user2']['id']))->sum('money');   //用户返佣的钱
+        $rebateMoney = D('Backmoney')->where(array('u2id' => $orderData['user2']['id']))->sum('money');   //用户返佣的钱
+//        dump($rebateMoney);die;
         $rebate_money = $orderData['user2']['rebate_money'];   //用户已参与第一返佣的钱
-        $limit_money = $orderData['course']['limit_price']?$orderData['course']['limit_price']:7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
+        $limit_money = $orderData['course']['limit_price'] ? $orderData['course']['limit_price'] : 7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
         $spareMoney = 7200 - $rebate_money;     //用户剩余可用于第一返佣规则的钱
-        if($spareMoney > 0){                      //可返佣的钱大于0  则最多消费课程限制的钱 ,
-            if(($sur1 = $userMoney - $limit_money) >= 0){         //若余额大于 课程限制的钱  则只能消费 课程限制的钱
+        if ($spareMoney > 0) {                      //可返佣的钱大于0
+                //判断余额和课程限制的钱, 决定用户需扣除余额多少
+            if (($sur1 = $limit_money - $userMoney) < 0) {         //若余额大于 课程限制的钱  则只能消费 课程限制的钱
                 $userDescMoney = $limit_money;
-                $lessMoney = $orderData['money'] - $limit_money;                //第二返佣规则的钱
-            }else{                              //否则  可以使用全部余额
+                $manyMoney = '0';
+            } else {                              //否则  可以使用全部余额
                 $userDescMoney = $userMoney;
-                $lessMoney = $orderData['money'] - $userMoney;
-                if( $rebateMoney - $lessMoney >=0 ){     //若基金足够,则直接消费
-                    $rebateDescMoney = $lessMoney;
-                }else{
-                    $rebateDescMoney = $rebateMoney;      //不足则先扣除基金
-                    //调 微信或支付宝进行支付
-                }
+                $manyMoney = $sur1;          //可用于第一返佣的钱
             }
 
-        }else{                            // //可返佣的钱小于0 ,说明7200已全部返完 ,
-            if($userMoney - $orderData['money'] >= 0 ){     //余额大于 订单金额,则用余额直接购买,(不返佣)
-                $userDescMoney = $orderData['money'];
+                //判断可用于返佣的钱 和 此次返佣的钱, 决定此次1类返佣的钱
+            if ($spareMoney - $manyMoney < 0) {        //若可用返佣的钱 小于 返佣的钱,则全部用于第一返佣,否则只能 选择 可用返佣的钱进行返佣
+                $manyMoney = $spareMoney;            //第一返佣的钱
+                $lessMoney = $orderData['goodprice'] - $spareMoney;     //第二返佣的钱
+            } else {
+                $lessMoney = $orderData['goodprice'] - $limit_money;
+            }
+                //判断基金 和 (订单金额 除去 扣除的余额 外的金额) 决定扣除的基金
+            if ($rebateMoney - ($rep =   $orderData['goodprice'] - $userDescMoney) >= 0) {     //若基金足够,则直接消费
+                $rebateDescMoney = $rep;
+            } else {
+                $rebateDescMoney = $rebateMoney;      //不足则先扣除基金
+                //调 微信或支付宝进行支付
+                $returnVal['userMoney'] = $userDescMoney;         //可扣除用户的钱
+                $returnVal['rebateMoney'] = $rebateDescMoney;     //扣除基金的钱
+                $lastMoney = $orderData['goodprice'] - $userDescMoney - $rebateDescMoney;    //订单扣除用户余额,扣除基金后的钱
+//                jsonpReturn('0', '余额不足,请选择其他支付方式');
+                return array('0','余额不足,请选择其他支付方式');
+            }
+        } else {                             //可返佣的钱小于0 ,说明7200已全部返完 ,余额可全部消费
+            if ($userMoney - $orderData['goodprice'] >= 0) {     //余额大于 订单金额,则用余额直接购买,(不返佣)
+                $userDescMoney = $orderData['goodprice'];
                 $lessMoney = '0';
-            }else{                                     //否则  可以使用全部余额
+            } else {                                     //否则  可以使用全部余额
                 $userDescMoney = $userMoney;
-                $lessMoney =$orderData['money'] - $userMoney ;
-                if( $rebateMoney - $lessMoney >=0 ){     //若基金足够,则直接消费
+                $lessMoney = $orderData['goodprice'] - $userMoney;
+                if ($rebateMoney - $lessMoney >= 0) {     //若基金足够,则直接消费
                     $rebateDescMoney = $lessMoney;
-                }else{
+                } else {
                     $rebateDescMoney = $rebateMoney;      //不足则先扣除基金
                     //调 微信或支付宝进行支付
+//                    jsonpReturn('0', '余额不足,请选择其他支付方式');
+                    return array('0','余额不足,请选择其他支付方式');
                 }
             }
         }
-
-
-        if(($surplus = $userMoney - $limit_money) >= 0 ){     //钱包钱不足购买
-            $userDescMoney = $limit_money;
-
-//            if(($sur2 =  $surplus - $rebateMoney) >= 0){      //返佣的钱也不足以支付剩余的钱
-//                $rebateDescMoney = $rebateMoney;
-//
-//            }else{
-//                $rebateDescMoney = $surplus;
-//            }
-//            $back['u2id'] = $orderData['user2']['id'];
-//            $back['money'] = -$rebateDescMoney;
-//            $back['message'] = '购物';
-//            $back['create_at'] = time();
-//            $back['order_id'] = $orderData['id'];
-//            $res1 = $backmoney->add($back);
-//        }else{
-//            $userDescMoney = $orderData['money'];
-        }
-        $res = D('User2')->where(array('id'=>$orderData['user2']['id']))->setDec('onemoney',$userDescMoney);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if(($surplus = $orderData['money'] - $userMoney) < 0 ){    //订单钱 小于 钱包余额
-//            $order->startTrans();                          //则钱包余额直接购买, (没有返佣)
-//            try{
-//                $data['status'] = 2;
-//                $data['update_at'] = time();
-//                $data['paytype'] = '余额';
-//                $data['real_money'] = $orderData['money'];
-//                $res = $order->where(array('id'=>$orderId))->save($data);
-//                if($res){
-//                    D('User2')->where(array('id'=>$orderData['user2']['id']))->setDec('onemoney',$orderData['money']);
-//                    $order->commit();
-//                }else{
-//                    $order->rollback();
-//                }
-//
-//            }catch(Exception $e){
-//                $order->rollback();
-//            }
-        }else{                              //订单钱 大于 钱包余额,  则 先扣除钱包的钱,剩余$surplus ,选择返佣的钱购买
-            if($rebateMoney - $surplus >= 0 ){    // 若返佣的钱 大于 $surplus 则用返佣的钱抵扣购买 (执行2返佣规则$surplus)
-
-
+        $backmoney->startTrans();
+        try{
+            //减少用户余额
+            if($userMoney){
+                $use['onemoney'] = $userMoney - $userDescMoney;
+                $use['rebate_money'] = $manyMoney;
+                $use['update_at'] = time();
+                $res = D('User2')->where(array('id' => $orderData['user2']['id']))->save($use);
             }
+            // 进行上级返佣
+            $notify = A('Notify');
+            $res1 = $notify->rebate($manyMoney, $lessMoney, $orderData['user2']['id']);
+            //改变订单状态
+            $orde['status'] = 2;
+            $orde['paytype'] = '余额';
+            $orde['update_at'] = time();
+            $res2 = $order->where(array('id'=>$orderData['id']))->save($orde);
+            // 减少用户基金
+            $back['u2id'] = $orderData['user2']['id'];
+            $back['money'] = -$rebateDescMoney;
+            $back['message'] = '购物';
+            $back['create_at'] = time();
+            $back['order_id'] = $orderData['id'];
+            if($res && $res1 && $res2 ){
+                $res3 = $backmoney->add($back);
+                if($res3){
+                    $backmoney->commit();
+//                    jsonpReturn('1','购买成功');
+                    return array('1','购买成功');
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(Exception $e){
+            $backmoney->rollback();
         }
-        $res = D('User2')->where(array('id'=>$orderData['user2']['id']))->setDec('onemoney',$orderData['money']);
-
 
     }
-
-
 
 
 

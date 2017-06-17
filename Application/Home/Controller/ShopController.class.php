@@ -102,18 +102,27 @@ class ShopController extends Controller{
     }
 
 
-//    public function selectPay(){     //选择支付   需传入支付方式(payType),订单id(orderId)
-//        $input= I('get.');
-//        $orderId = $input['orderId'];
-//        $payType = $input['payType'];
-//        if($payType == '支付宝'){
-//             //支付宝支付
-//        }else if($payType == '微信'){
-//            //微信支付
-//        }else if($payType == '余额'){
-//            //余额支付
-//        }
-//    }
+    public function paymentNow(){      //立即支付   需传入payType(1微信支付2支付宝支付3余额支付),订单orderId
+        $input = I('get.');
+        $paymentType = $input['payType'];
+        $orderId = $input['orderId'];
+        switch($paymentType){
+            case '1':
+                $wechatPay = A('Wechat');     //调取微信支付
+                redirect($wechatPay->wechatPay($orderId));
+                break;
+            case '2':
+                $aliPay = A('AliPay');       //调取支付宝支付
+                redirect($aliPay->webPay($orderId));
+                break;
+            case '3':
+                $balance = A('Balance');     //调取余额支付
+                $payVal = $balance->balancePay($orderId);
+                jsonpReturn($payVal);
+                break;
+        }
+
+    }
 
 
 
