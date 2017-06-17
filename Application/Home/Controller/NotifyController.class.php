@@ -27,7 +27,6 @@ class NotifyController extends Controller{
         $result = $this->rebate($manyMoney,$lessMoney,$orderData['u2id']);
         if($result){
             $res =$user->where(array('id'=>$orderData['u2id']))->setInc('rebate_money',$manyMoney);
-
             if($res){
                 jsonpReturn('1','保存成功');
             }else{
