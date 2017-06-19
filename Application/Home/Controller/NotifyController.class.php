@@ -2,42 +2,66 @@
 namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
+use Vendor\AliPay\AlipayTradeService;
 
 class NotifyController extends Controller{
 
-    public function notify1(){
+    public function aliNotify(){
+//        file_put_contents('123.txt','123123123');
+//        foreach($_GET as $k=>$v){
+//            file_put_contents('./log.txt',file_get_contents('./log.txt',$k.'校验成功:'.$v));
+//        }
+        $arr = $_GET;
         $user = D('User2');
-        $orderCode = 'G608905744125829';
-        $total_fee = 1;
-
-        $orderData = D('OrderRelation')->where(array('ordercode'=>$orderCode))->relation(true)->find();
-        dump($orderData);
-        $rebate_money = $orderData['user2']['rebate_money'];   //用户已参与第一返佣的钱
-        $limit_money = $orderData['course']['limit_price']?$orderData['course']['limit_price']:7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
-        $surplus = 7200 - $rebate_money;     //用户剩余可用于第一返佣规则的钱
-        if($surplus - $limit_money >=0 ){
-            //返佣$limit_money
-            $manyMoney = $limit_money;
-            $lessMoney = $total_fee - $limit_money;
-        }else{
-            //返佣$surplus
-            $manyMoney = $surplus;
-            $lessMoney = $total_fee - $surplus;
-        }
-        $result = $this->rebate($manyMoney,$lessMoney,$orderData['u2id']);
-        if($result){
-            $res =$user->where(array('id'=>$orderData['u2id']))->setInc('rebate_money',$manyMoney);
-
-            if($res){
-                jsonpReturn('1','保存成功');
-            }else{
-                jsonpReturn('0','保存失败');
+        $alipayService = new AlipayTradeService();
+        $result = $alipayService->check($arr);
+        if($result) {       //验签成功
+            $orderCode = htmlspecialchars($_GET['out_trade_no']);
+            $total_fee = $_GET['total_amount'];
+            $orderData = D('OrderRelation')->where(array('ordercode' => $orderCode))->relation(true)->find();
+            if ($orderData['status'] == '1') {
+//                dump($orderData);
+                $rebate_money = $orderData['user2']['rebate_money'];   //用户已参与第一返佣的钱
+                $limit_money = $orderData['course']['limit_price'] ? $orderData['course']['limit_price'] : 7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
+                $surplus = 7200 - $rebate_money;     //用户剩余可用于第一返佣规则的钱
+                if ($surplus - $limit_money >= 0) {
+                    //返佣$limit_money
+                    $manyMoney = $limit_money;
+                    $lessMoney = $total_fee - $limit_money;
+                } else {
+                    //返佣$surplus
+                    $manyMoney = $surplus;
+                    $lessMoney = $total_fee - $surplus;
+                }
+                $rebateResult = $this->rebate($manyMoney, $lessMoney, $orderData['u2id']);
+                if ($rebateResult) {
+                    $res = $user->where(array('id' => $orderData['u2id']))->setInc('rebate_money', $manyMoney);
+                    $newData['status'] = '2';
+                    $newData['paytype'] = '支付宝';
+                    $res1 = D('Order')->where(array('id'=>$orderData['id']))->save();
+                    if ($res && $res1 ) {
+                        echo 'success';
+//                        jsonpReturn('1', '保存成功');
+                    } else {
+//                        jsonpReturn('0', '保存失败');
+                        echo 'fail';
+                    }
+                } else {
+                    echo 'fail';
+//                    jsonpReturn('0', '系统错误!');
+                }
             }
-        }else{
-            jsonpReturn('0','系统错误!');
         }
 
     }
+
+    public function wechatNotify(){
+
+    }
+
+
+
+
 
 
     public function test(){    //测试分佣

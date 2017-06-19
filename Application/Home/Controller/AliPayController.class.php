@@ -48,22 +48,22 @@ class AliPayController extends Controller{
         $aop->signType = 'RSA';
         $aop->postCharset='UTF-8';
         $aop->format='json';
-        $request = new AlipayFundTransToaccountTransferRequest ();
+        $request = new AlipayFundTransToaccountTransferRequest();
         $request->setBizContent("{" .
             "\"out_biz_no\":\"3142321423432\"," .
             "\"payee_type\":\"ALIPAY_LOGONID\"," .
             "\"payee_account\":\"13733899540\"," .
-            "\"amount\":\"0.01\"," .
-            "\"payer_show_name\":\"上海交通卡退款\"," .
+            "\"amount\":\"0.1\"," .
+            "\"payer_show_name\":\"杏坛文化退款\"," .
             "\"payee_real_name\":\"贾建超\"," .
             "\"remark\":\"转账备注\"" .
             "  }");
         $result = $aop->execute ( $request);
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
-        dump($responseNode);
+//        dump($responseNode);
         $resultCode = $result->$responseNode->code;
-        dump($result->$responseNode);
-        dump($resultCode);
+//        dump($result->$responseNode);
+//        dump($resultCode);
         if(!empty($resultCode)&&$resultCode == 10000){
             echo "成功";
         } else {
