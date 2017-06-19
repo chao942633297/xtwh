@@ -37,7 +37,7 @@ class AliPayController extends Controller{
 
 
 
-    public function test(){            //支付宝转账
+    public function test($id){            //支付宝转账
         $config = Config::config();
         $aop = new AopClient ($config);
         $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
@@ -48,26 +48,29 @@ class AliPayController extends Controller{
         $aop->signType = 'RSA';
         $aop->postCharset='UTF-8';
         $aop->format='json';
+        $orderinfo = M('order')->field("ordercode,paytype,payee_man,payee_account,money")->where(["id"=>$id])->find();
+        $txmoney = sprintf("%.2f",$orderinfo['money'] * 0.95);
+        // $txmoney = 0.1;
         $request = new AlipayFundTransToaccountTransferRequest();
         $request->setBizContent("{" .
-            "\"out_biz_no\":\"3142321423432\"," .
+            "\"out_biz_no\":\"".$orderinfo['ordercode']."\"," .
             "\"payee_type\":\"ALIPAY_LOGONID\"," .
-            "\"payee_account\":\"13733899540\"," .
-            "\"amount\":\"0.1\"," .
-            "\"payer_show_name\":\"杏坛文化退款\"," .
-            "\"payee_real_name\":\"贾建超\"," .
-            "\"remark\":\"转账备注\"" .
+            "\"payee_account\":\"".$orderinfo['payee_account']."\"," .
+            "\"amount\":\"".$txmoney."\"," .
+            "\"payer_show_name\":\"杏坛文化账户提现\"," .
+            "\"payee_real_name\":\"".$orderinfo['payee_man']."\"," .
+            "\"remark\":\"基金提现\"" .
             "  }");
         $result = $aop->execute ( $request);
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
 //        dump($responseNode);
         $resultCode = $result->$responseNode->code;
-//        dump($result->$responseNode);
+       // dump($result->$responseNode);
 //        dump($resultCode);
-        if(!empty($resultCode)&&$resultCode == 10000){
-            echo "成功";
+        if(!empty($resultCode) && $resultCode == 10000){
+            return true;
         } else {
-            echo "失败";
+            return false;
         }
     }
 

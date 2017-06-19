@@ -14,7 +14,7 @@ class MoneyController extends Controller {
 
     #分销佣金列表
     public function commission(){
-        $user   = M('user2')->field("id,nickname,phone,headimg")->select();
+        $user   = M('user2')->field("id,name,phone")->select();
         $money  = M('backmoney')->field("id,u2id,money")->where("money > 0 ")->select();
         foreach ($user as $k => $v) {
             $user[$k]['allmoney'] = 0;
@@ -35,42 +35,52 @@ class MoneyController extends Controller {
     //分销佣金查询
     public function search(){
         $phone = I('phone');
+        $name  = I('name');
         if (!empty($phone)) {
             $where["phone"] = array("like","%".$phone."%");
         }
-        $user   = M('user2')->field("id,nickname,phone,headimg")->where($where)->select();
-        foreach ($user as $k => $v) {
-            $allmoney = M('backmoney')->where("u2id = ".$v["id"]." and money >0 ")->getField("sum(money)");
-            if ($allmoney == null || $allmoney == false) {
-                $allmoney = 0;
+        if (!empty($name)) {
+            $where["name"] = array("like","%".$name."%");
+        }
+        $user   = M('user2')->field("id,name,phone")->where($where)->select();
+        if (empty($user) || $user == false) {
+            $user = [];
+        }else{
+            $allmoney = M('backmoney')->field("id,u2id,money")->where(" money >0 ")->select();
+            if (empty($allmoney) || $allmoney== false ) {
+                $allmoney = [];
+            }else{
+                foreach ($user as $k => $v) {
+                    $user[$k]['allmoney'] = 0;
+                    foreach ($allmoney as $k1 => $v1) {
+                        if ($v["id"] == $v1["u2id"]) {
+                            $user[$k]["allmoney"] += $v1["money"];
+                        }
+                    }
+                }                
             }
-            $user[$k]["allmoney"] = $allmoney;
-        } 
+             
+        }
+
         $this->ajaxReturn($user);
     }
 
 
-    #直营/非直营 充值列表
+    #余额充值列表
     public function OneAccount(){
-        $type = I('type');
-        if ($type == 1 ) {
-            $message = "直营余额充值";
-        }else{
-            $message = "非直营余额充值";
-        }
-        $order  = M('order')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->where("message='".$message."' and money >0 and status =2 ")->select();
+        $order  = M('order')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->where("message='充值余额' and money >0 and status =2 ")->select();
         if (empty($order) || $order ==false) {
             $order = [];
             $summoney = 0;
         }else{
-            $userid = M('order')->where("message='".$message."' and money >0 and status =2 ")->getField("u2id",true);
+            $userid = M('order')->where("message='充值余额' and money >0 and status =2 ")->getField("u2id",true);
             $userid = array_unique($userid);     
             $where["id"] = array("in",$userid);
-            $userinfo = M('user2')->field("headimg,nickname,phone,id")->where($where)->select(); 
+            $userinfo = M('user2')->field("headimg,name,phone,id")->where($where)->select(); 
             foreach ($userinfo as $k1 => $v1) {
                 foreach ($order as $k => $v) {
                     if ($v["u2id"] == $userinfo[$k1]["id"]) {
-                        $order[$k]["nickname"] = $userinfo[$k1]["nickname"];
+                        $order[$k]["name"] = $userinfo[$k1]["name"];
                         $order[$k]["phone"] = $userinfo[$k1]["phone"];
                     }
                 }
@@ -82,21 +92,15 @@ class MoneyController extends Controller {
         }
 
         $this->assign("summoney",$summoney);
-        $this->assign("type",$type);
         $this->assign("data",json_encode($order));
         $this->display();
     }
 
-    # 直营 ,非直营 查询
+    # 余额查询
     public function oneSearch(){
-        $type    = I('type');
         $paytype = I('paytype');
         $where1  =[]; 
-        if ($type == 1 ) {
-            $where["message"] = "直营余额充值";
-        }else{
-            $where["message"] = "非直营余额充值";
-        } 
+        $where["message"] = "充值余额";
         if ($paytype != 1) {
             $where["paytype"] = $paytype;
         }

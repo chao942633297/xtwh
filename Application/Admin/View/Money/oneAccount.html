@@ -15,10 +15,9 @@
     <td>
       <select class="form-control" name="paytype">
         <option value="1">全部</option>
-        <option value="支付宝">支付宝</option>
-        <option value="微信端微信">微信端微信</option>
-        <option value="APP端微信">APP端微信</option>
-        <option value="基金余额充值">基金余额充值</option>
+        <option value="支付宝">支付宝充值</option>
+        <option value="微信">微信充值</option>
+        <option value="余额">基金余额充值</option>
       </select>
     </td>    
 		<td>手机号:</td>	
@@ -31,7 +30,6 @@
     <td><strong style="color:red ;margin:0px;padding:0px;">{$summoney}</strong> <span>元</span></td>
   </tr>	
 </table>
-  <input type="hidden" name="type" id="type" value="{$type}" >   <!--直营非直营标识 -->
 </form>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
@@ -76,7 +74,7 @@
       styleUI : 'Bootstrap',
       colModel: [
           // { label: '序号ID', name: 'id',width:'80'},
-          { label: '昵称', name: 'nickname',width:'100'},
+          { label: '姓名', name: 'name',width:'100'},
           { label: '充值用户手机号', name: 'phone',width:'140'},
           { label: '充值金额', name: 'money',width:'100'},
           // { label: '支付类型', name: 'paytype',width:'180' formatter: formatLink}, 

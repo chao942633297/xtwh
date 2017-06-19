@@ -167,6 +167,7 @@ function http($url, $data='', $method='GET'){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json; charset=utf-8"));    
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
@@ -182,6 +183,17 @@ function http($url, $data='', $method='GET'){
     // 返回结果集
     return $result;
 }
+
+//趣看参数
+function getConfig(){
+    $content = "appKey=iey6u5sxi16asnci&nonce=".time().round(1,10);
+    $appsecret = "AIyQo4Y9HRqbpmzy";
+    $qianming = base64_encode(hash_hmac("sha1",$content,$appsecret,true));
+    $data = array();
+    $data = ["appKey"=>"iey6u5sxi16asnci","nonce"=>time().round(1,10),"signature"=>$qianming];
+    return $data;
+}
+
 function LetvHttp($url, $data='', $method='GET',$header=['User-Agent'=>'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)']){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

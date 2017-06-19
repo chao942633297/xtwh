@@ -3,54 +3,19 @@ namespace Admin\Controller;
 use Think\Controller;
 
 class CourseController extends Controller {
-	
+	protected static $video_url = "http://api.quklive.com/cloud/services/user/onlineLives"; //直播房间列表
+    // protected static $video_url =
+
     public function index(){
-    	$userid = isset($_GET['id'])?$_GET['id']:'';
-    	$data = M('course')->where(array('user_id'=>$userid))->select();
-    	foreach ($data as $k => $v) {
-    		$na = M('category')->where(array('id'=>$data[$k]['categoryid']))->find();
-    		$nb = M('category')->where(array('id'=>$data[$k]['kecheng_id']))->find();
-    		$data[$k]['categoryid'] = $na['name'];
-    		$data[$k]['kecheng_id'] = $nb['name'];
-    		if($data[$k]['status'] == 0){
-    			$data[$k]['status'] = '上架';
-    		}else{
-    			$data[$k]['status'] = '下架';
-    		}
-    		if($data[$k]['line'] == 0){
-    			$data[$k]['line'] = '线上';
-    		}else{
-    			$data[$k]['line'] = '线下';
-    		}
-    	}
-    	$this->assign('data',json_encode($data));
-    	$this->assign('userid',$userid);
+        $data = getConfig();
+        $result = json_decode(http(self::$video_url,json_encode($data),'POST'),true);  
+        $arr = $result['value'];    
+        if (!empty($arr)) {
+            M('video')->add($arr);
+        }
     	$this->display();
     }
-    public function add(){
-    	$userid = isset($_GET['userid'])?$_GET['userid']:'';
-    	$data = M('category')->where('pid = 0 AND is_service = 1')->select();       
-        $this->assign('data',$data);
-        $this->assign('userid',$userid);
-        $this->display();
-    }
-   	public function edit(){
-    	$id = isset($_GET['id'])?$_GET['id']:'';
-    	$row = M('category')->where('pid = 0 AND is_service = 1')->select();       
-        $this->assign('row',$row);
 
-    	$data = M('course')->where(array('id'=>$id))->find(); 
-    	$ra = M('category')->where(array('id'=>$data['categoryid']))->find();       
-        $this->assign('name',$ra['name']);      
-        $this->assign('data',$data);
-        $this->display();
-    }
-    public function kemu(){
-        if($_POST['id']){
-            $data = M('category')->where('pid = '.$_POST['id'])->select();      
-            $this->ajaxReturn($data);
-        }           
-    }
     // http://v.youku.com/v_show/id_XMjgxMjgzNjkxNg==.html?spm=a2hww.20023042.m_223473.5~5~5~5~A
     public function insert(){
     	$type = $_POST['type'];
@@ -109,7 +74,12 @@ class CourseController extends Controller {
 				
     }
 
-    public function platform(){
-    	echo 22;
+
+// -----------------------------------趣看直播-----------------------------------------------------
+// ----------------------------------------------------------------------------------------
+
+    #直播列表
+    public  function video(){
+
     }
 }
