@@ -6,7 +6,7 @@
   table tr > td:last-child input{width:60%;margin-bottom:10px;  }
 </style>
   <div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">推荐　添加 | 编辑</h4>
+      <h4 class="modal-title" id="myModalLabel">编辑商品分类:</h4>
     </div>
      <div class="modal-body">
         <input type="hidden" name="id" id="id" value="{$data['id']}">
@@ -14,16 +14,16 @@
           
             <tr style="margin-bottom:5px;">         
             <td>选择类型</td>
-            <td><select class="form-control" style="width:200px;" id="ty" name="type"> 
-                  <option value="0" >选择类型</option>           
+            <td><select class="form-control" style="width:200px;margin-bottom:15px;" id="ty" name="type"> 
+                  <option value="0" >选择类型:</option>           
                   <option value="1" <?php if($data['type'] == 1) echo 'selected';?>>品牌</option>              
                   <option value="2" <?php if($data['type'] == 2) echo 'selected';?>>乐器</option> 
                   <option value="3" <?php if($data['type'] == 3) echo 'selected';?>>材质</option>         
             </select></td>
             </tr>
             <tr style="margin-top:5px;">
-              <td>名称</td>
-              <td><input type="text" class="form-control" name="name" placeholder="推荐名称" id="name" value="{$data['name']}"></td>
+              <td>名称:</td>
+              <td><input type="text" class="form-control" name="name" placeholder="推荐名称" id="name" value="{$data['name']}" style="width:200px;"></td>
             </tr>       
        
         

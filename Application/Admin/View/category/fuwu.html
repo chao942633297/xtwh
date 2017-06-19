@@ -6,28 +6,29 @@
      new uploadPreview({ UpBtn: "up_img", DivShow: "imgdiv", ImgShow: "imgShow" });
    }
 </script>
-<form id="fmform" action="" method="POST" enctype="multipart/form-data">
-    <input type="hidden" value="fmimg" name="imgtype" value="" />
-    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
-</form>
-<style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-  table tr > td:last-child input{width:80%;margin-bottom:10px;  }
-</style>
- <a style="margin-left:20px;margin-top:20px;width:100px;" type="button" class="btn btn-primary" onclick="kecheng()">添加服务</a>
 
+<style type="text/css">
+  table tr > td{padding-left:20px;padding-bottom:10px;width:40%;}
+</style>
+  <table>
+    <tr>
+      <td><a style="width:40%;margin-right:10px;" type="button" class="btn btn-primary" onclick="kecheng();">添加服务</a></td>      
+    </tr>
+    <tr>
+      <td><input class="form-control" type="text" size="24px" placeholder="输入名称过滤查询" id="name1" style="width:260px;" /></td>
+      <td><button id="submit_search" class="btn btn-primary " onclick="searchState();" style="width:40%">查询服务分类</button></td>      
+    </tr>
+  </table>
 <div>
-  <div style="margin:24px;">
-    名称：<input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
-    编号：<input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />    
-    <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询</button>
-  </div>
+
+
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
       <div id="jqGridPager"></div>  
       </div>
       <div role="tabpanel" class="tab-pane" id="edituser">    
+  </div>
   </div>
 <!-- 课程 -->
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -36,7 +37,7 @@
     <div class="modal-content" style="width:80%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">添加服务分类:</h4>
         </div>
          <div class="modal-body">
             <table class="modal-table" style="width:80%;">
@@ -58,13 +59,40 @@
       </form>
     </div>
   </div>
+
+<!-- 查看二级分类 -->
+  <div class="modal fade bs-example-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="width:80%;margin:auto;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">编辑分类:</h4>
+        </div>
+         <div class="modal-body">
+            <table class="table table-striped" style="width:100%;" >
+              <tr>
+                <th>名称:</th>
+                <td><input type="text" name="" id="editname" value="" class="form-control"></td>
+              </tr>
+
+              <input type="hidden" name="editid" id="editid" value="">
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="doEdit">保存</button>
+        </div>          
+      </div>
+    </div>
+  </div>
+
   
 </div>
 <include file="Public/footer" />
 <script type="text/javascript">
-  // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>==<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
+    // ==<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>
+    return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>";
   };
  
 
@@ -72,26 +100,7 @@
     $('.bs-example-modal-lg').modal().show(); 
   }
  
-  function deleteUser(id){
-    if (confirm("你确定要删除吗?")) {
-      $.ajax({
-        url: "{:U('/Admin/User/deleteUser')}",
-        dataType: "text",
-        async: true,
-        data: { "id": id},
-        type: "GET",   
-        success: function(req) {
-          if(req=="true")
-          {
-            $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/User/User')}");
-          }else{
-            alert('用户删除失败!');
-          }
-        }
-        });     
-    }
-  }
- 
+
  function check(){
   var na  = $.trim($("#na").val());
   if(na == ''){
@@ -122,9 +131,8 @@
       colModel: [
           { label: '编号', name: 'id',width:'110'},
           { label: '名称', name: 'name',width:'80'},
-       
           { label: '添加时间', name: 'create_at',width:'80'},
-          { label: '修改时间', name: 'update-at',width:'80'},
+          // { label: '修改时间', name: 'update-at',width:'80'},
           { label: '操作', name: 'id',width:'100',formatter: formatLink}
       ],
       viewrecords: true,
@@ -144,18 +152,14 @@
 <script>
   //模糊查询会员
   function searchState(){
-    var phone = $("#phone").val();
-    var name = $("#name").val();
-    var grade = $("#grade").val();
-    var insta = $("#insta").val();
-    var inend = $("#inend").val();
-    if (insta.length <0 || inend.length <0) {
-      alert('请选择时间');return;
+    var name = $("#name1").val();
+    if ( name == "") {
+      alert('请填写名称');return false;
     };
     $.ajax({
-      url:"{:U('/Admin/User/searchUser')}",
+      url:"{:U('/Admin/Category/searchService')}",
       type:'GET',
-      data:{'start':insta,'end':inend,'phone':phone,'grade':grade,'name':name},
+      data:{'name':name},
       dataType:'json',
       success:function(returndata){
         $("#jqGrid").clearGridData();
@@ -164,4 +168,41 @@
       }
     });
   }
+
+  function edit(id){
+    $.ajax({
+      url:"{:U('Admin/Category/edit')}",
+      type:"get",
+      data:{id:id},
+      success:function(data){
+        $("#editname").val(data.name);
+        $("#editid").val(data.id);
+        $('.bs-example-modal-edit').modal().show(); 
+      }
+    });
+  }  
+
+  $("#doEdit").click(function(){
+    var id = $("#editid").val();
+    var name = $("#editname").val();
+    if (name == "") {
+      alert("修改名称不准为空!");
+      return false;
+    }
+    $.ajax({
+      url:"{:U('Admin/Category/doEdit')}",
+      type:"POST",
+      data:{name:name,id:id},
+      success:function(msg){
+        if (msg) {
+          alert("编辑成功!");
+          // history.go(-1);
+          window.location.href = "{:U('Admin/Category/fuwu')}";
+        }else{
+          alert("编辑失败");
+        }
+      }
+    });
+  });
+
 </script>

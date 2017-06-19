@@ -247,16 +247,40 @@ class UserController extends Controller
 
         $data = M('children')->field("id,fid,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->select();
         $pid  = M('children')->getField("fid",true);
-        $pidinfo = M('user2')->field("id,phone,name")->where(['fid'=>["in",$pid]])->select();
-
-        foreach ($pidinfo as $k => $v) {
-            foreach ($data as $ke => $va) {
-                if ($va["fid"] == $v['id']) {
-                    $pidinfo[$k]["create_at"] = $va['create_at']; 
+        if (empty($pid)) {
+            $pidinfo = [];
+        }else{
+            $pidinfo = M('user2')->field("id,phone,name")->where(['fid'=>["in",$pid]])->select();
+            foreach ($pidinfo as $k => $v) {
+                foreach ($data as $ke => $va) {
+                    if ($va["fid"] == $v['id']) {
+                        $pidinfo[$k]["create_at"] = $va['create_at']; 
+                    }
                 }
-            }
-        }      
+            }             
+        }
         $this->assign("data",json_encode($pidinfo));
         $this->display();
+    }
+
+    #搜索小孩
+    public function searchChildren(){
+        $phone = I('phone');
+        $where["phone"] = ["like","%".$phone."%"];
+        $fidall = M('user2')->where($where)->getField("id",true);
+        if (empty($fidall) || $fidall == false) {
+            $userinfo = [];
+        }else{
+            $child = M('children')->field("id,fid,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->where(["fid"=>["in",$fidall]])->select();
+            $userinfo = M('user2')->field("id,phone,name")->where($where)->select();
+            foreach ($userinfo as $k => $v) {
+                foreach ($child as $ke => $va) {
+                    if ($va["fid"] == $v['id']) {
+                        $userinfo[$k]["create_at"] = $va['create_at']; 
+                    }
+                }
+            } 
+        }
+        $this->ajaxReturn($userinfo);
     }
 }

@@ -11,17 +11,24 @@
     <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
 </form>
 <style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-  table tr > td:last-child input{width:80%;margin-bottom:10px;  }
+  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;}
 </style>
- <a style="margin-left:20px;margin-top:20px;width:100px;" type="button" class="btn btn-primary" onclick="kecheng()">添加课程</a>
- <a style="margin-left:20px;margin-top:20px;width:100px;" type="button" class="btn btn-primary" onclick="kemu()">添加科目</a>
 <div>
-  <div style="margin:24px;">
-    名称：<input style="height:36px;" type="text" size="24px" placeholder="输入会员手机号过滤查询" id="phone" />
-    编号：<input style="height:36px;" type="text" size="24px" placeholder="输入会员昵称过滤查询" id="name" />    
-    <button id="submit_search" class="btn btn-primary" onclick="searchState();">查询</button>
-  </div>
+  <table>
+    <tr>
+      <td><a style="width:40%;margin-right:10px;" type="button" class="btn btn-primary" onclick="kecheng();">添加一级分类</a><a style="width:40%" type="button" class="btn btn-primary" onclick="kemu();">添加二级分类</a></td>      
+    </tr>
+    <tr>
+      <td><input class="form-control" type="text" size="24px" placeholder="输入名称过滤查询" id="name1" style="width:260px;" /></td>
+      <td><button id="submit_search" class="btn btn-primary " onclick="searchState();" style="width:40%">查询分类</button></td>      
+    </tr>
+    <tr>
+      <td><strong style="color:red">*点击名称可以查看二级分类*</strong></td>
+    </tr>
+  </table>
+</div>
+
+
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
@@ -29,26 +36,26 @@
       </div>
       <div role="tabpanel" class="tab-pane" id="edituser">    
   </div>
-<!-- 课程 -->
+<!-- 一类分类 -->
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
   	<form action="{:U('Category/add')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
-    <div class="modal-content" style="width:80%;margin:auto;">
+    <div class="modal-content" style="width:60%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">添加科目一类分类(例如:美术,音乐等)</h4>
         </div>
          <div class="modal-body">
             <table class="modal-table" style="width:80%;">
               <tr>  
-              <td>名称<span style="color:red">&nbsp;*</span></td>
+              <td>名称:</td>
                 <td>
                 <input type="text" class="form-control"  name="name" id="na" placeholder="名称"></td>
               </tr>
-             <tr style="margin-bottom:5px;">
-            <td>图标</td>
-            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="50" height="50" /></div></td>
-          </tr>                                  
+             <!-- <tr style="margin-bottom:5px;"> -->
+<!--             <td>图标</td>
+            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="50" height="50" /></div></td> -->
+          <!-- </tr>                                   -->
             </table>
         </div>
         <div class="modal-footer">
@@ -61,30 +68,29 @@
       </form>
     </div>
   </div>
-  <!-- 科目 -->
+  <!-- 添加二级分类 -->
   <div class="modal fade bs-example-modal-ld" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
   	<form action="{:U('Category/add')}" method="post" onSubmit="return checn();">
     <div class="modal-content" style="width:80%;margin:auto;">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
+          <h4 class="modal-title" id="myModalLabel">添加科目二级分类(例如:美术-幼儿美术,音乐-民谣等)</h4>
         </div>
          <div class="modal-body">
-            <table class="modal-table" style="width:80%;">
+            <table class="modal-table" style="width:60%;">
               <tr style="margin-bottom:5px;">         
-              <td>选择课程</td>
+              <td>选择一类分类:</td>
               <td><select class="form-control" style="margin-bottom:10px;" id="ty" name="pid"> 
-                    <option value="0">选择类型</option>
                     <foreach name="row" item="vo" >          
                     	<option value="{$vo['id']}">{$vo['name']}</option>              
                    	</foreach>       
               </select></td>
               </tr>
             <tr>  
-              <td>科目名称<span style="color:red">&nbsp;*</span></td>
+              <td>二类名称:</td>
                 <td>
-                <input type="text" class="form-control"  name="name" id="nickname" placeholder="科目名称"></td>
+                <input type="text" class="form-control"  name="name" id="nickname" placeholder="二类分类名称"></td>
               </tr>
                                                
             </table>
@@ -98,12 +104,65 @@
 	</form>
     </div>
   </div>
+
+<!-- 查看二级分类 -->
+  <div class="modal fade bs-example-modal-ldd" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="width:80%;margin:auto;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">一级分类名称:<span id="typeone" style="color:red;padding-left:10px;"></span></h4>
+        </div>
+         <div class="modal-body">
+            <table class="table table-striped" style="width:100%;" >
+              <tr id="typetwo">
+                <th>编号:</th>
+                <th>名称:</th>
+                <th style="width:100px">添加时间:</th>
+                <th>操作:</th>
+              </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>         
+      </div>
+    </div>
+  </div>
+
+
+<!-- 查看二级分类 -->
+  <div class="modal fade bs-example-modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="width:80%;margin:auto;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">编辑分类:</h4>
+        </div>
+         <div class="modal-body">
+            <table class="table table-striped" style="width:100%;" >
+              <tr>
+                <th>名称:</th>
+                <td><input type="text" name="" id="editname" value="" class="form-control"></td>
+              </tr>
+
+              <input type="hidden" name="editid" id="editid" value="">
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="doEdit">保存</button>
+        </div>          
+      </div>
+    </div>
+  </div>
+
 </div>
 <include file="Public/footer" />
 <script type="text/javascript">
-  // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
   function formatLink(id) {
-    return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>==<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>";
+    // ==<a class='btn btn-danger' href='javascript:' onclick='follow("+id+");'>删除</a>
+    return "<a class='btn btn-primary' onclick='edit("+id+");'>编辑</a>";
   };
  
 
@@ -158,20 +217,87 @@
  }
   
  
-  function formatterImg(thumbnail){
-    return "<img src ="+thumbnail+" style='width: 50px;height: 50px;'  />";
+  function formatterName(name, options, rowObject){
+    var data = rowObject;
+    var id   = data.id; 
+    return "<a onclick='getTwo("+id+")'><span id='typename"+id+"'>"+name+"</span></a>";
+  }
+
+  function getTwo(id){
+    $("#typetwo").nextAll("tr").empty();
+    var name = $("#typename"+id).text();
+    $("#typeone").text(name);
+    $.ajax({
+      url:"{:U('Admin/Category/getTwo')}",
+      type:"get",
+      data:{id:id},
+      success:function(data){
+        // console.log(data);
+        var count = data.length;
+        var option = "";
+        if (count >0) {
+          for (var i = 0; i < count; i++) {
+            option += "<tr>";
+            option += "<td>"+data[i]['id']+"</td>";
+            option += "<td>"+data[i]['name']+"</td>";
+            option += "<td>"+data[i]['create_at']+"</td>";
+            option += "<td><button class='btn btn-primary' onclick='edit("+data[i]['id']+")'>编辑</button></td>";
+            option += "</tr>";
+          }
+        }
+        $("#typetwo").after(option);
+        $('.bs-example-modal-ldd').modal().show(); 
+      }
+    });
   }
  
+  function edit(id){
+    // $('.bs-example-modal-ldd').modal().hide(); 
+    $.ajax({
+      url:"{:U('Admin/Category/edit')}",
+      type:"get",
+      data:{id:id},
+      success:function(data){
+        $("#editname").val(data.name);
+        $("#editid").val(data.id);
+        $('.bs-example-modal-edit').modal().show(); 
+      }
+    });
+  }
+
+  $("#doEdit").click(function(){
+    var id = $("#editid").val();
+    var name = $("#editname").val();
+    if (name == "") {
+      alert("修改名称不准为空!");
+      return false;
+    }
+    $.ajax({
+      url:"{:U('Admin/Category/doEdit')}",
+      type:"POST",
+      data:{name:name,id:id},
+      success:function(msg){
+        if (msg) {
+          alert("编辑成功!");
+          // history.go(-1);
+          window.location.href = "{:U('Admin/Category/kecheng')}";
+        }else{
+          alert("编辑失败");
+        }
+      }
+    });
+  });
+
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
       styleUI : 'Bootstrap',
       colModel: [
           { label: '编号', name: 'id',width:'110'},
-          { label: '级别', name: 'pid',width:'110'},
-          { label: '名称', name: 'name',width:'80'},
-          { label: '图标', name: 'icon_img',width:'120',formatter: formatterImg },
+          // { label: '级别', name: 'pid',width:'110'},
+          { label: '名称', name: 'name',width:'80',formatter: formatterName},
+          // { label: '图标', name: 'icon_img',width:'120',formatter: formatterImg },
           { label: '添加时间', name: 'create_at',width:'80'},
-          { label: '修改时间', name: 'update-at',width:'80'},
+          // { label: '修改时间', name: 'update-at',width:'80'},
           { label: '操作', name: 'id',width:'100',formatter: formatLink}
       ],
       viewrecords: true,
@@ -189,20 +315,16 @@
   });
 </script>
 <script>
-  //模糊查询会员
+  //模糊查询一级类分
   function searchState(){
-    var phone = $("#phone").val();
-    var name = $("#name").val();
-    var grade = $("#grade").val();
-    var insta = $("#insta").val();
-    var inend = $("#inend").val();
-    if (insta.length <0 || inend.length <0) {
-      alert('请选择时间');return;
+    var name = $("#name1").val();
+    if ( name == "") {
+      alert('请输入名称');return;
     };
     $.ajax({
-      url:"{:U('/Admin/User/searchUser')}",
+      url:"{:U('/Admin/Category/searchType')}",
       type:'GET',
-      data:{'start':insta,'end':inend,'phone':phone,'grade':grade,'name':name},
+      data:{'name':name},
       dataType:'json',
       success:function(returndata){
         $("#jqGrid").clearGridData();

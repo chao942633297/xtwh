@@ -4,24 +4,26 @@
     <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
 </form>
 <style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-  table tr > td:last-child input{width:80%;margin-bottom:10px;  }
+  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;}
+  .btn-green { background-color: #008d4c; color:white; }
 </style>
-<div>
+  <table>
+    <tr>
+      <td colspan="4"><a href="{:U('goods/add')}" class="btn btn-primary";">添加商品</a></td>      
+    </tr>
+  </table>
+  <div>
+    <label><input type="text" name="" id="name" placeholder="请输入商品名称" class="form-control"></label>
+    <label style="margin-left: 10px;margin-right:5px;"> 状态:　<select style="height:36px;width: 90px;" name="status" id="status">
+        <option value="-1">请选择</option>
+        <option value="0">上架</option>
+        <option value="1">下架</option>
+      </select></label>
+      <label><button id="submit_search" class="btn btn-primary " onclick="searchState();">搜索查询</button></label>
+  </div>    
 
-      <a style="margin-left:20px;margin-top:10px;width:100px;" href="{:U('goods/add')}" class="btn btn-primary" >添加商品</a>
+
   
-  <div style="margin:24px;">
-    产品名称： <input style="height:36px;" type="text" size="24px" placeholder="输入名称" id="tphone" />
-    <select style="height:36px;" name="status">
-      <option value="0">上线</option>
-      <option value="1">下架</option>
-    </select>
-    
-    <button id="submit_search" class="btn btn-success" onclick="searchState();">搜索</button>
-    
-  
-  </div>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
       <table id="jqGrid" style="width: 100%;"></table>
@@ -29,69 +31,48 @@
       </div>
       <div role="tabpanel" class="tab-pane" id="edituser">    
   </div>
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="width:80%;margin:auto;">
-      <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">添加 | 编辑会员信息　<span>(带<span style="color:red">*</span>号为必填项)</span></h4>
-        </div>
-         <div class="modal-body">
-            <table class="modal-table" style="width:80%;">
-              <tr>
-              <td>手机号<span style="color:red">&nbsp;*</span></td>
-              <td>
-                <input type="hidden" name="userid" id="userid"/>
-                <input type="tel" class="form-control" id="tel" placeholder="请输入正确手机号"></td>
-            </tr>
-            
-                         
-            </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          <button type="button" class="btn btn-primary" onclick="saveUser();">保存</button>
-        </div>         
-      </div>
-    </div>
-  </div>
 </div>
 <include file="Public/footer" />
 <script type="text/javascript">
-  // <a class='btn btn-danger' href='javascript:' onclick='deleteUser("+id+");'>删除</a>&nbsp;
-  function formatLink(id) {
-      return "<a href='edit/id/"+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a><a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='deleteRecom("+id+")'>删除</a>";
+  function formatLink(id,options,object) {
+      var data  = object;
+      var status= object.status;
+      if (status == 0 ) {
+        return "<a href='edit/id/"+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a><a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='updateStatus("+id+")' data='"+status+"'>下架</a>";        
+      }else{
+        return "<a href='edit/id/"+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a><a href='javascript:' class='btn btn-green' id='com"+id+"' onclick='updateStatus("+id+")' data='"+status+"'>上架</a>";        
+      }
+
   };
 
-  function deleteUser(id){
-    if (confirm("你确定要删除吗?")) {
+  function updateStatus(id){
+    if (confirm('想好了?')) {
       $.ajax({
-        url: "{:U('/Admin/goods/delete')}",
-        dataType: "text",
-        async: true,
-        data: { "id": id},
-        type: "GET",   
-        success: function(res) {
-          if (res['code'] == 1){
-            alert("删除成功");
-            $("#com"+id).parent().parent().remove();
+        url:"{:U('Admin/Goods/updateStatus')}",
+        type:"GET",
+        data:{id:id},
+        success:function(msg){
+          if (msg) {
+            history.go(0);
           }else{
-            alert(res['msg']);
+            alert("修改失败");
           }
         }
-        });     
+      });
     }
   }
-  
-  //时间戳转换为日期格式
  
-   function pics(p){
+  function pics(p){
     return "<img src='"+p+"' style='width:50px;height:50px;'>";
   }
-  // function info(){
-  //   return "<a href='edit/id/"+id+"'></a>";
-  // }
+
+  function status(status){
+     if( status == 0){
+       return '<font color="green">上架</font>';
+     }else{
+       return '<font color="red">下架</font>';
+     }
+  }
 
   $(document).ready(function($) { 
     $("#jqGrid").jqGrid({
@@ -99,17 +80,16 @@
       colModel: [
           { label: '编号', name: 'id',width:'50'},
           { label: '名称', name: 'name',width:'80',},
+          { label: '封面', name: 'pic',width:'50',formatter:pics},
           { label: '类型', name: 'instruments_id',width:'80'},
           { label: '品牌', name: 'brand_id',width:'80'},        
           { label: '材质', name: 'material_id',width:'80'},
-          { label: '封面', name: 'pic',width:'50',formatter:pics},
           { label: '简述', name: 'desc',width:'80'},
           { label: '价格', name: 'price',width:'80'},
-          { label: '折扣', name: 'discount',width:'80'},
-          { label: '状态', name: 'status',width:'80'},
+          { label: '折扣(%)', name: 'discount',width:'50'},
+          { label: '状态', name: 'status',width:'50',formatter:status},
           { label: '添加时间', name: 'create_at',width:'100'},
-          { label: '修改时间', name: 'update_at',width:'100' },       
-          { label: '操作', name: 'id',width:'100',formatter:formatLink}
+          { label: '操作', name: 'id',width:'120',formatter:formatLink}
       ],
       viewrecords: true,
       rownumbers: true,
@@ -126,20 +106,17 @@
   });
 </script>
 <script>
-  //模糊查询会员
+  //查询商品
   function searchState(){
-    var tphone = $("#tphone").val();
-    var tel = $("#tel").val();
     var name = $("#name").val();
-    var insta = $("#insta").val();
-    var inend = $("#inend").val();
-    if (insta.length <0 || inend.length <0) {
-      alert('请选择时间');return;
-    };
+    var status = $("#status option:selected").val();
+    if (name == "" && status == -1) {
+      alert("请填写商品名或者选择状态");return false;
+    }
     $.ajax({
-      url:"{:U('/Admin/User/searchUser')}",
+      url:"{:U('/Admin/Goods/search')}",
       type:'GET',
-      data:{'start':insta,'end':inend,'tphone':tphone,'tel':tel,'name':name},
+      data:{'name':name,'status':status},
       dataType:'json',
       success:function(returndata){
         $("#jqGrid").clearGridData();

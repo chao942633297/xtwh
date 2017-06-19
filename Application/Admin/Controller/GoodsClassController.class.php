@@ -11,11 +11,7 @@ class GoodsClassController extends Controller {
 		// $this->ajaxReturn($data);
 		foreach ($data as $key => $value) {
 			$data[$key]['type'] = $arr[$data[$key]['type']];
-			$data[$key]['create_at'] = date('Y-m-d',$data[$key]['create_at']);
-			if($data[$key]['update_at']){
-				$data[$key]['update_at'] = date('Y-m-d',$data[$key]['update_at']);
-			}
-			
+			$data[$key]['create_at'] = date('Y-m-d H:i:s',$data[$key]['create_at']);
 		}
 		$this->assign('data',json_encode($data));
 		
@@ -83,6 +79,34 @@ class GoodsClassController extends Controller {
 		}
 	}
 	
+
+	#搜索商品类别
+	public function searchType(){
+		$type = I('type');
+		if ($type == -1) {
+		$data = M('goodtype')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->order('id desc')->select();		
+		}else{
+			$data = M('goodtype')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->order('id desc')->where("type=%d",$type)->select();
+		}
+        if ($data == false || empty($data)) {
+            $data = [];
+        }
+        foreach ($data as $k => $v) {
+        	switch ($v['type']) {
+        		case 1:
+        		$data[$k]['type'] = "品牌";
+        			break;
+        		case 2:
+        		$data[$k]['type'] = "乐器";
+        			break;
+        		case 3:
+        		$data[$k]['type'] = "材质";
+        			break;
+        	}
+        }
+        $this->ajaxReturn($data);
+	}
+
 	public function delete(){
 
 		$id = $_GET['id'];

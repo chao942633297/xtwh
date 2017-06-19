@@ -7,11 +7,14 @@ class TeacherController extends Controller
     public function index(){
        $data = M('user1')->where('pid = 0 AND class = 1')->select();
        // var_dump($data);
+
        $this->assign('data',json_encode($data));
        $this->display();
     }
 
     public function jiaoshi(){
+        $class = M('category')->where("pid > 0")->select();
+        $this->assign("type",$class);
     	$this->display();
     }
 
@@ -73,10 +76,16 @@ class TeacherController extends Controller
 	    		$this->error('编辑失败');
 	    	}	
     	}elseif($type == 'add'){
-    		
     		$data['create_at'] = time();
-    		$id = M('user1')->add($data);
-	    	if($id){
+    		$id = M('user1')->add($data); //添加老师到user1表中
+            $typeid = explode(",",I('classall'));
+            $dd = [];
+            foreach ($typeid as $k => $v) {
+                $dd[$k]["user1_id"] = $id;
+                $dd[$k]["categoryid"] = $v;   
+            }
+            $res = M('usercate')->addAll($dd); //添加类别到usercate表中
+	    	if($res){
 	    		$r = $this->tuiguang($id);
 	    		if($r){
 	    			$this->success('添加成功',U('Admin/Teacher/index'));
@@ -108,7 +117,7 @@ class TeacherController extends Controller
     	$da['city']        = $r['city'];
     	$da['area']        = $r['area'];
     	$da['headimg']     = $r['logo'];
-    	$da['sourec']      = 1;
+    	$da['source']      = 1;
     	$da['create_at']   = time();
     	$res = M('user2')->where(array('u1id'=>$id))->find();
     	if(!$res){

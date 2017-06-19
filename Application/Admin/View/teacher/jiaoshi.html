@@ -1,9 +1,11 @@
 <include file="Public/head" />
 
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css">
-<script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css"> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script> -->
 <script src="__PUBLIC__/js/uploadPreview.js" type="text/javascript"></script>
 <script src="__PUBLIC__/js/uploadPreview.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/jquery-1.11.3.min.js"></script>
+ 
  <script>
        window.onload = function () { 
             new uploadPreview({ UpBtn: "up_img", DivShow: "imgdiv", ImgShow: "imgShow" });
@@ -57,6 +59,10 @@ ul, ol, dl { list-style: none; }
             <td>等级</td>
             <td><input type="text" class="form-control" name="level" placeholder="等级为1-5数字" id="name" value=""><font color="red">*1表示一颗星，最高五颗星*</font></td>
           </tr>
+          <tr style="margin-bottom:5px;">
+            <td>主营类别</td>
+            <td><input type="text" class="form-control" name="class" placeholder="" id="classname" value="" readonly data-toggle="modal" data-target="#myModal"></td>
+          </tr>          
           <tr style="margin-bottom:1px;">
             <td>选择省份/城市</td>
             <td><div ><input type="text" name="city" class="form-control" id="city" />
@@ -73,17 +79,54 @@ ul, ol, dl { list-style: none; }
 	             
 		</table>
 	    </div> 
-        <input type="hidden" name="type" value="add">   
+        <input type="hidden" name="type" value="add">  
+        <input type="hidden" name="classall" value="" id="classall"> 
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">选择类别</h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <volist name="type" id="vo">
+              <tr><input type="checkbox" name="" value="{$vo.id}" data="{$vo.name}"><span style="padding-left: 5px;padding-right:10px;padding-top:10px">{$vo.name}</span></tr>
+          </volist>  
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="closetype">关闭</button>
+        <button type="button" class="btn btn-primary" id="saveType">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 <include file="Public/footer" />
-<script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
-<script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
-<script src="__PUBLIC__/js/jquery-1.11.3.min.js"></script>
+<!-- <script src="__PUBLIC__/ueditor/ueditor.config.js"></script> -->
+<!-- <script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script> -->
 <script src="__PUBLIC__/js/Popt.js"></script>
 <script src="__PUBLIC__/js/cityJson.js"></script>
 <script src="__PUBLIC__/js/citySet.js"></script>
 <script type="text/javascript">
+  $("#saveType").click(function(){
+    var typeid = "" ;
+    var typename = "";
+    $.each($("input:checkbox:checked"),function(){
+      typeid += ","+$(this).val();
+      typename += "," +$(this).attr("data");
+    }) 
+    typeid = typeid.substr(1);
+    typename = typename.substr(1);
+    $("#classall").val(typeid);
+    $("#classname").val(typename);
+    $("#closetype").click();
+  });
+
 	$("#city").click(function (e) {
 		SelCity(this,e);
 	    console.log("inout",$(this).val(),new Date())

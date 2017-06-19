@@ -5,26 +5,19 @@ use Think\Controller;
 class GoodsController extends Controller {
 	
 	public function index(){
-		$data = M('good')->select();
+		$data = M('good')->field("id,name,brand_id,instruments_id,material_id,pic,desc,price,discount,status,create_at")->select();
+		$type = M('goodtype')->field("id,name")->select();
 		foreach ($data as $k => $v) {
-			 $instruments = M('goodtype')->where('id ='.$data[$k]['instruments_id'])->find();
-			 $data[$k]['instruments_id'] = $instruments['name'];
-			 $brand = M('goodtype')->where('id ='.$data[$k]['brand_id'])->find();
-			 $data[$k]['brand_id'] = $brand['name'];
-			 $material = M('goodtype')->where('id ='.$data[$k]['material_id'])->find();
-			 $data[$k]['material_id'] = $material['name'];
-
-			 if( $data[$k]['status'] == 0){
-			 	$data[$k]['status'] = '<font color="green">上线</font>';
-			 }else{
-			 	$data[$k]['status'] = '<font color="red">下架</font>';
-			 }
-			 $data[$k]['create_at'] = date('Y-m-d',$data[$k]['create_at']);
-			 if($data[$k]['update_at']){
-			 $data[$k]['update_at'] = date('Y-m-d',$data[$k]['update_at']);
-			 }
-			
-			
+			foreach ($type as $ke => $va) {
+				if ($v['brand_id'] == $va['id']) {
+					$data[$k]['brand_id'] = $va['name'];
+				}else if($v['instruments_id'] == $va['id']){
+					$data[$k]['instruments_id'] = $va['name'];	
+				}else if($v['material_id'] == $va['id']){
+			 		$data[$k]['material_id'] = $va['name'];
+				}
+			}
+			$data[$k]['create_at'] = date('Y-m-d H:i:s',$data[$k]['create_at']);
 		}
 		$this->assign('data',json_encode($data));
 		$this->display();	
@@ -115,9 +108,55 @@ class GoodsController extends Controller {
 		// $this->display();	
 	}
 	
-	public function delete(){
-		echo 22;
-		// $this->display();	
+	#搜索商品
+	public function search(){
+		$name   = I('name');
+		$status = I('status');
+		if (!empty($name)) {
+		 	$where['name'] = ['like','%'.$name.'%'];
+		}
+
+		if ($status != -1) {
+			$where['status'] = $status; 	
+		} 
+
+		$data = M('good')->field("id,name,brand_id,instruments_id,material_id,pic,desc,price,discount,status,create_at")->where($where)->select();
+		if (empty($data) || $data == false ) {
+			$data = [];
+		}else{
+			$type = M('goodtype')->field("id,name")->select();
+			foreach ($data as $k => $v) {
+				foreach ($type as $ke => $va) {
+					if ($v['brand_id'] == $va['id']) {
+						$data[$k]['brand_id'] = $va['name'];
+					}else if($v['instruments_id'] == $va['id']){
+						$data[$k]['instruments_id'] = $va['name'];	
+					}else if($v['material_id'] == $va['id']){
+				 		$data[$k]['material_id'] = $va['name'];
+					}
+				}
+				$data[$k]['create_at'] = date('Y-m-d H:i:s',$data[$k]['create_at']);
+			}
+		}
+		$this->ajaxReturn($data);
+	}
+
+	#改变状态
+	public function updateStatus(){
+		$id = I('id');
+		$status = M('good')->where("id=%d",$id)->getField("status");
+		if ($status == 1) {
+			$where['status'] = 0;
+		}else{
+			$where['status'] = 1;
+		}
+		$where['id'] = $id;
+		$res = M('good')->save($where);
+		if ($res) {
+			echo true;
+		}else{
+			echo false;
+		}
 	}
 
 	public function ueditor(){

@@ -12,6 +12,10 @@ class GetCashController extends Controller
         $mod=D('Order');
         $tables['table']='__ORDER__ a,__USER2__ b';
         $res=$mod->field('a.id,a.money,a.create_at,a.status,b.nickname,b.name,b.phone')->table($tables['table'])->where($where1)->where('a.status=3')->order('a.id desc')->select();
+        foreach ($res as $k => $v) {
+            $res[$k]["dzmoney"] = sprintf('%.2f', $v["money"] * 0.99);
+            $res[$k]["create_at"] = date("Y-m-d H:i:s",$v["create_at"]);
+        }
         $this->assign('data',json_encode($res));
         $this->display('getcash/cashList');
     }

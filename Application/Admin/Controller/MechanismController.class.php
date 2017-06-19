@@ -12,6 +12,8 @@ class MechanismController extends Controller
     }
 
     public function jigou(){
+        $class = M('category')->where("pid > 0")->select();
+        $this->assign("type",$class);        
     	$this->display();
     }
 
@@ -62,6 +64,13 @@ class MechanismController extends Controller
     		}  
     		$data['create_at'] = time();
     		$id = M('user1')->add($data);
+            $typeid = explode(",",I('classall'));
+            $dd = [];
+            foreach ($typeid as $k => $v) {
+                $dd[$k]["user1_id"] = $id;
+                $dd[$k]["categoryid"] = $v;   
+            }
+            $res = M('usercate')->addAll($dd); //添加类别到usercate表中
 
 	    	if($id){
 	    		$d = $this->tuiguang($id);
