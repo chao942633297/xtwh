@@ -1,6 +1,8 @@
 <?php
-require_once "WxTransfers.Config.php";
+//require_once "WxTransfers.Config.php";
+namespace Vendor\WxTx;
 
+vendor('WxTx/WxTransfersConfig');
 /**
  * 微信企业转账工具类
  */

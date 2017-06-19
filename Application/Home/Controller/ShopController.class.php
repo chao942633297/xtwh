@@ -118,7 +118,7 @@ class ShopController extends Controller{
             case '3':
                 $balance = A('Balance');     //调取余额支付
                 $payVal = $balance->balancePay($orderId);
-                jsonpReturn($payVal);
+                jsonpReturn($payVal['0'],$payVal['1']);
                 break;
         }
 

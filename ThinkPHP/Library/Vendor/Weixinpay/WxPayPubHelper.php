@@ -866,6 +866,30 @@ class JsApi_pub extends Common_util_pub
 		
 		return $this->parameters;
 	}
+
+	# Token 验证
+	public static function checkToken($token=''){
+		if($token==''){
+			$token = self::$token;
+		}
+		$signature = $_GET["signature"];
+		$timeStamp = $_GET["timestamp"];
+		$nonce = $_GET["nonce"];
+
+		$tmpArr = array($token, $timeStamp, $nonce);
+		# use SORT_STRING rule
+		sort($tmpArr, SORT_STRING);
+		$tmpStr = implode( $tmpArr );
+		$tmpStr = sha1( $tmpStr );
+
+		if( $tmpStr == $signature ){
+			exit($_GET["echostr"]);
+		}
+	}
+
+
+
+
 }
 
 

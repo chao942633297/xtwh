@@ -5,18 +5,26 @@ use Think\Controller;
 use Vendor\Weixinpay\WxPayConf_pub;
 use Vendor\Weixinpay\WxPayConf_pub\JsApi_pub;
 use Vendor\Weixinpay\WxPayConf_pub\UnifiedOrder_pub;
+use Vendor\WxTx\WxTransfers;
+use Vendor\WxTx\WxTransfersConfig;
 
 vendor('Weixinpay.WxPayPubHelper');
-
+vendor('WxTx.WxTransfers');
+vendor('WxTx.WxTransfersConfig');
 class WechatController extends Controller {
 
+	public function checktoken()
+	{
+		JsApi_pub::checkToken('xingtanwenhua');
 
-	public function wechatPay(){       //微信支付
+	}
+
+		public function wechatPay(){       //微信支付
 		$userId = session('home_user_id');
 		$user = D('User2');
 		$userData = $user->where(array('id'=>$userId))->find();
 		$openid = $userData['openid'];
-		$openid ='oDMupw8w9dYLr2IUOM3wHF8x1YJU';
+		$openid ='oZpwf01K2-n9c7v9wH1Tg_sb4bRc';
 
 		$jsApi = new JsApi_pub();
 		$unifiedOrder = new UnifiedOrder_pub();
@@ -33,7 +41,53 @@ class WechatController extends Controller {
 		//=========步骤3：使用jsapi调起支付============
 		$jsApi->setPrepayId($prepay_id);
 		$jsApiParameters = $jsApi->getParameters();
+		$this->assign('jsApiParamenters',$jsApiParameters);
+		$this->display('Wechat/wxchatpay');
 	}
+
+
+	public function wxTransfer(){          //微信提现
+		$path = WxTransfersConfig::getRealPath(); // 证书文件路径
+
+//		dump($path);die;
+		$config['wxappid'] = WxTransfersConfig::APPID;
+		$config['mch_id'] = WxTransfersConfig::MCHID;
+		$config['key'] = WxTransfersConfig::KEY;
+		$config['PARTNERKEY'] = WxTransfersConfig::KEY;
+		$config['api_cert'] = $path . WxTransfersConfig::SSLCERT_PATH;
+		$config['api_key'] = $path . WxTransfersConfig::SSLKEY_PATH;
+		$config['rootca'] = $path . WxTransfersConfig::SSLROOTCA;
+
+		$wxtran=new WxTransfers($config);
+		$wxtran->setLogFile('transfers.log');//日志地址
+		//转账
+		$data=array(
+			'openid'=>'',//openid
+			'check_name'=>'NO_CHECK',//是否验证真实姓名参数
+			're_user_name'=>'11',//姓名
+			'amount'=>100,//最小1元 也就是100
+			'desc'=>'企业转账测试',//描述
+			'spbill_create_ip'=>$wxtran->getServerIp(),//服务器IP地址
+		);
+		var_dump(json_encode($wxtran->transfers($data),JSON_UNESCAPED_UNICODE));
+		var_dump($wxtran->error);
+
+		//获取转账信息
+		var_dump($wxtran->getInfo('11111111'));
+		var_dump($wxtran->error);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

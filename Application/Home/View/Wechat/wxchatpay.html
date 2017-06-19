@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>微信支付</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">{$jsApiParamenters}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 <body>
@@ -13,6 +13,7 @@
     {
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
+                {$jsApiParamenters},
                 <!--<?php echo $jsApiParameters; ?>,-->
     function(res){
         WeixinJSBridge.log(res.err_msg);
@@ -22,7 +23,7 @@
         window.location.href = url;
     }else{
         alert('你已经点击了取消支付');
-        window.location.href = 'http://xbj.xinbangjun.com/home/shop/orderShow';
+//        window.location.href = 'http://xbj.xinbangjun.com/home/shop/orderShow';
     }
     }
     );

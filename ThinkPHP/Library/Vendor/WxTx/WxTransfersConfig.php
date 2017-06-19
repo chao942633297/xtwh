@@ -3,7 +3,7 @@
  *   配置账号信息
  *   配置要和证书在一起！！！！
  */
-
+namespace Vendor\WxTx;
 class WxTransfersConfig
 {
     //=======【基本信息设置】=====================================
@@ -41,6 +41,7 @@ class WxTransfersConfig
      * @return string
      */
     public static function getRealPath(){
-        return __DIR__.'/';
+        $path = __DIR__;
+        return substr($path,'0',strlen($path)-4).'Weixinpay/';
     }
-}  
+}
