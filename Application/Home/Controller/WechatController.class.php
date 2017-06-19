@@ -62,7 +62,7 @@ class WechatController extends Controller {
 		$wxtran->setLogFile('transfers.log');//日志地址
 		//转账
 		$data=array(
-			'openid'=>'',//openid
+			'openid'=>'oZpwf01K2-n9c7v9wH1Tg_sb4bRc',//openid
 			'check_name'=>'NO_CHECK',//是否验证真实姓名参数
 			're_user_name'=>'11',//姓名
 			'amount'=>100,//最小1元 也就是100

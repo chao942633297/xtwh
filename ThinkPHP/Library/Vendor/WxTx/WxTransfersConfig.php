@@ -20,9 +20,9 @@ class WxTransfersConfig
      * 设置地址：https://pay.weixin.qq.com/index.php/account/api_cert
      *
      */
-    const APPID = '';
-    const MCHID = '';
-    const KEY = '';
+    const APPID = 'wx82f96da4bdf876f7';
+    const MCHID = '1467802102';
+    const KEY = '6220C6DF0B490DE48435D99CF5A7DBD9';
     //=======【证书路径设置】=====================================
     /**
      * TODO：设置商户证书路径
