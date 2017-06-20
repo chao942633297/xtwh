@@ -13,7 +13,7 @@ class UserController extends Controller{
     const COLLECTION = 'collection';//收藏表
     const COURSE = 'course';        //课程表
     public function login_test(){
-        session('userid',1);
+        session(self::USERID,16);
     }
     //=================用户信息页====================
     public function index(){
@@ -157,7 +157,6 @@ class UserController extends Controller{
     }
     //====================我的基金==========================
     public function mybackmoney(){
-        session('userid',11);
         $id = session(self::USERID);
         $one_children = getChilden($id,1);
         $two_children = getChilden($id,2);
@@ -204,6 +203,80 @@ class UserController extends Controller{
             $return['three'] = $threes;
         }
         dump($return);
+    }
+    //基金提现
+    public function subCashApply(){         //基金提现申请
+        // $id = session(self::USERID);
+        $id = 16;
+        $user = M(self::USER)->where(['id'=>$id])->find();
+        if($user['rebate_money'] < 3600){
+            $this->ajaxReturn(['status'=>false,'error_message'=>'充值/消费金额不足'],'JSONP');
+        }
+        $date=I('post.');
+        $order=M('order');
+        $rules=array(
+            array('money','require','提现金额不能为空'),
+            array('paytype','require','提现方式不能为空'),
+            array('payee_man','require','收款人不能为空'),
+            array('payee_account','require','收款人账号不能为空'),
+            array('twopassword','require','二级密码不能为空'),
+        );
+        if(!$order->validate($rules)->create()){
+            $data=array('status'=>false,'error_message'=>$order->getError());
+        }else{
+            $totalCash= M(self::BACKMONEY)->where(['u2id'=>$id])->sum('money');
+            $find=M('user2')->where(['id'=>$id,'twopassword'=>md5($date['twopassword'])])->find();
+            if($date['money']>=100){
+                if($date['money']>$totalCash){
+                    $data=array('status'=>false,'error_message'=>'余额不足');
+                }else{
+                    if($find){
+                        $order->money='-'.($order->money*(1-0.05));
+                        $order->create_at=time();
+                        $order->ordercode=createCode();
+                        $order->u2id=$id;
+                        $order->status=3;
+                        $order->message='基金提现';
+                        $tr=M();
+                        $tr->startTrans();
+                        try{
+                            $res=$order->add();
+                            if($res){
+                                $res2=$this->addBackMoney($date['money'],$res);
+                                if($res2){
+                                    $data=array('status'=>true,'error_message'=>'申请提现成功');
+                                    $tr->commit();
+                                }else{
+                                    throw new Exception();
+                                }
+                            }else{
+                                throw new Exception();
+                            }
+                        }catch(Exception $e){
+                            $data=array('status'=>false,'error_message'=>'申请提现失败');
+                            $tr->rollback();
+                        }
+                    }else{
+                         $data=array('status'=>false,'error_message'=>'二级密码错误');
+                    }
+                }
+            }else{
+                $data=array('status'=>false,'error_message'=>'最低发起提现额度为100');
+            }
+        }
+        $this->ajaxReturn($data,'JSONP');
+    }
+    public function addBackMoney($money,$orderId){  //添加到基金表里数据
+        $date['u2id']=session(self::USERID);
+        $date['money']='-'.$money;
+        $date['create_at']=time();
+        $date['order_id']=$orderId;
+        $date['message']='提现';
+        $res=M('backmoney')->data($date)->add();
+        if($res){
+            return true;
+        }
+        return false;
     }
     //好友互转
     public function toFriend(){
@@ -304,7 +377,7 @@ class UserController extends Controller{
         dump($return);
     }
     //我的预存
-    public function myStored(){
+    public function myStored(){     //功能已删除
     }
     //我的课程
     public function myCourse(){
@@ -330,12 +403,18 @@ class UserController extends Controller{
     }
     //我的直播
     public function myLive(){
+        $id = session(self::USERID);
+
+    }
+    //我的二维码
+    public function myScanCode(){
+
     }
     //提现详情
     public function moneyDetail(){
         $id = session(self::USERID);
         $return['backmoney'] = M(self::BACKMONEY)->where(['u2id'=>$id])->sum('money');
-        $return['detail'] = M(self::ORDER)->where(['u2id'=>$id,'message'=>'基金提现'])->select();
+        $return['detail'] = M(self::ORDER)->where(['u2id'=>$id,'status'=>'5'])->select();
         dump($return);
     }
     //我的收藏
@@ -362,6 +441,6 @@ class UserController extends Controller{
     }
     public function test(){
         $user = promotion();
-        // dump($user);
+
     }
 }
