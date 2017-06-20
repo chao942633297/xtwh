@@ -30,10 +30,10 @@ class WxTransfersConfig
      * API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
      * @var path 跟这个文件同一目录下的cert文件夹放置证书！！！！
      */
-    const SSLCRET12 = 'cert/apiclient_cert.p12';
-    const SSLCERT_PATH = 'cert/apiclient_cert.pem';
-    const SSLKEY_PATH = 'cert/apiclient_key.pem';
-    const SSLROOTCA = 'cert/rootca.pem';
+    const SSLCRET12 = 'cacert/apiclient_cert.p12';
+    const SSLCERT_PATH = 'cacert/apiclient_cert.pem';
+    const SSLKEY_PATH = 'cacert/apiclient_key.pem';
+    const SSLROOTCA = 'cacert/rootca.pem';
 
     //=======【证书路径设置】=====================================
     /**
