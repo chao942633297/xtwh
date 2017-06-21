@@ -18,7 +18,7 @@ class UserController extends Controller{
     //=================用户信息页====================
     public function index(){
         $id = session(self::USERID);
-        $return = [];
+        $return = [];		
         $user = M(self::USER)->where('id='.$id)->find();
         switch ($user['grade']) {
             case '1':

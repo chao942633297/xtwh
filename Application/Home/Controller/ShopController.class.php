@@ -108,8 +108,8 @@ class ShopController extends Controller{
         $orderId = $input['orderId'];
         switch($paymentType){
             case '1':
-                $wechatPay = A('Wechat');     //调取微信支付
-                redirect($wechatPay->wechatPay($orderId));
+                $url = "http://".C('WEB').'/home/Wechat/wechatPay/orderId/'.$orderId;
+                Header("Location: $url");
                 break;
             case '2':
                 $aliPay = A('AliPay');       //调取支付宝支付

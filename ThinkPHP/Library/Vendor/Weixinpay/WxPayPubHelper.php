@@ -82,7 +82,7 @@ class Common_util_pub
 			//$buff .= strtolower($k) . "=" . $v . "&";
 			$buff .= $k . "=" . $v . "&";
 		}
-		$reqPar;
+		$reqPar='';
 		if (strlen($buff) > 0) 
 		{
 			$reqPar = substr($buff, 0, strlen($buff)-1);
@@ -795,6 +795,24 @@ class JsApi_pub extends Common_util_pub
 		$bizString = $this->formatBizQueryParaMap($urlObj, false);
 		return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
 	}
+
+	/**
+	 * 	作用：用户授权登陆,获得code的url
+	 */
+	function userAuthorizationLanding($redirectUrl)
+	{
+		$urlObj["appid"] = WxPayConf_pub::APPID;
+		$urlObj["redirect_uri"] = "$redirectUrl";
+		$urlObj["response_type"] = "code";
+		$urlObj["scope"] = "snsapi_userinfo";
+		$urlObj["state"] = "STATE"."#wechat_redirect";
+		$bizString = $this->formatBizQueryParaMap($urlObj, false);
+		return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
+	}
+
+
+
+
 
 	/**
 	 * 	作用：生成可以获得openid的url

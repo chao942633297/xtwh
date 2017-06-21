@@ -37,7 +37,7 @@ class AliPayController extends Controller{
 
 
 
-    public function test($id){            //支付宝转账
+    public function withDraw($id){            //支付宝转账
         $config = Config::config();
         $aop = new AopClient ($config);
         $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';

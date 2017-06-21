@@ -11,8 +11,8 @@ class MsgModel extends Model
 //        $pwd = "vV9lA9dO";//密码
         $password = md5($username.md5($pwd));
         $code=self::greatRand();
-        // $content = "您的验证码是：".$code."，切勿将验证码泄露于他人。【心帮君】";
-        $content="【心帮君】您的验证码是".$code."。请在页面中提交验证码完成验证。";
+        // $content = "【杏坛文化教育联盟】您的验证码是：900532，切勿将验证码泄露于他人。";
+        $content="【杏坛文化教育联盟】您的验证码是".$code."。切勿将验证码泄露于他人。";
         $url = "http://120.55.248.18/smsSend.do?";
         $data=array('username'=>$username,'password'=>$password,'mobile'=>$mobile,'content'=>urlencode($content));
         $param=self::getSign($data);
