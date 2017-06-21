@@ -7,8 +7,8 @@ class MsgModel extends Model
 {
     public function sendMsg($mobile)//发送验证码
     {
-//        $username = "XBJ";//用户名
-//        $pwd = "vV9lA9dO";//密码
+        $username = "XTWH";//用户名
+        $pwd = "jS2yX5sJ";//密码
         $password = md5($username.md5($pwd));
         $code=self::greatRand();
         // $content = "【杏坛文化教育联盟】您的验证码是：900532，切勿将验证码泄露于他人。";
