@@ -98,4 +98,45 @@ class AdminController extends Controller {
 		}
 	}
 
+	#数据统计
+	public function data(){
+		$t = time();
+		$start = mktime(0,0,0,date("m",$t),date("d",$t),date("Y",$t));  //当天开始时间
+		$end = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t)); //当天结束时间
+		// 累计会员总量
+		$userall = M('user2')->count();
+		// 累计收入总额
+		$moneyall= M('order')->where("status =2 and money > 0 and message='充值余额'")->getField("abs(sum(money))");
+		// 今日提现总额
+		$todaytx  = M('order')->where("status >2 and  create_at > '%s' and create_at < '%s'",$start,$end)->getField("abs(sum(money))");
+		// 今日提现手续费总计
+		if (empty($todaytx) || $todaytx <= 0 ) {
+			$todaytx  = 0;
+			$todaytx1 = 0;
+		}else{
+			$todaytx1 = $todaytx * 0.01; 
+		}
+		// 已发放提现总额
+		$aftertx = M('order')->where("status = 4")->getField("abs(sum(money))");
+		// 分销佣金总计
+		$account = M('backmoney')->where("money > 0 ")->getField("abs(sum(money))");
+
+		// 会员账户月总计	
+		// 今日新增会员量
+		$todayuser  = M('user2')->where("create_at > '%s' and create_at < '%s'",$start,$end)->count();		
+		// 今日余额互转总计
+		// 今日余额互转手续费总计
+		// 今日分销佣金总计
+		$todayaccount  = M('backmoney')->where(" money > 0 and create_at > '%s' and create_at < '%s'",$start,$end)->getField("abs(sum(money))");
+		$this->assign("userall",$userall);
+		$this->assign("moneyall",$moneyall);
+		$this->assign("todaytx",$todaytx);
+		$this->assign("todaytx1",$todaytx1);
+		$this->assign("aftertx",$aftertx);
+		$this->assign("account",$account);
+		$this->assign("todayuser",$todayuser);
+		$this->assign("todayaccount",$todayaccount);
+		$this->display();
+	}
+
 }

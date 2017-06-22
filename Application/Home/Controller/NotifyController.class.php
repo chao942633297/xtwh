@@ -3,6 +3,7 @@ namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
 use Vendor\AliPay\AlipayTradeService;
+use Vendor\Weixinpay\WxPayConf_pub\Notify_pub;
 
 class NotifyController extends Controller{
 
@@ -56,7 +57,22 @@ class NotifyController extends Controller{
     }
 
     public function wechatNotify(){
-
+        file_put_contents('123','testwx');
+        $notify = new Notify_pub();
+        //存储微信的回调
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $data = $notify->saveData($xml);
+        foreach($data as $k=>$v){
+            file_put_contents('./logwx.txt',file_get_contents('./logwx.txt',$k.'校验成功:'.$v));
+        }
+        if($notify->checkSign() == FALSE){
+            $notify->setReturnParameter("return_code","FAIL");//返回状态码
+            $notify->setReturnParameter("return_msg","签名失败");//返回信息
+        }else{
+            $notify->setReturnParameter("return_code","SUCCESS");//设置返回码
+        }
+        $returnXml = $notify->returnXml();
+        echo $returnXml;
     }
 
 
@@ -69,7 +85,13 @@ class NotifyController extends Controller{
         dump($result);
     }
 
-    public function rebate($manyMoney,$lessMoney,$userId){      //消费返佣
+    /**
+     * @param $manyMoney
+     * @param $lessMoney
+     * @param $userId
+     * @return bool
+     */
+    public function rebate($manyMoney, $lessMoney, $userId){      //消费返佣
         $config = file_get_contents('./private/conf.txt');
         $conf = unserialize($config);
         $user = D('User2');

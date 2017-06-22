@@ -26,7 +26,23 @@ class IndexController extends Controller{
 
         $where = $common->getSearchCond($input);
         $where['class'] = $classId;
-        $userData = $user->where($where)->select();
+        if($input){                       //排序
+            switch($input['screen']){
+                case 'Popularity':
+                    $order = 'looknum';
+                    break;
+                case 'lowestPrice':
+                    $order = 'price ASC';
+                    break;
+                case 'highestPrice':
+                    $order = 'price DESC';
+                    break;
+                default :
+                    $order = 'create_at DESC';
+                    break;
+            }
+        }
+        $userData = $user->where($where)->order($order)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
@@ -37,6 +53,28 @@ class IndexController extends Controller{
 
 
     public function findActive(){    //找活动
+        $input = I('get.');
+        $article = D('Article');
+        if($input){                          //排序
+            switch($input['screen']){
+                case 'Popularity':
+                    $order = 'looknum';
+                    break;
+                case 'lowestPrice':
+                    $order = 'price ASC';
+                    break;
+                case 'highestPrice':
+                    $order = 'price DESC';
+                    break;
+                default :
+                    $order = 'create_at DESC';
+                    break;
+            }
+        }
+        $articleData = $article->where(array('type'=>4))->order($order)->select();
+        if($articleData){
+            jsonpReturn('1','查询成功',$articleData);
+        }
 
     }
 
@@ -83,25 +121,27 @@ class IndexController extends Controller{
             $where['id'] =array('in',$arrId);
         }
         $where['class'] = $classId ? $classId : 1;
-        $userData = $user->where($where)->select();
+        if($input){
+            switch($input['screen']){
+                case 'Popularity':
+                    $order = 'looknum';
+                    break;
+                case 'lowestPrice':
+                    $order = 'price ASC';
+                    break;
+                case 'highestPrice':
+                    $order = 'price DESC';
+                    break;
+                default :
+                    $order = 'create_at DESC';
+                    break;
+            }
+        }
+        $userData = $user->where($where)->order($order)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
