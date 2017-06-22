@@ -76,7 +76,6 @@ class LoginController extends Controller{
         }else{
             //获取code码，以获取openid
             $code = $_GET['code'];
-            dump($pid);die;
             $pid = $_GET['pid'];
             $jsApi->setCode($code);
             $getOpenidUrl =$jsApi->createOauthUrlForOpenid();
