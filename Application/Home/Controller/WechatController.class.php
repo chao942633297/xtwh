@@ -62,6 +62,7 @@ class WechatController extends Controller {
 			$this->display('Wechat/wxchatpay');
 	}
 
+
 	public function test(){
 		$jsApi = new JsApi_pub();
 		if (!isset($_GET['code'])){
