@@ -50,10 +50,10 @@ class LoginController extends Controller{
     }
 
     public function sentMsg(){          //点击发送短信验证码   需传入接收验证码的手机号mobile
+
         $mobile=I('get.mobile');
-
+        $mobile = '13733899540';
         $res=D('Msg')->sendMsg($mobile);
-
         if($res){
             jsonpReturn('1','短信验证码已经发送');
         }else{
@@ -61,7 +61,6 @@ class LoginController extends Controller{
         }
 
     }
-
 
 
     public function userScanCode(){      //用户授权登陆

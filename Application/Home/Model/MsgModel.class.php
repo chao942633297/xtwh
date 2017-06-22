@@ -1,10 +1,7 @@
 <?php
 namespace Home\Model;
+class MsgModel{
 
-use Think\Model;
-
-class MsgModel extends Model
-{
     public function sendMsg($mobile)//发送验证码
     {
         $username = "XTWH";//用户名

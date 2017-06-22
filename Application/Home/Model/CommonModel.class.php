@@ -1,8 +1,6 @@
 <?php
 namespace Home\Model;
-use Think\Model;
-class CommonModel extends Model{
-    protected $tableName='User1';
+class CommonModel{
     public function getLoopCate($pid = '0'){    //获取视频的分类
         $category = D('Category');
         $topCate = $category->where(array('pid'=>$pid,'is_service'=>1))->select();
