@@ -58,10 +58,22 @@ class LoginController extends Controller{
 
     }
 
+    public function register(){       //注册页面
+        $input = I('get.');
+        $user = D('User2');
+        if($input['refereeId']){
+            $refereeMobile = $user->where(array('id'=>$input['refereeId']))->getField('phone');
+            if($refereeMobile){
+                jsonpReturn('1','有推荐人',$refereeMobile);
+            }
+        }
+        jsonpReturn('0','没有推荐人');
+    }
 
 
 
-    public function register(){          //注册页面   需传入class(3教师,2机构,1家长,0成人) 省份province  城市city  区/县area
+
+    public function actRegister(){          //提交注册   需传入class(3教师,2机构,1家长,0成人) 省份province  城市city  区/县area
         $input = I('get.');               //手机号phone 密码password  验证码myCode  推荐人手机号refereeMobile
         $user = D('User2');
         $msgCode = cookie('msgCode');
