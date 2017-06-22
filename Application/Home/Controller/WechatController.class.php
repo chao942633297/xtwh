@@ -50,7 +50,7 @@ class WechatController extends Controller {
 //			$total_fee = 1;
 
 			$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
-			$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
+			$unifiedOrder->setParameter("total_fee",$total_fee);//总金额
 			$unifiedOrder->setParameter("notify_url",WxPayConf_pub::NOTIFY_URL);//通知地址
 			$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
 			$prepay_id = $unifiedOrder->getPrepayId();

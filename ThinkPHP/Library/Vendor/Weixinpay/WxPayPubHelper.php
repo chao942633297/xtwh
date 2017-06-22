@@ -28,9 +28,11 @@
  * 		postXmlSSLCurl(),使用证书，以post方式提交xml到对应的接口url
 */
 namespace Vendor\Weixinpay\WxPayConf_pub;
+use Vendor\Weixinpay\SDKRuntimeException;
 use Vendor\Weixinpay\WxPayConf_pub;
 
 vendor('Weixinpay.WxPayPubConfig');
+vendor('Weixinpay.SDKRuntimeException');
 /**
  * 所有接口的基类
  */
@@ -822,6 +824,7 @@ class JsApi_pub extends Common_util_pub
 		$urlObj["appid"] = WxPayConf_pub::APPID;
 		$urlObj["secret"] = WxPayConf_pub::APPSECRET;
 		$urlObj["code"] = $this->code;
+		$urlObj["scope"] = "snsapi_base";
 		$urlObj["grant_type"] = "authorization_code";
 		$bizString = $this->formatBizQueryParaMap($urlObj, false);
 		return "https://api.weixin.qq.com/sns/oauth2/access_token?".$bizString;
