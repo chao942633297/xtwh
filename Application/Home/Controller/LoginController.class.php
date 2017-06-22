@@ -63,35 +63,60 @@ class LoginController extends Controller{
     }
 
 
+
     public function userScanCode(){      //用户授权登陆
         $jsApi = new JsApi_pub();
+        $user = D('User2');
+        $pid = I('get.refereeid');
+        $url = 'http://xtwh.yjj-jj.top/home/Login/userScanCode/pid/'.$pid;  //授权后回调页面
         if (!isset($_GET['code'])){
             //触发微信返回code码
-            $url = $jsApi->userAuthorizationLanding(WxPayConf_pub::JS_API_USERINFO_URL);
-            Header("Location: $url");
+            $urlData = $jsApi->userAuthorizationLanding($url);
+            Header("Location:$urlData");
         }else{
             //获取code码，以获取openid
             $code = $_GET['code'];
+            dump($pid);die;
+            $pid = $_GET['pid'];
             $jsApi->setCode($code);
-            $openid = $jsApi->getOpenId();
+            $getOpenidUrl =$jsApi->createOauthUrlForOpenid();
+            $createData =$jsApi->http_curl($getOpenidUrl);     //获取access_token 和openid
+//            dump($createData);
+            $openid = $createData['openid'];
+            $oneSelf = $user->where(array('openid'=>$openid))->find();
+            if($oneSelf['phone']){                          //判断是否已注册
+                session('home_user_id',$oneSelf['id']);
+                redirect('Index/index');
+            }else{
+                $access_token = $createData['access_token'];
+                $userInfoUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
+                $userInfo = $jsApi->http_curl($userInfoUrl);
+//                dump($userInfo);die;
+                if(!$user->create($userInfo)){
+                    jsonpReturn('0','失败',$user->getError());
+                }else {
+                    $user->refereeid = $pid;
+                    if($oneSelf){                   //判断是否已授权登陆,更换上下级关系
+                        $uId = $user->where(array('openid'=>$openid))->save();
+                    }else{
+                        $uId = $user->add();
+                    }
+                    $this->redirect('/Home/Login/register', array('refereeId' => $pid));
+                }
+            }
+
         }
-        dump($openid);
     }
 
 
 
 
 
-
-
-
-
-
     public function register(){       //注册页面
-        $input = I('get.');
+        $refereeId = I('get.refereeId');
         $user = D('User2');
-        if($input['refereeId']){
-            $refereeMobile = $user->where(array('id'=>$input['refereeId']))->getField('phone');
+        if($refereeId){
+            $refereeMobile = $user->where(array('id'=>$refereeId))->getField('phone');
             if($refereeMobile){
                 jsonpReturn('1','有推荐人',$refereeMobile);
             }
