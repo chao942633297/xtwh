@@ -1,6 +1,10 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Vendor\Weixinpay\WxPayConf_pub;
+use Vendor\Weixinpay\WxPayConf_pub\JsApi_pub;
+
+vendor('Weixinpay.WxPayPubHelper');
 class LoginController extends Controller{
 
 
@@ -57,6 +61,31 @@ class LoginController extends Controller{
         }
 
     }
+
+
+    public function test(){      //用户授权登陆
+        $jsApi = new JsApi_pub();
+        if (!isset($_GET['code'])){
+            //触发微信返回code码
+            $url = $jsApi->userAuthorizationLanding(WxPayConf_pub::JS_API_USERINFO_URL);
+            Header("Location: $url");
+        }else{
+            //获取code码，以获取openid
+            $code = $_GET['code'];
+            $jsApi->setCode($code);
+            $openid = $jsApi->getOpenId();
+        }
+        dump($openid);
+    }
+
+
+
+
+
+
+
+
+
 
     public function register(){       //注册页面
         $input = I('get.');

@@ -62,24 +62,6 @@ class WechatController extends Controller {
 	}
 
 
-	public function test(){
-		$jsApi = new JsApi_pub();
-		if (!isset($_GET['code'])){
-			//触发微信返回code码
-			$url = $jsApi->userAuthorizationLanding(WxPayConf_pub::JS_API_USERINFO_URL);
-			Header("Location: $url");
-		}else{
-			//获取code码，以获取openid
-			$code = $_GET['code'];
-			$jsApi->setCode($code);
-			$openid = $jsApi->getOpenId();
-		}
-		dump($openid);
-	}
-
-
-
-
 
 	public function wxTransfer(){          //微信提现
 		$path = WxTransfersConfig::getRealPath(); // 证书文件路径
