@@ -67,8 +67,8 @@ class LoginController extends Controller{
         $jsApi = new JsApi_pub();
         $user = D('User2');
         $pid = I('get.refereeid');
-        $url = 'http://xtwh.yjj-jj.top/home/Login/userScanCode/pid/'.$pid;  //授权后回调页面
         if (!isset($_GET['code'])){
+            $url = 'http://xtwh.yjj-jj.top/home/Login/userScanCode/pid/'.$pid;  //授权后回调页面
             //触发微信返回code码
             $urlData = $jsApi->userAuthorizationLanding($url);
             Header("Location:$urlData");

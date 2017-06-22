@@ -65,8 +65,8 @@ function getChilden($uid,$num = 1){
     }
     $users_id = trim($users_id,',');    //一级下级
     for($i = 1;$i < $num;$i++){
-        if(!$user_id){
-            return $user_id;
+        if(!$users_id){
+            return $users_id;
         }
         $users_id = getChilden($users_id,$num-1);
         return $users_id;
@@ -202,7 +202,7 @@ function LetvHttp($url, $data='', $method='GET',$header=['User-Agent'=>'Mozilla/
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
