@@ -85,8 +85,10 @@ class LoginController extends Controller{
                 }
                 if(empty($refereeMobile)){
                     jsonpReturn('0','推荐人手机号不能为空!');
-                }else if(!$user->where(array('phone'=>$refereeMobile))->count()){
+                }else if(!$refereeId = $user->where(array('phone'=>$refereeMobile))->getField('id')){
                     jsonpReturn('0','推荐人手机号不存在!');
+                }else{
+                    $user->refereeid = $refereeId;
                 }
                 if(!$user->create($input)){
                     jsonpReturn('0',$user->getError());

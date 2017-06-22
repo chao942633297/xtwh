@@ -47,8 +47,6 @@ class WechatController extends Controller {
 			$out_trade_no = $orderData['ordercode'].time();
 			$total_fee = (int)$orderData['goodprice'];
 
-//			$out_trade_no = '942633297'.time();
-//			$total_fee = 1;
 
 			$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
 			$unifiedOrder->setParameter("total_fee",$total_fee);//总金额
