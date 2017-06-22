@@ -63,7 +63,7 @@ class LoginController extends Controller{
     }
 
 
-    public function test(){      //用户授权登陆
+    public function userScanCode(){      //用户授权登陆
         $jsApi = new JsApi_pub();
         if (!isset($_GET['code'])){
             //触发微信返回code码
