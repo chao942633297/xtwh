@@ -432,11 +432,13 @@ class UserController extends Controller{
     //我的直播
     public function myLive(){
         $id = session(self::USERID);
+        $id =
         $qkid = M(self::LIVE)->where(['uid'=>$id])->find();
         if(!$qkid){
             $this->ajaxReturn(['status'=>2,'message'=>'您没有开启直播的权限'],'JSONP');
         }
 		$video = M(self::VIDEOING)->where(['qkid'=>$qkid,'state'=>1])->select();
+        dump($video);
         foreach($video as $k=>$v){
             
         }
