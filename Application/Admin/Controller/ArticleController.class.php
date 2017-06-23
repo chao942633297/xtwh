@@ -90,5 +90,49 @@ class ArticleController extends Controller {
     }
  
 
+    #活动管理
+    public function activity(){
+        $activity = M('article')->where("type = 4 ")->select();
+        $ac       = M('activity')->select();
+        if (empty($activity)) {
+            $activity = [];
+        }else{
+             foreach ($activity as $k => $v) {
+                $activity[$k]['create_at'] = date("Y-m-d H:i:s",$v['create_at']);
+                $activity[$k]['num'] = 0;
+                foreach ($ac as $k1 => $v1) {
+                    if ($v['id'] == $v1['aid']) {
+                        $activity[$k]['num'] += 1;
+                    }
+                }
+            }           
+        }
+
+        $this->assign("data",json_encode($activity));
+        $this->display();
+    }
+
+
+    #活动人员
+    public function activityUser(){
+        $id   = I('id');
+        $user = M('activity')->where("aid=%d",$id)->getField("uid",true);
+        $user1 = M('activity')->where("aid=%d",$id)->select();
+        if (empty($user)) {
+            $userinfo = [];
+        }else{
+            $user = implode(",",$user);
+            $where["id"] = array("in",$user);
+            $userinfo = M('user2')->field("id,name,phone,province,city,area")->where($where)->select();
+            foreach ($userinfo as $k => $v) {
+                foreach ($user1 as $key => $value) {
+                    if ($v['id'] == $value['uid']) {
+                        $userinfo[$k]['create_at'] = date("Y-m-d H:i:s",$value['create_at']);
+                    }
+                }
+            }            
+        }
+        $this->ajaxReturn($userinfo);
+    }
 
 }

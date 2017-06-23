@@ -8,7 +8,7 @@
         }
     </script>
 <style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+  table tr > td:first-child{padding-left:20px;padding-bottom:10px;text-align:center;}
   table tr > td:last-child input{width:60%;margin-bottom:10px;  }
 ul, ol, dl { list-style: none; }
 ._citys { width: 450px; display: inline-block; border: 2px solid #eee; padding: 5px; position: relative; background: #fff;}
@@ -46,10 +46,10 @@ ul, ol, dl { list-style: none; }
           <tr style="margin-bottom:5px;margin-top:5px">         
             <td>身份</td>
             <td><select class="form-control" style="width:200px;margin-bottom:10px;" id="ty" name="type"> 
-                  <option value="0" <if condition="$data.class eq 0"> selected="selected" <else /></if> >成人</option>           
-                  <option value="1" <if condition="$data.class eq 1"> selected="selected" <else /></if>>家长</option>              
-                  <option value="2" <if condition="$data.class eq 2"> selected="selected" <else /></if>>机构</option> 
-                  <option value="3" <if condition="$data.class eq 3"> selected="selected" <else /></if>>教师</option>         
+                  <option value="0"> <if condition="$data.class eq 0"> selected="selected" <else /></if> >成人</option>
+                  <option value="1"> <if condition="$data.class eq 1"> selected="selected" <else /></if>>家长</option>
+                  <option value="2"> <if condition="$data.class eq 2"> selected="selected" <else /></if>>机构</option>
+                  <option value="3"> <if condition="$data.class eq 3"> selected="selected" <else /></if>>教师</option>
             </select></td>
           </tr>  
           <tr style="margin-bottom:5px;">
@@ -57,12 +57,12 @@ ul, ol, dl { list-style: none; }
             <td>
               <select class="form-control" name="grade" id="grade" style="width:200px;margin-bottom:10px;">
                 <option value="-1">请选择会员等级</option>
-                <option value="0" <if condition="$data.grade eq 0"> selected="selected" <else /></if>>路人甲</option>
-                <option value="1" <if condition="$data.grade eq 1"> selected="selected" <else /></if>>VIP</option>
-                <option value="2" <if condition="$data.grade eq 2"> selected="selected" <else /></if>>VIP银卡</option>
-                <option value="3" <if condition="$data.grade eq 3"> selected="selected" <else /></if>>VIP金卡</option>
-                <option value="4" <if condition="$data.grade eq 4"> selected="selected" <else /></if>>VIP钻卡</option>
-                <option value="5" <if condition="$data.grade eq 5"> selected="selected" <else /></if>>合伙人</option>
+                <option value="0"> <if condition="$data.grade eq 0"> selected="selected" <else /></if>>路人甲</option>
+                <option value="1"> <if condition="$data.grade eq 1"> selected="selected" <else /></if>>VIP</option>
+                <option value="2"> <if condition="$data.grade eq 2"> selected="selected" <else /></if>>VIP银卡</option>
+                <option value="3"> <if condition="$data.grade eq 3"> selected="selected" <else /></if>>VIP金卡</option>
+                <option value="4"> <if condition="$data.grade eq 4"> selected="selected" <else /></if>>VIP钻卡</option>
+                <option value="5"> <if condition="$data.grade eq 5"> selected="selected" <else /></if>>合伙人</option>
               </select>               
             </td>      
           </tr>

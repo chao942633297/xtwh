@@ -26,23 +26,7 @@ class IndexController extends Controller{
 
         $where = $common->getSearchCond($input);
         $where['class'] = $classId;
-        if($input){                       //排序
-            switch($input['screen']){
-                case 'Popularity':
-                    $order = 'looknum';
-                    break;
-                case 'lowestPrice':
-                    $order = 'price ASC';
-                    break;
-                case 'highestPrice':
-                    $order = 'price DESC';
-                    break;
-                default :
-                    $order = 'create_at DESC';
-                    break;
-            }
-        }
-        $userData = $user->where($where)->order($order)->select();
+        $userData = $user->where($where)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
@@ -53,25 +37,9 @@ class IndexController extends Controller{
 
 
     public function findActive(){    //找活动
-        $input = I('get.');
         $article = D('Article');
-        if($input){                          //排序
-            switch($input['screen']){
-                case 'Popularity':
-                    $order = 'looknum';
-                    break;
-                case 'lowestPrice':
-                    $order = 'price ASC';
-                    break;
-                case 'highestPrice':
-                    $order = 'price DESC';
-                    break;
-                default :
-                    $order = 'create_at DESC';
-                    break;
-            }
-        }
-        $articleData = $article->where(array('type'=>4))->order($order)->select();
+        $articleData = $article->where(array('type'=>4))->select();
+        
         if($articleData){
             jsonpReturn('1','查询成功',$articleData);
         }
@@ -121,27 +89,67 @@ class IndexController extends Controller{
             $where['id'] =array('in',$arrId);
         }
         $where['class'] = $classId ? $classId : 1;
-        if($input){
-            switch($input['screen']){
-                case 'Popularity':
-                    $order = 'looknum';
-                    break;
-                case 'lowestPrice':
-                    $order = 'price ASC';
-                    break;
-                case 'highestPrice':
-                    $order = 'price DESC';
-                    break;
-                default :
-                    $order = 'create_at DESC';
-                    break;
-            }
-        }
-        $userData = $user->where($where)->order($order)->select();
+        $userData = $user->where($where)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }
     }
+
+
+
+
+
+    public function test(){
+        $secretKey = '5e9480a7778c62a7b0c3c5b3400bb2cc';
+        $url = 'http://api.letvcloud.com/open.php';
+        $time = time();
+        $uuid = '82128f0e5b';
+        $api = 'video.upload.init';
+        $name = '123456';
+//        $data ='user_unique='.$uuid.'&timestamp='.$time.'&api='.$api.'&format=json&ver=2.0';
+//        $sign = md5($data.'&secretKey='.$secretKey);
+//        $urlData = urlencode($data).'&sign='.$sign.'&video_name='.$name;
+
+        $data['user_unique'] = $uuid;
+        $data['timestamp'] = $time;
+        $data['api'] = $api;
+        $data['format'] = 'json';
+        $data['ver'] = '2.0';
+        $data['secretKey'] = $secretKey;
+        $data['sign'] = md5($this->ToUrlParams($data));
+        $data['name'] = '123456';
+
+        $return =  http($url,$data,'POST');
+        var_dump($return);
+        die();
+    }
+
+
+    /**
+     *
+     * 拼接签名字符串
+     * @param array $urlObj
+     *
+     * @return 返回已经拼接好的字符串
+     */
+    private function ToUrlParams($urlObj)
+    {
+        $buff = "";
+        foreach ($urlObj as $k => $v)
+        {
+            if($k != "sign"){
+                $buff .= $k . "=" . $v . "&";
+            }
+        }
+
+        $buff = trim($buff, "&");
+        return $buff;
+    }
+
+
+
+
+
 
 
 

@@ -1,6 +1,8 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Vendor\phpqrcode\QRcode;
+
 class UserController extends Controller{
     # 定义控制器使用表名
     const USERID = 'userid';    //登录的用户id
@@ -12,6 +14,8 @@ class UserController extends Controller{
     const CATEGORY = 'category';    //兴趣类别表
     const COLLECTION = 'collection';//收藏表
     const COURSE = 'course';        //课程表
+    const VIDEOING = 'videoing';			//直播视频表
+    const LIVE     = 'live';          //直播表
     public function login_test(){
         session(self::USERID,16);
     }
@@ -134,12 +138,18 @@ class UserController extends Controller{
         $add['u2id'] = $id;
         $add['money'] = $money;
         $add['status'] = '1';
-        $add['message'] = '余额充值';
+        $add['message'] = '充值余额';
         $add['paytype'] = $paytype;
         $add['create_at'] = time();
         $order = M(self::ORDER)->add($add);
         if($order){
+        	if($paytype = '微信'){
+        		A('Wechat')->wechatPay($order);
+        	}else{
+        		A('AliPay')->webPay($order);
+        	}
         }
+		dump($order);
     }
     //=====================教育基金=========================
     public function backmoney(){
@@ -192,6 +202,7 @@ class UserController extends Controller{
         }
         if(!empty($three_children)){
             $three = M(self::BACKMONEY)->where(['source'=>['in',$three_children],'money'=>['GT',0]])->select();
+            $threes = array();
             foreach($three as $k=>$v){
                 $user = M(self::USER)->where(['id'=>$v['source']])->find();
                 $threes[$k]['name'] = $user['name'];
@@ -322,6 +333,23 @@ class UserController extends Controller{
         }
         dump($return);
     }
+	//忘记二级密码
+	public function forgetpwd(){
+		$id = session(self::USERID);
+		//需要手机号，新的密码，确认新的密码，验证码
+		$phone = I('phone');
+		$password = I('password');
+		$twopassword = I('twopassword');
+		if($password != $twopassword){
+			$this->ajaxReturn(['status'=>2,'message'=>'两次密码不相同'],'JSONP');
+		}
+		$code = I('code');
+		if($code != cookie('msgCode')){
+			$this->ajaxReturn(['status'=>2,'message'=>'验证码错误'],'JSONP');
+		}
+		M(self::USER)->where(['id'=>$id])->save(['twopassword'=>$password]);
+		$this->ajaxReturn(['status'=>1,'message'=>'修改成功'],'JSONP');
+	}
     //转入余额
     public function toMoney(){
         $id = session(self::USERID);
@@ -355,7 +383,7 @@ class UserController extends Controller{
         }
         dump($return);
     }
-    //我的伙伴
+    //我的伙伴1
     public function myPartner(){
         $id = session(self::USERID);
         $children = '';
@@ -404,11 +432,46 @@ class UserController extends Controller{
     //我的直播
     public function myLive(){
         $id = session(self::USERID);
-
+        $qkid = M(self::LIVE)->where(['uid'=>$id])->find();
+        if(!$qkid){
+            $this->ajaxReturn(['status'=>2,'message'=>'您没有开启直播的权限'],'JSONP');
+        }
+		$video = M(self::VIDEOING)->where(['qkid'=>$qkid,'state'=>1])->select();
+        foreach($video as $k=>$v){
+            
+        }
     }
     //我的二维码
     public function myScanCode(){
+        $id = session(self::USERID);
+        $id = 1;
+        $user = M(self::USER)->where(['id'=>$id])->find();
+        $qrcode = '';
+        if(!$user['qrcode'] || !is_file('.'.$user['qrcode'])){
+            vendor("phpqrcode.phpqrcode");
+            $data = 'http://xtwh.yjj-jj.top/home/Login/userScanCode?refereeid='.$id;
+            // 纠错级别：L、M、Q、H
+            $level = 'L';
+            // 点的大小：1到10,用于手机端4就可以了
+            $size = 4;
+            // 下面注释了把二维码图片保存到本地的代码,如果要保存图片,用$fileName替换第二个参数false
+            $path = "./Uploads/code/";
+            // 生成的文件名
+            $fileName = $path.time().mt_rand(1000,9999).'.png';
+            QRcode::png($data,$fileName,$level,$size);
+            $qrcode = substr($fileName,1);
+            //将二维码存入数据库
+            M(self::USER)->where(['id'=>$id])->save(['qrcode'=>$qrcode]);
+        }else{
+            $qrcode = $user['qrcode'];
+        }
 
+        $return['name'] = $user['name'];
+        $return['nickname'] = $user['nickname'];
+        $return['headimg'] = $user['headimg'];
+        $return['qrcode'] = $qrcode;
+
+		dump($return);
     }
     //提现详情
     public function moneyDetail(){

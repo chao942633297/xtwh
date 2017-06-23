@@ -8,7 +8,6 @@ class PartnerController extends Controller{
         $doubleId = $input['doubleId'];
         $teacherId = 2;
         $user = D('User1Relation')->where(array('id'=>$teacherId))->relation(true)->find();
-        $res = D('User1')->where(array('id'=>$teacherId))->setInc('click','1');   //增加点击量
         if(empty($user['user1'])){
             unset($user['user1']);
         }
@@ -22,8 +21,8 @@ class PartnerController extends Controller{
     public function courseDetail(){           //课程详情   需传入课程id(courseId)
         $input = I('get.');
         $courseId = $input['courseId'];
+        $courseId = 2;
         $course = D('CourseRelation')->where(array('id'=>$courseId))->relation('user1')->find();
-        $res = D('Course')->where(array('id'=>$courseId))->setInc('click','1');   //增加点击量
         if($course){
             jsonpReturn('1','成功',$course);
         }else{

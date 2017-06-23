@@ -15,11 +15,10 @@ class UserController extends Controller
 
     //首页
     public function index(){
-        // FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s')
-       $data = M('user2')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d') as create_at")->order('create_at desc')->select();
+        $data = M('user2')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d') as create_at")->order('create_at desc')->select();
 
        $back = M('backmoney')->field("u2id,sum(money) as money")->group('u2id')->select();  //基金
-       
+     
        foreach ($data as $k => $v) {
             foreach ($back as $ke => $va) {
                 if ($v['id'] == $va['u2id']) {
@@ -32,9 +31,13 @@ class UserController extends Controller
               }
            }
        }
-       $this->assign('data',json_encode($data));
-       $this->display();
+  
+       $this->assign("data",json_encode($data));
+        $this->display();
     }
+
+
+
 
     public function add(){
         $this->display();

@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css">
 <script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script>
 <style type="text/css">
-  table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+  table tr > td:first-child{padding-left:20px;padding-bottom:10px;text-align:center;}
   table tr > td:last-child input{width:60%;margin-bottom:10px;  }
 </style>
   <div class="modal-header">
@@ -16,9 +16,9 @@
             <td>选择类型</td>
             <td><select class="form-control" style="width:200px;margin-bottom:15px;" id="ty" name="type"> 
                   <option value="0" >选择类型:</option>           
-                  <option value="1" <?php if($data['type'] == 1) echo 'selected';?>>品牌</option>              
-                  <option value="2" <?php if($data['type'] == 2) echo 'selected';?>>乐器</option> 
-                  <option value="3" <?php if($data['type'] == 3) echo 'selected';?>>材质</option>         
+                  <option value="1"> <?php if($data['type'] == 1) echo 'selected';?>>品牌</option>
+                  <option value="2"> <?php if($data['type'] == 2) echo 'selected';?>>乐器</option>
+                  <option value="3"> <?php if($data['type'] == 3) echo 'selected';?>>材质</option>
             </select></td>
             </tr>
             <tr style="margin-top:5px;">

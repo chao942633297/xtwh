@@ -6,7 +6,6 @@ class TeacherController extends Controller
 {
     public function index(){
        $data = M('user1')->where('pid = 0 AND class = 1')->select();
-       // var_dump($data);
 
        $this->assign('data',json_encode($data));
        $this->display();

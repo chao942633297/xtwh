@@ -1,9 +1,8 @@
 <include file="Public/head" />
 
 <style type="text/css">
-  table tr > td {padding-left:5px;padding-bottom:10px;width:40%;}
+  table tr > td {padding-left:5px;padding-bottom:10px;}
 </style>
-<div>
 
 <div>
   <table>
@@ -100,11 +99,11 @@
     var phone = $("#phone").val();
     if (phone == "") {
       alert('请输入手机号');return false;
-    };
+    }
     $.ajax({
       url:"{:U('/Admin/Teacher/search')}",
       type:'GET',
-      data:{phone:phone},
+      data:{'phone':phone},
       dataType:'json',
       success:function(returndata){
         $("#jqGrid").clearGridData();

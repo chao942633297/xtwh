@@ -129,6 +129,6 @@ class GetCashController extends Controller
     #调用提现
     public function AlipayTx($id){
         $order = A('Home/AliPay');
-        return $order->test($id);
+        return $order->withDraw($id);
     }
 }
