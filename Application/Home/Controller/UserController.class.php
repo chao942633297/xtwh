@@ -14,7 +14,8 @@ class UserController extends Controller{
     const CATEGORY = 'category';    //兴趣类别表
     const COLLECTION = 'collection';//收藏表
     const COURSE = 'course';        //课程表
-    const VIDEO = 'video';			//直播表
+    const VIDEOING = 'videoing';			//直播视频表
+    const LIVE     = 'live';          //直播表
     public function login_test(){
         session(self::USERID,16);
     }
@@ -431,7 +432,14 @@ class UserController extends Controller{
     //我的直播
     public function myLive(){
         $id = session(self::USERID);
-		
+        $qkid = M(self::LIVE)->where(['uid'=>$id])->find();
+        if(!$qkid){
+            $this->ajaxReturn(['status'=>2,'message'=>'您没有开启直播的权限'],'JSONP');
+        }
+		$video = M(self::VIDEOING)->where(['qkid'=>$qkid,'state'=>1])->select();
+        foreach($video as $k=>$v){
+            
+        }
     }
     //我的二维码
     public function myScanCode(){
@@ -439,7 +447,7 @@ class UserController extends Controller{
         $id = 1;
         $user = M(self::USER)->where(['id'=>$id])->find();
         $qrcode = '';
-        if(!$user['qrcode']){
+        if(!$user['qrcode'] || !is_file('.'.$user['qrcode'])){
             vendor("phpqrcode.phpqrcode");
             $data = 'http://xtwh.yjj-jj.top/home/Login/userScanCode?refereeid='.$id;
             // 纠错级别：L、M、Q、H
@@ -449,7 +457,7 @@ class UserController extends Controller{
             // 下面注释了把二维码图片保存到本地的代码,如果要保存图片,用$fileName替换第二个参数false
             $path = "./Uploads/code/";
             // 生成的文件名
-            $fileName = $path.time().'.png';
+            $fileName = $path.time().mt_rand(1000,9999).'.png';
             QRcode::png($data,$fileName,$level,$size);
             $qrcode = substr($fileName,1);
             //将二维码存入数据库
