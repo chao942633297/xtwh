@@ -39,16 +39,19 @@ class IndexController extends Controller{
 
 
 
-    public function findActive(){    //找活动
+    public function findActive(){    //找活动  //活动详情需传入活动id (actId)
+        $actId = I('get.actId');
         $article = D('Article');
-        $articleData = $article->where(array('type'=>4))->select();
-        
+        if($actId){
+            $articleData = $article->where(array('id'=>$actId))->find();
+        }else{
+            $articleData = $article->where(array('type'=>4))->select();
+        }
         if($articleData){
             jsonpReturn('1','查询成功',$articleData);
         }else{
             jsonpReturn('0','查询失败');
         }
-
     }
 
     public function findService(){        //找服务 页面  返回分类表 一级分类
