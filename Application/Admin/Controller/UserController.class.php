@@ -61,7 +61,7 @@ class UserController extends Controller
                     $path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
                 }
             }
-            $_POST['headimg'] = $path;
+            $_POST['headimgurl'] = $path;
        }
        if ($_POST['grade'] == "-1") {
            unset($_POST['grade']);
@@ -80,7 +80,7 @@ class UserController extends Controller
     //会员信息页面
     public function info(){
         $id = I('id');
-        $data = M('user2')->field("id,phone,name,nickname,headimg,class,grade,province,city,area,address")->where("id=%d",$id)->find();
+        $data = M('user2')->field("id,phone,name,nickname,headimgurl,class,grade,province,city,area,address")->where("id=%d",$id)->find();
         $this->assign("data",$data);
         $this->display();
     }
@@ -103,7 +103,7 @@ class UserController extends Controller
                     $path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
                 }
             }
-            $_POST['headimg'] = $path;
+            $_POST['headimgurl'] = $path;
        }  
         $res = M('user2')->save($_POST);
         if ($res) {

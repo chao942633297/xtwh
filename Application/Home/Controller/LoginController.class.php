@@ -17,7 +17,7 @@ class LoginController extends Controller{
             $userData = $user->where(array('phone'=>$mobile,'password'=>$pwd))->find();
             if($userData){
                 session('home_user_id',$userData['id']);
-                jsonpReturn('1','登陆成功',$userData);
+                jsonpReturn('1','成功',$userData);
             }else{
                 jsonpReturn('0','账号不存在或密码错误!');
             }

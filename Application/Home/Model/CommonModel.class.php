@@ -5,7 +5,7 @@ class CommonModel{
         $category = D('Category');
         $topCate = $category->where(array('pid'=>$pid,'is_service'=>1))->select();
         foreach($topCate as $k=> $val){
-            $secCate = $this->loopCate($val['id']);
+            $secCate = $this->getLoopCate($val['id']);
             if($secCate){
                 $topCate[$k]['child'] = $secCate;
             }else{

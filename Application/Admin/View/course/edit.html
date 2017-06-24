@@ -6,61 +6,57 @@
       <h4 class="modal-title" id="myModalLabel">视频信息编辑</h4>
     </div>
    <form action="{:U('Course/insert')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
-     <div class="modal-body">
-      <table style="width: 80%;margin:0 auto;">
-           <tr style="margin-bottom:5px;">
-            <td>老师/机构</td>
-            <td></td>
-          </tr>      
+     <div class="modal-body">       
+      <table style="width: 80%;margin:0 auto;">     
            <tr style="margin-bottom:5px;">
             <td>选择科目</td>
             <td><select name="category" class="form-control" id="category" style="width:300px;margin-bottom: 10px;" >
               <volist name="category" id="vo">
-                <option value="{$vo.['id']}">{$vo['name']}</option>
+                <option value="{$vo['id']}" <if condition="$data['categoryid'] eq $vo['id']"> selected="selected" <else /></if> >{$vo['name']}</option>
               </volist>
             </select></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>标题</td>
-            <td><input type="text" class="form-control" name="video_name" placeholder="标题" id="name" value="" style="width: 300px;margin-bottom:10px;"></td>
+            <td><input type="text" class="form-control" name="video_name" placeholder="标题" id="name" value="{$data['video_name']}" style="width: 300px;margin-bottom:10px;"></td>
           </tr>
         
           <tr style="margin-bottom:5px;">
             <td>价格</td>
-            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value="" style="width: 300px;margin-bottom:10px;"></td>
+            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value="{$data['price']}" style="width: 300px;margin-bottom:10px;"></td>
           </tr> 
           <tr style="margin-bottom:10px;">
             <td>限制额度</td>
-            <td><input type="text" class="form-control" name="limit_price" placeholder="限制额度"  value="" style="width: 300px;margin-bottom:5px;"></td>
+            <td><input type="text" class="form-control" name="limit_price" placeholder="限制额度"  value="{$data['limit_price']}" style="width: 300px;margin-bottom:5px;"></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>会员折扣</td>
-            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value="" style="width: 300px;margin-bottom:10px;"></td>
+            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value="{$data['discount']}" style="width: 300px;margin-bottom:10px;"></td>
           </tr>                    
           <tr>        
              <td>简介</td>
-             <td><textarea style="resize:none;width:50%;height:200px;margin-bottom:10px;" type="text" rows="4" class="form-control" name="description" id="des" ></textarea></td>
+             <td><textarea style="resize:none;width:50%;height:200px;margin-bottom:10px;" type="text" rows="4" class="form-control" name="description" id="des" >{$data['description']}</textarea></td>
          </tr> 
           
           <tr style="margin-bottom:5px;">
             <td>开课时间</td>
-            <td><input type="text" class="workinput wicon mr25 form-control" id="start_time" readonly placeholder="请选择日期" value="" name="start_time" style="width: 300px;margin-bottom:10px;"></td>
+            <td><input type="text" class="workinput wicon mr25 form-control" id="start_time" readonly placeholder="请选择日期" value="{$data['start_time']}" name="start_time" style="width: 300px;margin-bottom:10px;"></td>
           </tr>
 
            <tr style="margin-bottom:5px;">
             <td>授课方式</td>
             <td><select name="line" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
-                <option value="0">线上</option>
+                <option value="0"> <if condition="$data['line'] eq 0 "> selected="selected" <else /></if>  >线上</option>
               
-                <option value="1">线下</option>          
+                <option value="1"> <if condition="$data['line'] eq 1 "> selected="selected" <else /></if>  >线下</option>
             </select></td>
           </tr>  
                
     </table>
       </div> 
       <input type="hidden" name="categoryid" id="categoryid">
-        <input type="hidden" name="type" value="add">   
-        <input type="hidden" name="id" id="" value="{$data.id}">
+        <input type="hidden" name="type" value="edit">   
+        <input type="hidden" name="id" id="" value="{$data['id']}">
     <button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 <include file="Public/footer" />
@@ -70,27 +66,13 @@
     var categoryid = $("#category option:selected").val();
     $("#categoryid").val(categoryid);
 
-  var videoStatus = $("#videoStatus").text();  
-  if (videoStatus != "已上传") {
-    alert("请上车视频或者等待视频上传完成");
-    return false;
-  }
-  var ke  = $("#ke").val();  
-    if(ke == 0){
-      alert('没有选择课程');
-       return false;
-    }
+
     var name   = $("#name").val();  
     if(name == 0){
       alert('标题不能为空');
        return false;
     }
    
-    var vid = $("#vid").val();
-    if(vid == 0){
-      alert('视频连接不可以为空');
-       return false;
-    }
   
     var pri = $("#pri").val();
     if(pri == 0){

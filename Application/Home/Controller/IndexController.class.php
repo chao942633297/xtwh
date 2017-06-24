@@ -13,6 +13,8 @@ class IndexController extends Controller{
         $lunboData = $lunbo->select();
         if($cateList){
             jsonpReturn('1','查询成功',array('topCate'=>$topCate,'cateList'=>$cateList,'lunboData'=>$lunboData));
+        }else{
+            jsonpReturn('0','查询失败');
         }
     }
 
@@ -42,6 +44,8 @@ class IndexController extends Controller{
         
         if($articleData){
             jsonpReturn('1','查询成功',$articleData);
+        }else{
+            jsonpReturn('1','查询成功');
         }
 
     }

@@ -136,8 +136,42 @@ class CourseController extends Controller {
     	$this->assign("data",json_encode($data));
     	$this->display();
     }
+
+    # 直播房间管理
+    public function roomShow()
+    {
+        $data  = M('videoing')->select();
+        if (empty($data) || $data == false ) {
+            $data = [];
+        }else{
+            $user  = M('live')->select();
+            $user2 = M('user2')->field("id,name,phone")->where("u1id > 0 ")->select();            
+            foreach ( $user as $k=>$v) {
+                foreach ( $user2 as $k1=>$v1 ) {
+                    if ($v['uid'] == $v1['id']) {
+                        $user[$k]['name'] = $v1['name'];
+                        $user[$k]['phone'] = $v1['phone'];
+                    }
+                }
+            }
+
+            foreach ( $data as $k=>$v ) {
+                foreach ( $user as $k1=>$v1 ) {
+                    if ($v['qkid'] == $v1['qkid'] ) {
+                        $data[$k]['name'] = $v1['name'];
+                        $data[$k]['phone'] = $v1['phone'];
+                        $data[$k]['uid'] = $v1['uid'];
+                    }
+                }
+            }
+        }
+
+        $this->assign("data",json_encode($data));
+        $this->display();
+
+    }
 // --------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------------------------
+// --------------------------------------------课程视频管理------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------------
 
     #视频展示
@@ -186,12 +220,19 @@ class CourseController extends Controller {
 	#添加视频到乐视--存储到数据库
     public function insert(){
         $data = $_POST;
-        $data['video_id'] = $_SESSION['video_id'];
-        $data['video_unique'] = $_SESSION['video_unique'];
-        unset($data['type']);
-        $data['create_at']  = time();
-        $data['start_time'] =  strtotime($_POST['start_time']);
-        $res = M('course')->add($data);
+        if ($data['type'] == "add") {
+            unset($data['type']);
+            unset($data['id']);
+            $data['video_id'] = $_SESSION['video_id'];
+            $data['video_unique'] = $_SESSION['video_unique'];    
+            $data['create_at']  = time();
+            $data['start_time'] =  strtotime($_POST['start_time']); 
+            $res = M('course')->add($data);                   
+        }else{
+            unset($data['type']);
+            $res = M('course')->save($data);                   
+        }
+
         if ($res) {
             $this->success("添加成功",U('Admin/Course/index'));
         }else{
