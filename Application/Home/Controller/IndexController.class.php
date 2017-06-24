@@ -31,7 +31,8 @@ class IndexController extends Controller{
         $userData = $user->where($where)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
-        }
+        }else{}
+        jsonpReturn('1','查询失败');
     }
 
 
@@ -45,7 +46,7 @@ class IndexController extends Controller{
         if($articleData){
             jsonpReturn('1','查询成功',$articleData);
         }else{
-            jsonpReturn('1','查询成功');
+            jsonpReturn('0','查询失败');
         }
 
     }
@@ -57,6 +58,8 @@ class IndexController extends Controller{
         $categoryData = $category->where($where)->select();
         if($categoryData){
             jsonpReturn('1','成功',$categoryData);
+        }else{
+            jsonpReturn('1','失败');
         }
     }
 
@@ -67,6 +70,8 @@ class IndexController extends Controller{
         $courseData = $course->where(array('categoryid'=>$cateId))->select();
         if($courseData){
             jsonpReturn('1','成功',$courseData);
+        }else{
+            jsonpReturn('1','失败');
         }
 
     }
@@ -96,71 +101,10 @@ class IndexController extends Controller{
         $userData = $user->where($where)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
+        }else{
+            jsonpReturn('1','查询失败');
         }
     }
-
-
-
-
-
-    public function test(){
-        $secretKey = '5e9480a7778c62a7b0c3c5b3400bb2cc';
-        $url = 'http://api.letvcloud.com/open.php';
-        $time = time();
-        $uuid = '82128f0e5b';
-        $api = 'video.upload.init';
-        $name = '123456';
-//        $data ='user_unique='.$uuid.'&timestamp='.$time.'&api='.$api.'&format=json&ver=2.0';
-//        $sign = md5($data.'&secretKey='.$secretKey);
-//        $urlData = urlencode($data).'&sign='.$sign.'&video_name='.$name;
-
-        $data['user_unique'] = $uuid;
-        $data['timestamp'] = $time;
-        $data['api'] = $api;
-        $data['format'] = 'json';
-        $data['ver'] = '2.0';
-        $data['secretKey'] = $secretKey;
-        $data['sign'] = md5($this->ToUrlParams($data));
-        $data['name'] = '123456';
-
-        $return =  http($url,$data,'POST');
-        var_dump($return);
-        die();
-    }
-
-
-    /**
-     *
-     * 拼接签名字符串
-     * @param array $urlObj
-     *
-     * @return 返回已经拼接好的字符串
-     */
-    private function ToUrlParams($urlObj)
-    {
-        $buff = "";
-        foreach ($urlObj as $k => $v)
-        {
-            if($k != "sign"){
-                $buff .= $k . "=" . $v . "&";
-            }
-        }
-
-        $buff = trim($buff, "&");
-        return $buff;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
