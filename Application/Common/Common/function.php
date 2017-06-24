@@ -125,7 +125,7 @@ function promotion($money = 0,$id){
         return 'fail';
     }
     if(empty($id)){
-        $id = session('userid');
+        $id = session('home_user_id');
     }
     // $id = 14;
     // $money = 900;

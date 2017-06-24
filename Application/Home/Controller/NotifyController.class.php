@@ -65,7 +65,7 @@ class NotifyController extends Controller{
     {
         $fp = fopen($file,"a");
         flock($fp, LOCK_EX) ;
-        fwrite($fp,"执行日期：".strftime("%Y-%m-%d-%H：%M：%S",time())."\n".$word."\n\n");
+        fwrite($fp,"执行日期：".strftime("%Y-%m-%d %H：%M：%S",time())."\n".$word."\n\n");
         flock($fp, LOCK_UN);
         fclose($fp);
     }
@@ -89,8 +89,10 @@ class NotifyController extends Controller{
             $res = D('User2')->where(array('id' => $orderData['u2id']))->setInc('rebate_money', $manyMoney);
             $newData['status'] = '2';
             $newData['paytype'] = $paytype;
+            $newData['real_money'] = $total_fee;
             $res1 = D('Order')->where(array('id'=>$orderData['id']))->save($newData);
-            if ($res && $res1 ) {
+            $res2 = promotion($total_fee,$orderData['u2id']);
+            if ($res && $res1 && $res2 ) {
                 exit('success');
             } else {
                 exit('fail');
