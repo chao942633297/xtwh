@@ -42,7 +42,7 @@ class WechatController extends Controller {
                 }
             }
             $timeStamp = time();
-            $out_trade_no = $orderData['ordercode'].time();
+            $out_trade_no = $orderData['ordercode'];
             $total_fee = $orderData['goodprice'] * 100;
             $unifiedOrder = new UnifiedOrder_pub();
             $unifiedOrder->setParameter("openid","$openid");//商品描述
