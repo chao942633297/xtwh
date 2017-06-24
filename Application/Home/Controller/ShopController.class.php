@@ -28,7 +28,7 @@ class ShopController extends Controller{
         $addrData = D('Address')->where($where)->find();
         $goodData = D('Good')->where(array('id'=>$goodId))->find();
         if($goodData){
-            jsonpReturn('1','查询成功');
+            jsonpReturn('1','查询成功',$goodData);
         }else{
             jsonpReturn('0','查询失败');
         }
@@ -52,6 +52,8 @@ class ShopController extends Controller{
         $res = D('Order')->add($good);
         if($res){
             jsonpReturn('1','提交订单成功');
+        }else{
+            jsonpReturn('1','提交订单失败');
         }
     }
 
@@ -73,23 +75,24 @@ class ShopController extends Controller{
         $userId = session('home_user_id');
         $course = D('Course');
         $order = D('Order');
-        $user = D('User');
+//        $user = D('User');
         $input = I('get.');
         $courseId = $input['courseId'];
-        $paytype = $input['paytype'];
-        $courseId = 2;
+//        $paytype = $input['paytype'];
         $courseData = $course->where(array('id'=>$courseId))->find();
         $cour['ordercode'] = $this->createCode();
         $cour['u2id'] = $userId;
-        $cour['money'] = -$courseData['price'];
+//        $cour['money'] = -$courseData['price'];
         $cour['status'] = 1;
         $cour['message'] = '购买课程';
-        $cour['paytype'] = $paytype;
+//        $cour['paytype'] = $paytype;
         $cour['courseid'] = $courseId;
         $cour['goodprice'] = $courseData['price'];
         $res = $order->add($cour);
         if($res){
             jsonpReturn('1','提交订单成功');
+        }else{
+            jsonpReturn('1','提交订单失败');
         }
     }
 

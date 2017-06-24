@@ -96,7 +96,7 @@ class PartnerController extends Controller{
 
     public function mySubData(){    //我的学员 //我的营业额
         $userId = session('home_user_id');
-        $turnover = I('get.turnover');          //   需传入 turnover=1
+            $turnover = I('get.turnover');          //   需传入 turnover=1
         $user = D('User2');
         $order = D('OrderRelation');
         $userId = 11;
