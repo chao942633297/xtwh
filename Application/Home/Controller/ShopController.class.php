@@ -51,7 +51,7 @@ class ShopController extends Controller{
         $good['create_at'] = time();
         $res = D('Order')->add($good);
         if($res){
-            jsonpReturn('1','提交订单成功');
+            jsonpReturn('1','提交订单成功',$res);
         }else{
             jsonpReturn('1','提交订单失败');
         }
@@ -90,7 +90,7 @@ class ShopController extends Controller{
         $cour['goodprice'] = $courseData['price'];
         $res = $order->add($cour);
         if($res){
-            jsonpReturn('1','提交订单成功');
+            jsonpReturn('1','提交订单成功',$res);
         }else{
             jsonpReturn('1','提交订单失败');
         }

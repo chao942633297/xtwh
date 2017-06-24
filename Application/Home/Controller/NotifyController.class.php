@@ -57,7 +57,7 @@ class NotifyController extends Controller{
     }
 
     public function wechatNotify(){
-        file_put_contents('123','testwx');
+        file_put_contents('123.txt','testwx');
         $notify = new Notify_pub();
         //存储微信的回调
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
