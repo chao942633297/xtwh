@@ -28,10 +28,13 @@ class IndexController extends BaseController{
         $where = $common->getSearchCond($input);
         $where['class'] = $classId;
         $userData = $user->where($where)->select();
+        foreach($userData as $k=>$v ){
+            $userData[$k]['minPrice'] = D('Course')->where(array('user_id'=>$v['id']))->min('price');
+        }
         if($userData){
             jsonpReturn('1','查询成功',$userData);
         }else{
-            jsonpReturn('1','查询失败');
+            jsonpReturn('0','查询失败');
         }
     }
 
