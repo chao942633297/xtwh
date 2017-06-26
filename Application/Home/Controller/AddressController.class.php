@@ -26,9 +26,9 @@ class AddressController extends Controller{
             $addrData = $address->where(array('id'=>$addrId))->find();
             if($addrData){
                 jsonpReturn('1','查询成功',$addrData);
+            }else{
+                jsonpReturn('0','查询失败');
             }
-        }else{
-            jsonpReturn('0','查询失败');
         }
     }
 
