@@ -19,9 +19,10 @@ class CommonModel{
         $where = array();
         if($input){
             $cateId = $input['cateId'];
-            $province = $input['province'];
-            $city = $input['city'];
-            $area = $input['area'];
+            $data = explode(',',$input['addr']);
+            $province = $data['0'];
+            $city = $data['1'];
+            $area = $data['2'];
             $arrId = D('Usercate')->where(array('categoryid'=>$cateId))->getField('user1_id',true);
             if($cateId){
                 $where['id'] = array('in',$arrId);

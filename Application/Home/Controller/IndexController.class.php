@@ -39,6 +39,28 @@ class IndexController extends BaseController{
     }
 
 
+    public function test(){    //查询列表           首页搜素需传入(classId =2)/找老师(classId =1)/找机构(classId =2)共用
+        $input = I('get.');
+        //查询分类需要二级分类id,cateId查询区域需要省province市city区area
+        $classId = $input['classId'];
+        $user = D('User1');
+        $common = D('Common');
+        $where = $common->getSearchCond($input);
+        jsonpReturn('12','123',$where);
+        $where['class'] = $classId;
+        $userData = $user->where($where)->select();
+        foreach($userData as $k=>$v ){
+            $userData[$k]['minPrice'] = D('Course')->where(array('user_id'=>$v['id']))->min('price');
+        }
+        if($userData){
+            jsonpReturn1('1','查询成功',$userData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
+
+
+
 
 
 

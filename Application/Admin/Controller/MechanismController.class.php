@@ -50,7 +50,8 @@ class MechanismController extends Controller
 				$this->error($upload->getError());   
 			}else{		       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];
 			  	}
 			}
 			$data['logo']  = $path;
