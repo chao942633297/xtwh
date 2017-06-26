@@ -138,12 +138,16 @@ class LoginController extends Controller{
             $password = $input['password'];
             $refereeMobile = $input['refereeMobile'];
             if($code == $msgCode){
-                if(empty($province) || empty($city) || empty($area) ){
-                    jsonpReturn('0','地区不能为空');
+                if(empty($province)){
+                    jsonpReturn('0','省份不能为空');
+                }else if(empty($city)){
+                    jsonpReturn('0','城市不能为空');
+                }else if(empty($area)){
+                    jsonpReturn('0','区/县不能为空');
                 }
                 if(empty($phone)){
                     jsonpReturn('0','手机号码不能为空');
-                }else if(!preg_match("^1[3|4|5|7|8][0-9]{9}$",$phone)){
+                }else if(!preg_match("/^1[3|4|5|7|8][0-9]{9}$/",$phone)){
                     jsonpReturn('0','请输入正确的手机号码');
                 }
                 if(empty($refereeMobile)){
