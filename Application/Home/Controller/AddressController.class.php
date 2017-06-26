@@ -18,19 +18,34 @@ class AddressController extends Controller{
         }
     }
 
+    public function showAddr(){      //添加/修改收货地址页面  传入addrId为修改收货地址
+        $input = I('get.');
+        $address = D('Address');
+        $addrId = $input['addrId'];
+        if($addrId){
+            $addrData = $address->where(array('id'=>$addrId))->find();
+            if($addrData){
+                jsonpReturn('1','查询成功',$addrData);
+            }
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
+
+
     public function addAddr(){        //新增/修改收货地址   修改地址需传入地址id(addrId). 添加地址 需传入收货人姓名name,收货人手机号phone,省份province, 城市city,区/县area ,
         $input = I('get.');            //街道 street, 邮编zipcode
         $address = D('address');
         $userId = session('home_user_id');
         $addrId = $input['addrId'];
-        if($input['name']){
-            if(empty($input['province']) || empty($input['city']) || empty($input['area']) || empty($input['street']) ){
-                jsonpReturn('0','地区不能为空');
-            }
+        if($input){
             if(empty($input['phone'])){
                 jsonpReturn('0','手机号码不能为空');
             }else if(!preg_match("^1[3|4|5|7|8][0-9]{9}$",$input['phone'])){
                 jsonpReturn('0','请输入正确的手机号码');
+            }
+            if(empty($input['province']) || empty($input['city']) || empty($input['area']) || empty($input['street']) ){
+                jsonpReturn('0','地区不能为空');
             }
 
             if(!$address->create($input)){
@@ -43,18 +58,9 @@ class AddressController extends Controller{
                 $res = $address->add();
             }
             if($res){
-                jsonpReturn('1','成功',$res);
+                jsonpReturn('1','操作成功',$res);
             }else{
-                jsonpReturn('0','失败');
-            }
-        }else{
-            if($addrId){
-                $addrData = $address->where(array('id'=>$addrId))->find();
-                if($addrData){
-                    jsonpReturn('1','查询成功',$addrData);
-                }
-            }else{
-                jsonpReturn('0','查询失败');
+                jsonpReturn('0','操作失败');
             }
         }
 
@@ -81,8 +87,9 @@ class AddressController extends Controller{
         $address = D('Address');
         if($input){
             $addrId = $input['addrId'];
-            $res = $address->where(array('id'=>$addrId))->setField('default','1');
+            $res = $address->where(array('id'=>$addrId))->setField(array('default'=>1,'update_at'=>time()));
             if($res){
+                $address->where(array('id'=>array('neq',$addrId)))->setField('default','0');
                 jsonpReturn('1','设置成功',$res);
             }else{
                 jsonpReturn('0','设置失败');
