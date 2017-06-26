@@ -3,7 +3,7 @@ namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
 
-class BalanceController extends Controller{
+class BalanceController extends BaseController{
 
     public function balancePay(){
         $input = I('get.');

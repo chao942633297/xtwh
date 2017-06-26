@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-class PartnerController extends Controller{
+class PartnerController extends BaseController{
 
     public function doubleDetail(){        //教师详情/机构详情   需传入教师id或者机构id(doubleId)
         $input = I('get.');

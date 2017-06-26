@@ -11,7 +11,7 @@ use Vendor\WxTx\WxTransfersConfig;
 vendor('Weixinpay.WxPayPubHelper');
 vendor('WxTx.WxTransfers');
 vendor('WxTx.WxTransfersConfig');
-class WechatController extends Controller {
+class WechatController extends BaseController {
 
 	public function checktoken()
 	{

@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-class DirectSeedingController extends Controller{
+class DirectSeedingController extends BaseController{
 
     const appKey = 'iey6u5sxi16asnci';
     const appSecret = 'AIyQo4Y9HRqbpmzy';

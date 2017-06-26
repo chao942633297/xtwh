@@ -5,7 +5,7 @@ use Think\Exception;
 use Vendor\AliPay\AlipayTradeService;
 use Vendor\Weixinpay\WxPayConf_pub\Notify_pub;
 
-class NotifyController extends Controller{
+class NotifyController extends BaseController{
 
     public function aliNotify(){
         $arr = $_GET;                 //获取回调数据

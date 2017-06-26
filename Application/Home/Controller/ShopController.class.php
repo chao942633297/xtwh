@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-class ShopController extends Controller{
+class ShopController extends BaseController{
     //购买商品
     public function goodDetail(){       //商品详情  需传入商品id(goodId)
         $input = I('get.');
