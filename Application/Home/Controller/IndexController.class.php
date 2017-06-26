@@ -25,14 +25,14 @@ class IndexController extends BaseController{
         $classId = $input['classId'];
         $user = D('User1');
         $common = D('Common');
-
         $where = $common->getSearchCond($input);
         $where['class'] = $classId;
         $userData = $user->where($where)->select();
         if($userData){
             jsonpReturn('1','查询成功',$userData);
-        }else{}
-        jsonpReturn('1','查询失败');
+        }else{
+            jsonpReturn('1','查询失败');
+        }
     }
 
 
