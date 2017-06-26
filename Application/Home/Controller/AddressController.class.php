@@ -70,6 +70,8 @@ class AddressController extends Controller{
             }else{
                 jsonpReturn('0','操作失败');
             }
+        }else{
+            jsonpReturn('0','数据错误');
         }
 
     }
