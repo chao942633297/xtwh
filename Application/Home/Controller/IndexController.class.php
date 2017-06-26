@@ -79,9 +79,39 @@ class IndexController extends Controller{
 
     }
 
-    public function hotRecom(){      //热门推荐
+    public function wonderfulRecom(){      //精彩推荐
+        $article = D('Article');
+        $articleData = $article->where(array('type'=>array('neq',4)))->select();    //除去活动外的文章
+        if($articleData){
+            jsonpReturn('1','查询成功',$articleData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
+
+
+    public function risingStar(){       //明日之星
+        $course = D('Course');
+        $courseData = $course->where(array('user_id'=>0))->select();
+        if($courseData){
+            jsonpReturn('1','查询成功',$courseData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
+
+
+    public function videoZone(){
+        $course = D('Course');
+        $courseData = $course->select();
+        if($courseData){
+            jsonpReturn('1','查询成功',$courseData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
 
     }
+
 
 
 
