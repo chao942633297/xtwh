@@ -4,6 +4,17 @@ use Think\Controller;
 class AddressController extends Controller{
 
 
+    public function addrInfo(){
+        $userId = session('home_user_id');
+        $address = D('Address');
+        $addressData = $address->where(array('u2id'=>$userId))->select();
+        if($addressData){
+            jsonpReturn('1','查询成功',$addressData);
+        }else{
+            jsonpReturn('0','查询失败');
+        }
+    }
+
     public function addAddr(){        //新增/修改收货地址   修改地址需传入地址id(addrId). 添加地址 需传入收货人姓名name,收货人手机号phone,省份province, 城市city,区/县area ,
         $input = I('get.');            //街道 street, 邮编zipcode
         $address = D('address');
