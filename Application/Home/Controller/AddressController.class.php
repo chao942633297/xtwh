@@ -24,9 +24,19 @@ class AddressController extends Controller{
         $userId = session('home_user_id');
         $addrId = $input['addrId'];
         if($input['name']){
-            if(!$address->create($input)){
-                jsonpReturn('1',$address->getError());
+            if(empty($input['province']) || empty($input['city']) || empty($input['area']) || empty($input['street']) ){
+                jsonpReturn('0','地区不能为空');
             }
+            if(empty($input['phone'])){
+                jsonpReturn('0','手机号码不能为空');
+            }else if(!preg_match("^1[3|4|5|7|8][0-9]{9}$",$input['phone'])){
+                jsonpReturn('0','请输入正确的手机号码');
+            }
+
+            if(!$address->create($input)){
+                jsonpReturn('0',$address->getError());
+            }
+            $address->u2id = $userId;
             if($addrId){
                 $res = $address->where(array('id'=>$addrId))->save();
             }else{
