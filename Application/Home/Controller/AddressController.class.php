@@ -3,8 +3,11 @@ namespace Home\Controller;
 use Think\Controller;
 class AddressController extends Controller{
 
+    public function _initialize(){
+        session('home_user_id',15);
+    }
 
-    public function addrInfo(){
+    public function addrInfo(){        //地址页面
         $userId = session('home_user_id');
         $address = D('Address');
         $addressData = $address->where(array('u2id'=>$userId))->select();
