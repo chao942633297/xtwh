@@ -51,7 +51,6 @@ class MechanismController extends Controller
 			}else{		       
 			  	foreach($info as $file){
 			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];
-			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];
 			  	}
 			}
 			$data['logo']  = $path;
