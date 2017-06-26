@@ -1,11 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-class AddressController extends Controller{
-
-    public function _initialize(){
-        session('home_user_id',15);
-    }
+class AddressController extends BaseController{
 
     public function addrInfo(){        //地址页面
         $userId = session('home_user_id');
