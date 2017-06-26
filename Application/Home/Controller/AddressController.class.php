@@ -44,8 +44,14 @@ class AddressController extends Controller{
             }else if(!preg_match("^1[3|4|5|7|8][0-9]{9}$",$input['phone'])){
                 jsonpReturn('0','请输入正确的手机号码');
             }
-            if(empty($input['province']) || empty($input['city']) || empty($input['area']) || empty($input['street']) ){
-                jsonpReturn('0','地区不能为空');
+            if(empty($input['province'])){
+                jsonpReturn('0','省份不能为空');
+            }else if(empty($input['city'])){
+                jsonpReturn('0','城市不能为空');
+            }else if(empty($input['area'])){
+                jsonpReturn('0','区/县不能为空');
+            }else if(empty($input['street'])){
+                jsonpReturn('0','街道不能为空');
             }
 
             if(!$address->create($input)){
