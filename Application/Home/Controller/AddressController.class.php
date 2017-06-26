@@ -39,9 +39,12 @@ class AddressController extends Controller{
         $userId = session('home_user_id');
         $addrId = $input['addrId'];
         if($input){
+            if(empty($input['name'])){
+                jsonpReturn('0','收货人姓名不能为空');
+            }
             if(empty($input['phone'])){
                 jsonpReturn('0','手机号码不能为空');
-            }else if(!preg_match("^1[3|4|5|7|8][0-9]{9}$",$input['phone'])){
+            }else if(!preg_match("/^1[3|4|5|7|8][0-9]{9}$/",$input['phone'])){
                 jsonpReturn('0','请输入正确的手机号码');
             }
             if(empty($input['province'])){
@@ -53,7 +56,6 @@ class AddressController extends Controller{
             }else if(empty($input['street'])){
                 jsonpReturn('0','街道不能为空');
             }
-
             if(!$address->create($input)){
                 jsonpReturn('0',$address->getError());
             }
