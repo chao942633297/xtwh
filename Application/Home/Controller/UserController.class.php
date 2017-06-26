@@ -5,7 +5,7 @@ use Vendor\phpqrcode\QRcode;
 
 class UserController extends Controller{
     # 定义控制器使用表名
-    const USERID = 'userid';    //登录的用户id
+    const USERID = 'home_user_id';    //登录的用户id
     const USER    = 'user2';        //用户表
     const USER1   = 'user1';        //教师培训机构表
     const CHILDREN = 'children';     //子女表
@@ -16,8 +16,12 @@ class UserController extends Controller{
     const COURSE = 'course';        //课程表
     const VIDEOING = 'videoing';			//直播视频表
     const LIVE     = 'live';          //直播表
-    public function login_test(){
-        session(self::USERID,16);
+    public function _initialize(){
+        session(self::USERID,14);
+        if(!session(self::USERID)){
+            echo 1;exit;
+            $this->ajaxReturn(['status'=>3,'message'=>'登录信息过期'],'JSONP');
+        }
     }
     //=================用户信息页====================
     public function index(){
@@ -61,7 +65,7 @@ class UserController extends Controller{
         }
         $return['childennum'] = count(explode(',',trim($childen,','))); //下级人数
         $return['backmoney'] = M(self::BACKMONEY)->where(['u2id'=>$id])->sum('money');//教育基金
-        dump($return);
+        $this->ajaxReturn(['status'=>1,'message'=>'查询成功','data'=>$return],'JSONP');
     }
     //===================编辑资料页面====================
     public function useredit(){
@@ -77,6 +81,7 @@ class UserController extends Controller{
             $return['p_nickname'] = $parent['nickname'];
             $return['p_phone'] = $parent['phone'];
         }
+        $return['sex'] = '男';
         if($user['sex'] == 1){
             $return['sex'] == '男';
         }else{
@@ -85,13 +90,13 @@ class UserController extends Controller{
         $return['birthday'] = $user['birthday'];
         $children = M(self::CHILDREN)->where(['fid'=>$user['childrenid']])->find();
         if($children){
-            $return['grade'] = $children['grade'];
-            $return['birthday'] = $children['birthday'];
-            $return['interest'] = $children['interest'];
+            $return['c_grade'] = $children['grade'];
+            $return['c_birthday'] = $children['birthday'];
+            $return['c_interest'] = $children['interest'];
         }
         $return['category']['one'] = M(self::CATEGORY)->where(['pid'=>0])->select();//所有一级分类
         $return['category']['two'] = M(self::CATEGORY)->where(['pid'=>['neq',0]])->select();
-        dump($return);
+        $this->ajaxReturn(['status'=>1,'message'=>'查询成功','data'=>$return],'JSONP');
     }
     //=================执行编辑资料==============
     public function do_useredit(){
@@ -110,22 +115,25 @@ class UserController extends Controller{
         $child_info = M(self::CHILDREN)->where(['fid'=>$user['id']])->find();
         if($child_info){
             $child['id'] = $child_info['id'];
-            $child['grade'] = $forms['grade'];
-            $child['birthday'] = $forms['children_birthday'];
-            $child['interest'] = $forms['interest'];
+            $child['grade'] = $forms['c_grade'];
+            $child['birthday'] = $forms['c_birthday'];
+            $child['interest'] = $forms['c_interest'];
             M(self::USER)->save($child);
         }
-        echo '成功';
+        $this->ajaxReturn(['status'=>1,'message'=>'更新成功'],'JSONP');
     }
     //=================我的余额页面==============
-    public function mymoney(){
+        public function mymoney(){
         $id = session(self::USERID);
         $user = M(self::USER)->where(['id'=>$id])->find();
         $return['money']['onemoney'] = $user['onemoney'];
         // $return['money']['twomoney'] = $user['twomoney'];
         $order = M(self::ORDER)->where(['u2id'=>$id,'status'=>['neq','1']])->order('id desc')->select();
+        foreach($order as $k=>$v){
+            $order[$k]['update_at'] = date('Y-m-d H:i',$v['update_at']);
+        }
         $return['order'] = $order;
-        dump($return);
+            $this->ajaxReturn(['status'=>1,'message'=>'查询成功','data'=>$return],'JSONP');
     }
     //====================我的余额----余额充值========================
     public function addmoney(){         //须完善
@@ -149,7 +157,7 @@ class UserController extends Controller{
         		A('AliPay')->webPay($order);
         	}
         }
-		dump($order);
+        $this->ajaxReturn(['status'=>1,'message'=>'充值完成'],'JSONP');
     }
     //=====================教育基金=========================
     public function backmoney(){
@@ -160,10 +168,10 @@ class UserController extends Controller{
         foreach($backmoney as $k=>$v){
             $order = M(self::ORDER)->where(['id'=>$v['order_id']])->find();
             $return['order'][$k]['message'] = $order['message'];
-            $return['order'][$k]['createtime'] = $order['createtime'];
+            $return['order'][$k]['createtime'] = $order['create_at'];
             $return['order'][$k]['money'] = $order['money'];
         }
-        dump($return);
+        $this->ajaxReturn(['status'=>1,'message'=>'查询成功','data'=>$return],'JSONP');
     }
     //====================我的基金==========================
     public function mybackmoney(){
@@ -213,12 +221,12 @@ class UserController extends Controller{
             }
             $return['three'] = $threes;
         }
-        dump($return);
+        $this->ajaxReturn(['status'=>1,'message'=>'查询成功','data'=>$return],'JSONP');
     }
     //基金提现
     public function subCashApply(){         //基金提现申请
-        // $id = session(self::USERID);
-        $id = 16;
+         $id = session(self::USERID);
+//        $id = 16;
         $user = M(self::USER)->where(['id'=>$id])->find();
         if($user['rebate_money'] < 3600){
             $this->ajaxReturn(['status'=>false,'error_message'=>'充值/消费金额不足'],'JSONP');
@@ -233,21 +241,24 @@ class UserController extends Controller{
             array('twopassword','require','二级密码不能为空'),
         );
         if(!$order->validate($rules)->create()){
-            $data=array('status'=>false,'error_message'=>$order->getError());
+            $data=array('status'=>false,'message'=>$order->getError());
         }else{
             $totalCash= M(self::BACKMONEY)->where(['u2id'=>$id])->sum('money');
             $find=M('user2')->where(['id'=>$id,'twopassword'=>md5($date['twopassword'])])->find();
             if($date['money']>=100){
                 if($date['money']>$totalCash){
-                    $data=array('status'=>false,'error_message'=>'余额不足');
+                    $data=array('status'=>false,'message'=>'余额不足');
                 }else{
                     if($find){
-                        $order->money='-'.($order->money*(1-0.05));
+                        $order->money='-'.($data['money']*(1-0.05));
                         $order->create_at=time();
                         $order->ordercode=createCode();
                         $order->u2id=$id;
                         $order->status=3;
                         $order->message='基金提现';
+                        $order->paytype = $data['paytype'];
+                        $order->payee_man = $data['payee_man'];
+                        $order->payee_account = $data['payee_account'];
                         $tr=M();
                         $tr->startTrans();
                         try{
@@ -255,7 +266,7 @@ class UserController extends Controller{
                             if($res){
                                 $res2=$this->addBackMoney($date['money'],$res);
                                 if($res2){
-                                    $data=array('status'=>true,'error_message'=>'申请提现成功');
+                                    $data=array('status'=>true,'message'=>'申请提现成功');
                                     $tr->commit();
                                 }else{
                                     throw new Exception();
@@ -264,15 +275,15 @@ class UserController extends Controller{
                                 throw new Exception();
                             }
                         }catch(Exception $e){
-                            $data=array('status'=>false,'error_message'=>'申请提现失败');
+                            $data=array('status'=>false,'message'=>'申请提现失败');
                             $tr->rollback();
                         }
                     }else{
-                         $data=array('status'=>false,'error_message'=>'二级密码错误');
+                         $data=array('status'=>false,'message'=>'二级密码错误');
                     }
                 }
             }else{
-                $data=array('status'=>false,'error_message'=>'最低发起提现额度为100');
+                $data=array('status'=>false,'message'=>'最低发起提现额度为100');
             }
         }
         $this->ajaxReturn($data,'JSONP');
@@ -331,7 +342,7 @@ class UserController extends Controller{
             M(self::BACKMONEY)->add(['u2id'=>$friend['id'],'money'=>$money - $money * 0.01,'source'=>$id,'message'=>'好友互转转入','create_at'=>time(),'order_id'=>$fid]);
             $this->ajaxReturn(['status'=>1,'message'=>'互转成功'],'JSONP');
         }
-        dump($return);
+        $this->ajaxReturn(['status'=>2,'message'=>'请完善信息'],'JSONP');
     }
 	//忘记二级密码
 	public function forgetpwd(){
@@ -432,11 +443,13 @@ class UserController extends Controller{
     //我的直播
     public function myLive(){
         $id = session(self::USERID);
+        $id = 15;
         $qkid = M(self::LIVE)->where(['uid'=>$id])->find();
         if(!$qkid){
             $this->ajaxReturn(['status'=>2,'message'=>'您没有开启直播的权限'],'JSONP');
         }
 		$video = M(self::VIDEOING)->where(['qkid'=>$qkid,'state'=>1])->select();
+        dump($video);
         foreach($video as $k=>$v){
             
         }
@@ -449,7 +462,7 @@ class UserController extends Controller{
         $qrcode = '';
         if(!$user['qrcode'] || !is_file('.'.$user['qrcode'])){
             vendor("phpqrcode.phpqrcode");
-            $data = 'http://xtwh.yjj-jj.top/home/Login/userScanCode?refereeid='.$id;
+            $data = 'http://'.$_SERVER['SERVER_NAME'] .'/home/Login/userScanCode?refereeid='.$id;
             // 纠错级别：L、M、Q、H
             $level = 'L';
             // 点的大小：1到10,用于手机端4就可以了

@@ -8,7 +8,6 @@ vendor('Weixinpay.WxPayPubHelper');
 class LoginController extends Controller{
 
 
-
     public function login(){            //登陆页面  若获取到信息, 需显示用户名,用户密码,保存密码选中状态
         $user = D('User2');
         if(!empty(cookie('mobile')) && !empty(cookie('pwd')) ){
@@ -17,7 +16,7 @@ class LoginController extends Controller{
             $userData = $user->where(array('phone'=>$mobile,'password'=>$pwd))->find();
             if($userData){
                 session('home_user_id',$userData['id']);
-                jsonpReturn('1','成功',$userData);
+                jsonpReturn('1','登陆成功',$userData);
             }else{
                 jsonpReturn('0','账号不存在或密码错误!');
             }
