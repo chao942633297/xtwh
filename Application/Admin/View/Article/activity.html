@@ -1,0 +1,106 @@
+<include file="Public/head" />
+
+<style type="text/css">
+</style>
+<!--   <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel" style="color:red">点击活动编号可以查看报名用户信息</h4>
+    </div> -->
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
+      <table id="jqGrid" style="width: 100%;"></table>
+      <div id="jqGridPager"></div>  
+      </div>
+      <div role="tabpanel" class="tab-pane" id="edituser">    
+  </div>
+</div>
+
+  <!-- 添加二级分类 -->
+  <div class="modal fade bs-example-modal-ld" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="width:100%;margin:auto;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">活动人员:</h4>
+        </div>
+
+         <div class="modal-body">
+            <table class="table table-striped" style="width:100%;" >
+              <tr id="typetwo">
+                <th>姓名:</th>
+                <th>手机号:</th>
+                <th>省份</th>
+                <th>市</th>
+                <th>区/县</th>
+                <th>报名时间</th>
+              </tr>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>         
+      </div>
+    </div>
+  </div>
+
+<include file="Public/footer" />
+<script type="text/javascript">
+  function formatLink(id){
+    return "<a href='javascript:' class='btn btn-default' onclick='searchUser("+id+");'>查询报名用户</a>";
+  }
+
+  function searchUser(id){
+    $("#typetwo").nextAll("tr").empty();
+    $.ajax({
+      url:"{:U('Article/activityUser')}",
+      type:"GET",
+      data:{id,id},
+      success:function(data){
+        // console.log(data);
+        var count = data.length;
+        var option = "";
+        if (count >0) {
+          for (var i = 0; i < count; i++) {
+            option += "<tr>";
+            option += "<td>"+data[i]['name']+"</td>";
+            option += "<td>"+data[i]['phone']+"</td>";
+            option += "<td>"+data[i]['province']+"</td>";
+            option += "<td>"+data[i]['city']+"</td>";
+            option += "<td>"+data[i]['area']+"</td>";
+            option += "<td>"+data[i]['create_at']+"</td>";
+            option += "</tr>";
+          }
+        }
+        $("#typetwo").after(option);        
+        $('.bs-example-modal-ld').modal().show(); 
+      }
+
+    });
+  }
+  $(document).ready(function($) { 
+    $("#jqGrid").jqGrid({
+      styleUI : 'Bootstrap',
+      colModel: [
+          { label: '文章标题', name: 'title',width:'200',},
+          { label: '简述', name: 'desc',width:'300'},
+          { label: '阅读量', name: 'looknum',width:'50'},
+          { label: '报名数', name: 'num',width:'50'},
+          { label: '添加时间', name: 'create_at',width:'100'},
+          { label: '操作', name: 'id',width:'100',formatter:formatLink}
+
+      ],
+      viewrecords: true,
+      rownumbers: true,
+      rownumWidth: 35,
+      height: document.documentElement.clientHeight-135,
+      autowidth:true,
+      rowNum: 9,
+      datatype: 'local',
+      loadonce:true,
+      pager: "#jqGridPager"
+    });
+    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").trigger('reloadGrid');
+  });
+</script>
+

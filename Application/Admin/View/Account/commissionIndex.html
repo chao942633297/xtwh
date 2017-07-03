@@ -15,7 +15,8 @@
 		<td><input type="text" class="form-control" name="phone" value="" id="phone" placeholder="请输入数字"/>	</td>		
     <td><input type="button" name="" id="searchsub" class="btn btn-primary" value="查询"></td>
     <td><input type="reset" name="" class="btn btn-primary" value="重置"></td>
-	</tr>	
+	  <td><a href="{:U('/Admin/Account/getExcel')}" class="btn" style="background-color: green;color:white">导出表格</a></td>
+  </tr>	
 </table>
 </form>
   <div class="tab-content">
@@ -29,6 +30,7 @@
   
 <include file="Public/footer" />
 <script type="text/javascript">
+
   $("#phone").bind("input propertychange",function(){
     var phone = $(this).val();
     if (!/^[0-9]*$/.test(phone)) {
@@ -74,7 +76,7 @@
       rownumWidth: 35,
       height: document.documentElement.clientHeight-135,
       autowidth:true,
-      rowNum: 9,  //每页显示条数
+      rowNum: 15,  //每页显示条数
       datatype: 'local',
       loadonce:true,
       pager: "#jqGridPager"

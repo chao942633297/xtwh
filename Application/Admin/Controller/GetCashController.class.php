@@ -129,6 +129,47 @@ class GetCashController extends Controller
     #调用提现
     public function AlipayTx($id){
         $order = A('Home/AliPay');
-        return $order->test($id);
+        return $order->withDraw($id);
+    }
+
+    #提现列表--导出表格
+    public function getExcelCash(){
+        $xlsName  = "提现列表";
+        $xlsCell  = array(
+        array('id','序列'),
+        array('name','真实姓名'),
+        array('phone','手机号'),
+        array('money','提现金额'),
+        array('zkmoney','到账金额'),
+        array('status','状态'),
+        array('create_at','申请提现时间')
+        );
+        $order = M('order');
+        $user  = M('user2');
+        $orders= $order->where("message = '基金提现' and money < 0")->order("status asc")->select();
+        $idall = $order->where("message = '基金提现' and money < 0")->getField("u2id",true);
+        $idall = array_unique($idall);
+        $users = $user->field("name,phone,id")->where(["id"=>["in",$idall]])->select();
+        foreach ($orders as $k => $v) {
+            if($v['status']==3){
+                $orders[$k]['status'] = "待提现";
+            }else if($v['status'] ==4){
+                $orders[$k]['status'] = "已提现";                
+            }else if($v['status'] ==5){
+                $orders[$k]['status'] = "驳回";                                
+            }
+            $orders[$k]["money"] = abs($v["money"]);
+            $orders[$k]["zkmoney"] = sprintf('%.2f',$orders[$k]["money"] * 0.95);
+            $orders[$k]["create_at"] = date("Y-m-d H:i:s",$v["create_at"]);
+            foreach ($users as $k1 => $v1) {
+                if ($v["u2id"] == $v1["id"]) {
+                    $orders[$k]["name"] = $v1["name"];
+                    $orders[$k]["phone"] = $v1["phone"];
+                }
+            }
+        }
+
+
+        getExcel($xlsName,$xlsCell,$orders);
     }
 }

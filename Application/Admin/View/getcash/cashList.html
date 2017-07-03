@@ -1,11 +1,12 @@
 <include file="Public/head" />
 
 <style type="text/css">
-  table tr > td {padding-left:5px;padding-bottom:10px;padding-top:5px;width:40%;}
+  table tr > td {padding-left:5px;padding-bottom:10px;padding-top:5px;}
 </style>
 <div>
   <table>
     <tr>
+        <td style="padding-left:20px;font-weight:bold;">状态:</td>
         <td>        
             <select class="form-control" name="status" id="status">
                 <option value="-1">选择</option>
@@ -17,7 +18,9 @@
         <td>
             <input class="form-control" type="text" size="24px" placeholder="输入手机号过滤查询" id="phone" style="width:250px;" />
         </td>
-        <td style="paddin-left:-20px"><button id="submit_search" class="btn btn-primary " onclick="searchState();">查询</button></td>      
+        <td style="paddin-left:-20px"><button id="submit_search" class="btn btn-primary " onclick="searchState();">查询</button></td> 
+        <td><a href="{:U('/Admin/GetCash/getExcelCash')}" class="btn" style="background-color: green;color:white">导出表格</a></td>
+
     </tr>
   </table>
 </div>

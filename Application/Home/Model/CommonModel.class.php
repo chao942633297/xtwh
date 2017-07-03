@@ -1,13 +1,11 @@
 <?php
 namespace Home\Model;
-use Think\Model;
-class CommonModel extends Model{
-    protected $tableName='User1';
+class CommonModel{
     public function getLoopCate($pid = '0'){    //获取视频的分类
         $category = D('Category');
         $topCate = $category->where(array('pid'=>$pid,'is_service'=>1))->select();
         foreach($topCate as $k=> $val){
-            $secCate = $this->loopCate($val['id']);
+            $secCate = $this->getLoopCate($val['id']);
             if($secCate){
                 $topCate[$k]['child'] = $secCate;
             }else{
@@ -21,9 +19,10 @@ class CommonModel extends Model{
         $where = array();
         if($input){
             $cateId = $input['cateId'];
-            $province = $input['province'];
-            $city = $input['city'];
-            $area = $input['area'];
+            $data = explode(',',$input['addr']);
+            $province = $data['0'];
+            $city = $data['1'];
+            $area = $data['2'];
             $arrId = D('Usercate')->where(array('categoryid'=>$cateId))->getField('user1_id',true);
             if($cateId){
                 $where['id'] = array('in',$arrId);

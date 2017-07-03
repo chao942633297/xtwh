@@ -14,7 +14,20 @@ class ArticleController extends Controller {
 
     #文章管理
     public function Article(){
-    	$data = M('article')->field("id,title,desc,looknum,logo,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->select();
+    	$data = M('article')->field("id,title,desc,type,class,looknum,logo,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->where("is_del = 0")->select();
+        if (empty($data) || $data == false) {
+            $data = [];
+        }else{
+            $type = M('category')->field("id,name")->where("is_service =2 ")->select();
+            foreach ($data as $k => $v) {
+                foreach ($type as $k1 => $v1) {
+                    if ($v1['id'] == $v['class']) {
+                        $data[$k]['class'] = $v1['name'];
+                    }
+                }
+            }            
+        }
+
     	$this->assign("data",json_encode($data));
     	$this->display();
     }
@@ -90,5 +103,123 @@ class ArticleController extends Controller {
     }
  
 
+    #活动管理
+    public function activity(){
+        $activity = M('article')->field("id,title,desc,type,class,looknum,logo,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->where("type = 4 and is_del= 0 ")->select();
+        $ac       = M('activity')->select();
+        if (empty($activity)) {
+            $activity = [];
+        }else{
+             foreach ($activity as $k => $v) {
+                $activity[$k]['create_at'] = date("Y-m-d H:i:s",$v['create_at']);
+                $activity[$k]['num'] = 0;
+                foreach ($ac as $k1 => $v1) {
+                    if ($v['id'] == $v1['aid']) {
+                        $activity[$k]['num'] += 1;
+                    }
+                }
+            }           
+        }
+
+        $this->assign("data",json_encode($activity));
+        $this->display();
+    }
+
+
+    #活动人员
+    public function activityUser(){
+        $id   = I('id');
+        $user = M('activity')->where("aid=%d",$id)->getField("uid",true);
+        $user1 = M('activity')->where("aid=%d",$id)->select();
+        if (empty($user)) {
+            $userinfo = [];
+        }else{
+            $user = implode(",",$user);
+            $where["id"] = array("in",$user);
+            $userinfo = M('user2')->field("id,name,phone,province,city,area")->where($where)->select();
+            foreach ($userinfo as $k => $v) {
+                foreach ($user1 as $key => $value) {
+                    if ($v['id'] == $value['uid']) {
+                        $userinfo[$k]['create_at'] = date("Y-m-d H:i:s",$value['create_at']);
+                    }
+                }
+            }            
+        }
+        $this->ajaxReturn($userinfo);
+    }
+
+
+
+
+    #服务管理
+    public function service(){
+        $article = M('article');
+        $data = $article->field("id,title,desc,type,class,looknum,logo,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as create_at")->where("type = 0 and is_del =0 ")->select();
+        $this->assign("data",json_encode($data));
+        $this->display();
+   }
+
+   #添加服务文章
+   public function addservice(){
+	   	$type = I('type');
+	   	if ($type == 2 ) {
+		   	$info = M('article')->where(['id'=>I('id')])->find();
+		   	$this->assign("data",$info);
+	   	}
+        $cate = M('category')->field("id,name")->where("is_service = 2")->select();
+        $user = M('user2')->field("id,name,phone")->where("u1id > 0 ")->select();
+        $this->assign("cate",$cate);
+        $this->assign("user",$user);
+        $this->assign("type",$type);
+        $this->display();
+   }
+
+   #保存添加的服务文章
+   public function saveService(){
+        $type  = I('type');
+        if ($type == 1) { //type = 1 为添加
+	        if (I('lunbo') != "") {
+	            $arr = array_filter(explode("*|*",I('lunbo')));
+	        }   
+	        $data = $_POST;
+	        unset($data['lunbo']);
+	        unset($data['id']);
+	        unset($data['type']);
+	        $data['create_at'] = time();
+	        $res = M('article')->add($data);
+	        if ($res) {
+	        	$dd = [];
+	        	foreach ($arr as $k => $v) {
+	        		$dd[] = array("img"=>$v,"pid"=>$res);
+	        	}
+	        	$rr = M('lunbo')->addAll($dd);
+	        	if ($rr) {
+	           		$this->ajaxReturn(['code'=>1,'msg'=>'添加成功']);
+	        	}else{
+	            	$this->ajaxReturn(['code'=>0,'msg'=>'添加失败']);
+	        	}
+	        }else{
+	            $this->ajaxReturn(['code'=>0,'msg'=>'添加失败']);
+	        }        	
+        }else{
+	        $data = $_POST;
+	        unset($data['type']);
+	        unset($data['lunbo']);
+	        $res = M('article')->save($data);
+	        	if ($res) {
+	           		$this->ajaxReturn(['code'=>1,'msg'=>'编辑成功']);
+	        	}else{
+	            	$this->ajaxReturn(['code'=>0,'msg'=>'编辑失败']);
+	        	}
+        }
+
+
+   }
+
+       //文本编辑器
+    public function ueditor(){
+        $data = new \Org\Util\Ueditor();
+        echo $data->output();
+    }
 
 }

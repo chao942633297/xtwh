@@ -1,0 +1,193 @@
+<include file="Public/head" />
+
+<style type="text/css">
+  table tr > td:first-child{padding-left:20px;padding-bottom:10px;text-align:center;}
+  table tr > td:last-child input{width:80%;margin-bottom:10px;  }
+</style>
+<div>
+  <div style="margin:24px;">
+   <div style="margin:24px;">
+      <a style="margin-left:20px;width:100px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal">添加用户</a>
+    </div>
+   
+  </div>
+
+<!-- 添加 -->
+<div id="gridSystemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="gridModalLabel"> <font color="red">直播账号为"user"+用户id, 密码为手机号 </font></h4>
+        </div>
+        <div class="modal-body">
+          <table style="width:80%;margin:0 auto">
+            <tr>
+            <td>老师/机构:</td>
+            <td>
+              <select name="user1" id="user1" class="form-control">
+                  <volist name="user" id="vo">
+                  <option value="{$vo['id']}">{$vo['name']}　{$vo['phone']}</option>
+                  </volist>
+              </select>
+            </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="addUser()">添加</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
+
+<div id="update1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="gridModalLabel">修改密码</h4>
+        </div>
+        <div class="modal-body">
+            <table>
+              <tr>
+                <td>新密码:</td>
+                <input type="hidden" name="" id="qkid" value="">
+                <td><input type="password" name="password1" id="password1" class="form-control"></td>
+              </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="updatePwd();">修改</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
+
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
+      <table id="jqGrid" style="width: 100%;"></table>
+      <div id="jqGridPager"></div>  
+      </div>
+      <div role="tabpanel" class="tab-pane" id="edituser">    
+  </div>
+</div>
+
+
+<include file="Public/footer" />
+
+
+<script type="text/javascript">
+  function addUser(){
+   var id = $("#user1 option:selected").val();
+    $.ajax({
+      url:"{:U('Admin/Course/addUser')}",
+      type:"GET",
+      data:{id:id},
+      success:function(data){
+        if (data.code == 1) {
+          alert(data.msg);
+          window.location.href = "{:U('Admin/Course/userShow')}";
+        }else{
+          alert(data.msg);
+        }
+      }
+    });
+  }
+
+  function updateuser(qkid){
+    $("#qkid").val(qkid);
+  }  
+
+  function updatePwd(){
+    var qkid = $("#qkid").val();
+    var pwd  = $("#password1").val();
+    $.ajax({
+      url:"{:U('Admin/Course/updatePwd')}",
+      type:"POST",
+      data:{qkid:qkid,password:pwd},
+      success:function(data){
+        if (data.code == 1 ) {
+          alert(data.msg);
+          window.location.href = "{:U('Admin/Course/userShow')}";
+        }else{
+          alert(data.msg);
+        }
+      }
+    });
+  }
+
+  function formatLink(qkid) {
+    return "<a class='btn btn-primary' data-toggle='modal' data-target='#update1' onclick='updateuser("+qkid+")' >修改密码</a>&nbsp;<a class='btn btn-danger'onclick='deleteUser("+qkid+")' id='del"+qkid+"'>删除</a>";
+  };
+ 
+  function deleteUser(qkid){
+    if (confirm("你确定要删除吗?")) {
+      $.ajax({
+        url: "{:U('/Admin/Course/delUser')}",
+        type: "GET",
+        data: { qkid: qkid},
+        success: function(data) {
+          if (data.code == 1 ) {
+            // alert(data.msg);
+            // window.location.href = "{:U('Admin/Course/userShow')}";
+            $("#del"+qkid).parent().parent().remove();
+          }else{
+            alert(data.msg);
+          }
+        }
+      });     
+    }
+  }
+  
+
+  $(document).ready(function($) { 
+    $("#jqGrid").jqGrid({
+      styleUI : 'Bootstrap',
+      colModel: [
+          { label: '用户名', name: 'name',width:'150'},         
+          { label: '手机号', name: 'phone',width:'120'},
+          { label: '趣看用户id', name: 'qkid',width:'120'},
+          { label: '创建时间', name: 'create_at',width:'120'},
+          { label: '操作', name: 'qkid',width:200,formatter: formatLink}
+      ],
+      viewrecords: true,
+      rownumbers: false,
+      rownumWidth: 35,
+      height: document.documentElement.clientHeight-135,
+      autowidth:true,
+      rowNum: 10,
+      datatype: 'local',
+      loadonce:true,
+      pager: "#jqGridPager"
+    });
+    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").trigger('reloadGrid');
+  });
+</script>
+<script>
+  //模糊查询会员
+  function searchState(){
+    var phone = $("#phone").val();
+    var name = $("#name").val();
+    var grade = $("#grade").val();
+    var insta = $("#insta").val();
+    var inend = $("#inend").val();
+    if (insta.length <0 || inend.length <0) {
+      alert('请选择时间');return;
+    };
+    $.ajax({
+      url:"{:U('/Admin/User/searchUser')}",
+      type:'GET',
+      data:{'start':insta,'end':inend,'phone':phone,'grade':grade,'name':name},
+      dataType:'json',
+      success:function(returndata){
+        $("#jqGrid").clearGridData();
+            $("#jqGrid").jqGrid('setGridParam', { data: returndata});
+            $("#jqGrid").trigger('reloadGrid');
+      }
+    });
+  }
+</script>

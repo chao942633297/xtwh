@@ -1,4 +1,41 @@
 <?php
+
+
+
+function multi_array_sort($multi_array,$sort_key,$sort=SORT_ASC){      //对二维数组某个字段排序
+    if(is_array($multi_array)){
+        foreach ($multi_array as $row_array){
+            if(is_array($row_array)){
+                $key_array[] = $row_array[$sort_key];
+            }else{
+                return false;
+            }
+        }
+    }else{
+        return false;
+    }
+    array_multisort($key_array,$sort,$multi_array);
+    return $multi_array;
+} 
+
+
+
+
+/**
+ * Jsonp方式返回数据到客户端
+ * @param mixed $data 要返回的数据
+ * @author jcl
+ * @return array
+ */
+function jsonpReturn1($status='',$msg='',$data=array()) {
+    $data = array("status"=>$status,"msg"=>$msg,"data"=>$data);
+    if(empty($type)) $type  =   'jsonp';
+            // 返回JSON数据格式到客户端 包含状态信息
+            header('Content-Type:application/json; charset=utf-8');
+            $handler  =   isset($_GET[C('VAR_JSONP_HANDLER')]) ? $_GET[C('VAR_JSONP_HANDLER')] : C('DEFAULT_JSONP_HANDLER');
+            exit($handler.'('.json_encode($data,$json_option).');');
+}
+
 // 判断是否是微信内部浏览器
 function is_weixin(){
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
@@ -6,6 +43,18 @@ function is_weixin(){
         }
             return false;
 }
+
+/**
+ * 将字符解析成数组
+ * @param $str
+ */
+function parseParams($str)
+{
+    $arrParams = [];
+    parse_str(html_entity_decode(urldecode($str)), $arrParams);
+    return $arrParams;
+}
+
 function ObjectToArray($array) {
     if(is_object($array)) {
         $array = (array)$array;
@@ -65,9 +114,9 @@ function getChilden($uid,$num = 1){
     }
     $users_id = trim($users_id,',');    //一级下级
     for($i = 1;$i < $num;$i++){
-        if(!$user_id){
-            return $user_id;
-        }
+//        if(!$user_id){
+//            return $user_id;
+//        }
         $users_id = getChilden($users_id,$num-1);
         return $users_id;
     }

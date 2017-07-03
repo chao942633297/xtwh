@@ -1,160 +1,102 @@
 <include file="Public/head" />
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/jedate/skin/jedate.css">
-<script src="__PUBLIC__/js/uploadPreview.js" type="text/javascript"></script>
-<script src="__PUBLIC__/js/uploadPreview.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="__PUBLIC__/jedate/jquery.jedate.js"></script>
- <script>
-       window.onload = function () { 
-            new uploadPreview({ UpBtn: "up_img", DivShow: "imgdiv", ImgShow: "imgShow" });
-        }
-    </script>
-<style type="text/css">
-	table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
-	table tr > td:last-child input{width:60%;margin-bottom:10px;	}
-ul, ol, dl { list-style: none; }
-._citys { width: 450px; display: inline-block; border: 2px solid #eee; padding: 5px; position: relative; background: #fff;}
-._citys span { color: #56b4f8; height: 15px; width: 15px; line-height: 15px; text-align: center; border-radius: 3px; position: absolute; right: 10px; top: 10px; border: 1px solid #56b4f8; cursor: pointer; }
-._citys0 { width: 100%; height: 34px; display: inline-block; border-bottom: 2px solid #56b4f8; padding: 0; margin: 0; }
-._citys0 li { display: inline-block; line-height: 34px; font-size: 15px; color: #888; width: 80px; text-align: center; cursor: pointer; }
-.citySel { background-color: #56b4f8; color: #fff !important; }
-._citys1 { width: 100%; display: inline-block; padding: 10px 0; }
-._citys1 a { width: 83px; height: 35px; display: inline-block; background-color: #f5f5f5; color: #666; margin-left: 6px; margin-top: 3px; line-height: 35px; text-align: center; cursor: pointer; font-size: 13px; overflow: hidden; }
-._citys1 a:hover { color: #fff; background-color: #56b4f8; }
-.AreaS { background-color: #56b4f8 !important; color: #fff !important; }
-</style>
+<!-- 上传商品缩略图 -->
+<form id="fmform" action="" method="POST" enctype="multipart/form-data">
+    <input type="hidden" value="fmimg" name="imgtype"/>
+    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform')"/>
+</form>
 	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">视频　添加 | 编辑</h4>
+      <h4 class="modal-title" id="myModalLabel">视频信息编辑</h4>
     </div>
-    <form action="{:U('Course/insert')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
+   <form action="{:U('Course/insert')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
      <div class="modal-body">       
-		<table style="width: 100%;">
-		<tr style="margin-bottom:5px;">
-            <td>选择课程分类</td>
-            <td><select name="kecheng_id" class="form-control" id="ke" style="width:300px;margin-bottom: 10px;" >
-              <option value="0">选择分类</option>
-              <foreach name="row" item="va" >
-                <option value="{$va['id']}" <?php if($data['kecheng_id'] == $va['id']) echo 'selected';?>>{$va['name']}</option>
-              </foreach>
-            </select></td>
-          </tr>
+      <table style="width: 80%;margin:0 auto;">     
            <tr style="margin-bottom:5px;">
             <td>选择科目</td>
-            <td><select name="categoryid" class="form-control" id="mu" style="width:300px;margin-bottom: 10px;" >
-              <option value="0">{$name}</option>
-             
+            <td><select name="category" class="form-control" id="category" style="width:300px;margin-bottom: 10px;" >
+              <volist name="category" id="vo">
+                <option value="{$vo['id']}" <if condition="$data['categoryid'] eq $vo['id']"> selected="selected" <else /></if> >{$vo['name']}</option>
+              </volist>
             </select></td>
           </tr>
           <tr style="margin-bottom:5px;">
             <td>标题</td>
-            <td><input type="text" class="form-control" name="title" placeholder="标题" id="name" value="{$data['title']}"><font color="red">*视频标题不可以为空*</font></td>
+            <td><input type="text" class="form-control" name="video_name" placeholder="标题" id="name" value="{$data['video_name']}" style="width: 300px;margin-bottom:10px;"></td>
           </tr>
           <tr style="margin-bottom:5px;">
-            <td>封面</td>
-            <td id="imgdiv"><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" ><img id="imgShow" width="100" src="{$data['logo']}" height="100" /></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>视频连接</td>
-            <td><input type="text" class="form-control" name="video" placeholder="乐视视频连接" id="vid" value="{$data['video']}"><font color="red">*乐视视频连接*</font></td>
-          </tr>          
+            <td>视频logo图</td>
+            <td><img src="{$data['logo']}" id="imgurl" name="imgurl" style="width: 100px;height: 100px;border-style: none" class="form-control" src="" onclick="javascript:$('#fmimg').click();" alt="" /></td>
+          </tr>        
+          <input type="hidden" name="logo" value="{$data['logo']}" id="logo">         
           <tr style="margin-bottom:5px;">
             <td>价格</td>
-            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value="{$data['price']}"><font color="red">*价格不可以为空*</font></td>
+            <td><input type="text" class="form-control" name="price" placeholder="视频价格" id="pri" value="{$data['price']}" style="width: 300px;margin-bottom:10px;"></td>
           </tr> 
+          <tr style="margin-bottom:10px;">
+            <td>限制额度</td>
+            <td><input type="text" class="form-control" name="limit_price" placeholder="限制额度"  value="{$data['limit_price']}" style="width: 300px;margin-bottom:5px;"></td>
+          </tr>
+          <tr style="margin-bottom:5px;">
+            <td>会员折扣</td>
+            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value="{$data['discount']}" style="width: 300px;margin-bottom:10px;"></td>
+          </tr>                    
           <tr>        
              <td>简介</td>
-             <td><textarea style="resize:none;width:60%;height:200px;margin-top: 10px;" type="text" rows="4" class="form-control" name="description" id="des" >{$data['description']}</textarea><font color="red">*视频简介*</font></td>
+             <td><textarea style="resize:none;width:50%;height:200px;margin-bottom:10px;" type="text" rows="4" class="form-control" name="description" id="des" >{$data['description']}</textarea></td>
          </tr> 
           
           <tr style="margin-bottom:5px;">
             <td>开课时间</td>
-            <td><input type="text" class="workinput wicon mr25 form-control" id="inpstart" readonly placeholder="请选择日期" value="" name="start_time"><font color="red">*课程线下开课时间*</font></td>
+            <td><input type="text" class="workinput wicon mr25 form-control" id="start_time" readonly placeholder="请选择日期" value="" name="start_time" style="width: 300px;margin-bottom:10px;"></td>
           </tr>
-          <tr style="margin-bottom:5px;">
-            <td>会员折扣</td>
-            <td><input type="text" class="form-control" name="discount" placeholder="会员折扣"  value="{$data['discount']}"><font color="red">可以为空</font></td>
-          </tr>
-           <tr style="margin-bottom:5px;">
-            <td>点击量</td>
-            <td><input type="text" class="form-control" name="click" placeholder="视频点击量"  value="{$data['click']}"><font color="red"></font></td>
-          </tr>
-           <tr style="margin-bottom:5px;">
-            <td>视频状态</td>
-            <td><select name="status" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
-                <option value="0">上架</option>
-              
-                <option value="1">下架</option>          
-            </select></td>
-          </tr>
+
            <tr style="margin-bottom:5px;">
             <td>授课方式</td>
             <td><select name="line" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
-                <option value="0">线上</option>
+                <option value="0" <if condition="$data['line'] eq 0 "> selected="selected" <else /></if>  >线上</option>
               
-                <option value="1">线下</option>          
+                <option value="1" <if condition="$data['line'] eq 1 "> selected="selected" <else /></if>  >线下</option>          
             </select></td>
           </tr>  
-	             
-		</table>
-	    </div> 
-	    <input type="hidden" name="id" value="{$data['id']}">
-	    <input type="hidden" name="user_id" value="{$data['user_id']}">
+               
+    </table>
+      </div> 
+      <input type="hidden" name="categoryid" id="categoryid">
         <input type="hidden" name="type" value="edit">   
-		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
+        <input type="hidden" name="id" id="" value="{$data['id']}">
+    <button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
 <include file="Public/footer" />
-<script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
-<script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
-<script src="__PUBLIC__/js/jquery-1.11.3.min.js"></script>
-<script src="__PUBLIC__/js/Popt.js"></script>
-<script src="__PUBLIC__/js/cityJson.js"></script>
-<script src="__PUBLIC__/js/citySet.js"></script>
 <script type="text/javascript">
-	$("#city").click(function (e) {
-		SelCity(this,e);
-	    console.log("inout",$(this).val(),new Date())
-	});
- $("#ke").change(function(){
-    // alert($(this).val());
-    var id = $("#ke").val();
-    if(id != 0){
-          $.ajax({
-            type     : "POST",
-            url      : "{:U('Course/kemu')}",
-            data     : {"id":id,},
-            dataType : "json",
-            success  : function(data){   
-                $("#mu option").remove();          
-                for (var i = data.length - 1; i >= 0; i--) {
-
-                  $("#mu").append("<option value='" + data[i]['id'] + "'>" + data[i]['name'] + "</option>");               
-                }
-            }, error : function(){
-              alert('数据获取失败');
-            }
-          }); 
-      }else{
-         $("#mu option").remove();
-         $("#mu").append("<option value='0'>选择科目</option>");    
+  function upload(fromID){
+      var vars=$("#"+fromID);
+      var options={
+          type:"post",
+          url:"{:U('/Admin/File/Upload')}",
+          dataType:'json',
+          contentType:"application/json;charset=utf-8",
+          success:function(data){
+              if(data!="false"){
+                  $("#imgurl").attr('src',data);   
+                  $("#logo").val(data);     
+              }
+          }
       }
-  });
-	//保存添加或修改的推荐信息
-	function check(){
-	var ke  = $("#ke").val();  
-    if(ke == 0){
-      alert('没有选择课程');
-       return false;
-    }
+      vars.ajaxSubmit(options);
+  }
+  //保存添加或修改的推荐信息
+  function check(){
+    var categoryid = $("#category option:selected").val();
+    $("#categoryid").val(categoryid);
+
+
     var name   = $("#name").val();  
     if(name == 0){
       alert('标题不能为空');
        return false;
     }
    
-    var vid = $("#vid").val();
-    if(vid == 0){
-      alert('视频连接不可以为空');
-       return false;
-    }
   
     var pri = $("#pri").val();
     if(pri == 0){
@@ -166,8 +108,16 @@ ul, ol, dl { list-style: none; }
       alert('视频介绍不能为空');
        return false;
     }
-	  return true; 	
-	}
-$('#inpstart').jeDate(start);
+    return true;  
+  }
+
+$("#start_time").jeDate({
+    // isvalid:["3,4,8,10",true],  //这里为true
+    // hmsSetVal:{$data['start_time']},
+    minDate: $.nowDate(0),
+    maxDate: '2025-06-16',
+    format:"YYYY-MM-DD hh:mm:ss",
+    zIndex:3000
+})
 </script>
 

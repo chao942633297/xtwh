@@ -20,19 +20,15 @@ class AdminController extends Controller {
 	}
 
 	public function index1(){
-		// var_dump($_GET);
 		if (IS_POST) {
-			// dump($_POST);exit;
 			$conf = serialize($_POST);
 			file_put_contents('./private/conf.txt',$conf);
 			$aa = unserialize(file_get_contents('./private/conf.txt'));
 			$this->ajaxReturn("成功");
-			// $this->success("更新规则成功！",$aa);
 		}else{		
 			$aa = file_get_contents('./private/conf.txt');
 			$aa = unserialize($aa);
 			$this->ajaxReturn($aa);		
-			// $this->assign("aa",$aa);
 		}		
 	}
 
@@ -69,19 +65,38 @@ class AdminController extends Controller {
 
 	#轮播图
 	public function lunbo(){
-		$data = M('lunbo')->select();
+		$type = I('type');
+		$id = I('id');
+		if ( $id > 0 ) {
+			$where['type'] = $type;
+			$where['pid'] = $id;
+			$data = M('lunbo')->where($where)->select();
+		}else{
+			$data = M('lunbo')->where("type=%d",$type)->select();
+		}
+		$this->assign("type",$type);
+		$this->assign("pid",$id);
 		$this->assign("data",json_encode($data));
 		$this->display();
 	}
 
 
 	public function addLunbo1(){
+		$type = I('type');
+		$pid = I('pid');
+		$this->assign("pid",$pid);
+		$this->assign("type",$type);
 		$this->display();
 	}
 
 	#添加轮播图
 	public function addlb(){
+		$pid = I('pid');
 		$data["img"] = I("img");
+		$data['type'] = I('type');
+		if ( $pid > 0 ) {
+			$data['pid'] = I('pid');
+		}
 		$data["createtime"] = time();
 		$yes = M('lunbo')->add($data);
 		$this->ajaxReturn($yes);
@@ -108,7 +123,7 @@ class AdminController extends Controller {
 		// 累计收入总额
 		$moneyall= M('order')->where("status =2 and money > 0 and message='充值余额'")->getField("abs(sum(money))");
 		// 今日提现总额
-		$todaytx  = M('order')->where("status >2 and  create_at > '%s' and create_at < '%s'",$start,$end)->getField("abs(sum(money))");
+		$todaytx  = M('order')->where("status >2 and money >0 and  create_at > '%s' and create_at < '%s'",$start,$end)->getField("abs(sum(money))");
 		// 今日提现手续费总计
 		if (empty($todaytx) || $todaytx <= 0 ) {
 			$todaytx  = 0;
@@ -117,7 +132,7 @@ class AdminController extends Controller {
 			$todaytx1 = $todaytx * 0.01; 
 		}
 		// 已发放提现总额
-		$aftertx = M('order')->where("status = 4")->getField("abs(sum(money))");
+		$aftertx = M('order')->where("status = 4 and money < 0 ")->getField("abs(sum(money))");
 		// 分销佣金总计
 		$account = M('backmoney')->where("money > 0 ")->getField("abs(sum(money))");
 
@@ -128,14 +143,26 @@ class AdminController extends Controller {
 		// 今日余额互转手续费总计
 		// 今日分销佣金总计
 		$todayaccount  = M('backmoney')->where(" money > 0 and create_at > '%s' and create_at < '%s'",$start,$end)->getField("abs(sum(money))");
+		if ( empty($todayaccount) || $todayaccount == false) {
+			$todayaccount = 0;
+		}
+
 		$this->assign("userall",$userall);
+		
 		$this->assign("moneyall",$moneyall);
+		
 		$this->assign("todaytx",$todaytx);
+		
 		$this->assign("todaytx1",$todaytx1);
+		
 		$this->assign("aftertx",$aftertx);
+		
 		$this->assign("account",$account);
+		
 		$this->assign("todayuser",$todayuser);
+		
 		$this->assign("todayaccount",$todayaccount);
+		
 		$this->display();
 	}
 

@@ -11,7 +11,7 @@ use Vendor\WxTx\WxTransfersConfig;
 vendor('Weixinpay.WxPayPubHelper');
 vendor('WxTx.WxTransfers');
 vendor('WxTx.WxTransfersConfig');
-class WechatController extends Controller {
+class WechatController extends BaseController {
 
 	public function checktoken()
 	{
@@ -22,62 +22,43 @@ class WechatController extends Controller {
 
 		public function wechatPay(){       //微信支付
 			$orderId = I('get.orderId');
-//			$orderId = '17';
-			$order = D('Order' );
-			$orderData = $order->where(array('id'=>$orderId))->find();
-			$openid ='oZpwf01K2-n9c7v9wH1Tg_sb4bRc';
-			$jsApi = new JsApi_pub();
-//			if (!isset($_GET['code'])){
-//				//触发微信返回code码
-//				$url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL);
-//				Header("Location: $url");
-//			}else{
-//				//获取code码，以获取openid
-//				$code = $_GET['code'];
-//				dump($code);die;
-//				$jsApi->setCode($code);
-//				$openid = $jsApi->getOpenId();
-//			}
-			$unifiedOrder = new UnifiedOrder_pub();
-			$unifiedOrder->setParameter("openid","$openid");//商品描述
-			$unifiedOrder->setParameter("body","杏坛文化");//商品描述
-			//自定义订单号，此处仅作举例
-			$timeStamp = time();
-			$out_trade_no = $orderData['ordercode'].time();
-			$total_fee = (int)$orderData['goodprice'];
-
-//			$out_trade_no = '942633297'.time();
-//			$total_fee = 1;
-
-			$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
-			$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
+            $order = D('OrderRelation');
+            $orderData = $order->where(array('id'=>$orderId))->relation('user2')->find();
+            $jsApi = new JsApi_pub();
+            //自定义订单号，此处仅作举例
+            $openid =$orderData['user2']['openid'];
+            if(empty($openid)) {
+                if (!isset($_GET['code'])) {
+                    //触发微信返回code码
+                    $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL.'/orderId/'.$orderId);
+                    Header("Location: $url");
+                } else {
+                    //获取code码，以获取openid
+                    $orderId = $_GET['orderId'];
+                    $orderData = $order->where(array('id'=>$orderId))->relation('user2')->find();
+                    $code = $_GET['code'];
+                    $jsApi->setCode($code);
+                    $openid = $jsApi->getOpenId();
+                }
+            }
+ 
+            $timeStamp = time();
+            $out_trade_no = $orderData['ordercode'];
+            $total_fee = $orderData['goodprice'] * 100;
+            $unifiedOrder = new UnifiedOrder_pub();
+            $unifiedOrder->setParameter("openid","$openid");//商品描述
+            $unifiedOrder->setParameter("body","杏坛文化");//商品描述
+            $unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
+			$unifiedOrder->setParameter("total_fee",$total_fee);//总金额
 			$unifiedOrder->setParameter("notify_url",WxPayConf_pub::NOTIFY_URL);//通知地址
 			$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
 			$prepay_id = $unifiedOrder->getPrepayId();
 			//=========步骤3：使用jsapi调起支付============
 			$jsApi->setPrepayId($prepay_id);
 			$jsApiParameters = $jsApi->getParameters();
-//			dump($jsApiParameters);die;
 			$this->assign('jsApiParameters',$jsApiParameters);
 			$this->display('Wechat/wxchatpay');
 	}
-
-	public function test(){
-		$jsApi = new JsApi_pub();
-		if (!isset($_GET['code'])){
-			//触发微信返回code码
-			$url = $jsApi->userAuthorizationLanding(WxPayConf_pub::JS_API_CALL_URL);
-			Header("Location: $url");
-		}else{
-			//获取code码，以获取openid
-			$code = $_GET['code'];
-			$jsApi->setCode($code);
-			$openid = $jsApi->getOpenId();
-		}
-		dump($openid);
-	}
-
-
 
 
 

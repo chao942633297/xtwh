@@ -15,11 +15,10 @@ class UserController extends Controller
 
     //首页
     public function index(){
-        // FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s')
-       $data = M('user2')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d') as create_at")->order('create_at desc')->select();
+        $data = M('user2')->field("*,FROM_UNIXTIME(create_at,'%Y-%m-%d') as create_at")->order('create_at desc')->select();
 
        $back = M('backmoney')->field("u2id,sum(money) as money")->group('u2id')->select();  //基金
-       
+     
        foreach ($data as $k => $v) {
             foreach ($back as $ke => $va) {
                 if ($v['id'] == $va['u2id']) {
@@ -32,9 +31,13 @@ class UserController extends Controller
               }
            }
        }
-       $this->assign('data',json_encode($data));
-       $this->display();
+  
+       $this->assign("data",json_encode($data));
+        $this->display();
     }
+
+
+
 
     public function add(){
         $this->display();
@@ -55,10 +58,10 @@ class UserController extends Controller
                 $this->error($upload->getError());   
             }else{             
                 foreach($info as $file){
-                    $path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+                    $path =  '/Uploads'.$file['savepath'].$file['savename'];   
                 }
             }
-            $_POST['headimg'] = $path;
+            $_POST['headimgurl'] = $path;
        }
        if ($_POST['grade'] == "-1") {
            unset($_POST['grade']);
@@ -77,7 +80,7 @@ class UserController extends Controller
     //会员信息页面
     public function info(){
         $id = I('id');
-        $data = M('user2')->field("id,phone,name,nickname,headimg,class,grade,province,city,area,address")->where("id=%d",$id)->find();
+        $data = M('user2')->field("id,phone,name,nickname,headimgurl,class,grade,province,city,area,address")->where("id=%d",$id)->find();
         $this->assign("data",$data);
         $this->display();
     }
@@ -97,10 +100,10 @@ class UserController extends Controller
                 $this->error($upload->getError());   
             }else{             
                 foreach($info as $file){
-                    $path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+                    $path = '/Uploads'.$file['savepath'].$file['savename'];   
                 }
             }
-            $_POST['headimg'] = $path;
+            $_POST['headimgurl'] = $path;
        }  
         $res = M('user2')->save($_POST);
         if ($res) {

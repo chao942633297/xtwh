@@ -1,9 +1,8 @@
 <include file="Public/head" />
 
 <style type="text/css">
-  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;}
+  table tr > td {padding-left:20px;padding-bottom:10px;}
 </style>
-<div>
 <div>
   <table>
     <tr>
@@ -32,8 +31,10 @@
       <table id="jqGrid" style="width: 100%;"></table>
       <div id="jqGridPager"></div>  
       </div>
-      <div role="tabpanel" class="tab-pane" id="edituser">    
+      <div role="tabpanel" class="tab-pane" id="edituser">  
+      </div>
   </div>
+
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-lg" role="document">
@@ -59,7 +60,6 @@
       </div>
     </div>
   </div>
-</div>
 <include file="Public/footer" />
 
 
@@ -115,6 +115,28 @@
     }
   }
  
+  //模糊查询会员
+  function searchState(){
+    var phone = $("#phone").val();
+    var grade = $("#grade option:selected").val();
+    if (phone == "" && grade == -1 ) {
+      alert("请填写手机号或者选择等级搜索");
+      return false;
+    }
+    $.ajax({
+      url:"{:U('/Admin/User/searchUser')}",
+      type:'GET',
+      data:{phone:phone,grade:grade},
+      dataType:'json',
+      success:function(returndata){
+        $("#jqGrid").clearGridData();
+            $("#jqGrid").jqGrid('setGridParam', { data: returndata});
+            $("#jqGrid").trigger('reloadGrid');
+      }
+    });
+  }
+
+
  
   function formatlevel(li){
     if(li == 0){
@@ -157,18 +179,14 @@
           { label: '账户余额',name: 'onemoney',width:'120'},
           { label: '基金金额',name: 'backmoney',width:'120' },
           { label: '注册时间',name: 'create_at',width:'150' },                  
-          // { label: '来源', name: 'source',width:'300',formatter: formatsource},
-          // { label: '城市', name: 'city',width:'100'},
-          // { label: '区县', name: 'area',width:'100'},
-          // { label: '详细地址', name: 'address',width:'300'},        
           { label: '操作', name: 'id',width:380,formatter: formatLink}
       ],
       viewrecords: true,
-      rownumbers: false,
+      rownumbers: true,
       rownumWidth: 35,
       height: document.documentElement.clientHeight-135,
       autowidth:true,
-      rowNum: 9,
+      rowNum: 15,
       datatype: 'local',
       loadonce:true,
       pager: "#jqGridPager"
@@ -176,26 +194,4 @@
     $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
     $("#jqGrid").trigger('reloadGrid');
   });
-</script>
-<script>
-  //模糊查询会员
-  function searchState(){
-    var phone = $("#phone").val();
-    var grade = $("#grade option:selected").val();
-    if (phone == "" && grade == -1 ) {
-      alert("请填写手机号或者选择等级搜索");
-      return false;
-    }
-    $.ajax({
-      url:"{:U('/Admin/User/searchUser')}",
-      type:'GET',
-      data:{phone:phone,grade:grade},
-      dataType:'json',
-      success:function(returndata){
-        $("#jqGrid").clearGridData();
-            $("#jqGrid").jqGrid('setGridParam', { data: returndata});
-            $("#jqGrid").trigger('reloadGrid');
-      }
-    });
-  }
 </script>

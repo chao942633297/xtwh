@@ -157,7 +157,7 @@ class Ueditor{
 		}else{
 			$data = array(
 				'state'=>"SUCCESS",
-				'url'=>\Vin\FileStorage::getPath($rootpath,$info['savepath'].$info['savename']),
+				'url'=>\Vin\FileStorage::getPath("http://ht.xtwhjy.com".$rootpath,$info['savepath'].$info['savename']),
 				'title'=>$info['savename'],
 				'original'=>$info['name'],
 				'type'=>'.' . $info['ext'],

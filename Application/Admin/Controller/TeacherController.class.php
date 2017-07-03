@@ -6,7 +6,6 @@ class TeacherController extends Controller
 {
     public function index(){
        $data = M('user1')->where('pid = 0 AND class = 1')->select();
-       // var_dump($data);
 
        $this->assign('data',json_encode($data));
        $this->display();
@@ -41,7 +40,7 @@ class TeacherController extends Controller
 				$this->error($upload->getError());   
 			}else{		       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];   
 			  	}
 			}
 			$data['logo'] = $path;
@@ -76,6 +75,7 @@ class TeacherController extends Controller
 	    		$this->error('编辑失败');
 	    	}	
     	}elseif($type == 'add'){
+            $data['major']     = $_POST['major'];  
     		$data['create_at'] = time();
     		$id = M('user1')->add($data); //添加老师到user1表中
             $typeid = explode(",",I('classall'));

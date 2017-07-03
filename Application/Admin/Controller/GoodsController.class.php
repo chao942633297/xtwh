@@ -48,7 +48,7 @@ class GoodsController extends Controller {
 			$this->error($upload->getError());   
 		}else{// 上传成功 			       
 		  	foreach($info as $file){
-		  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+		  		$path =  '/Uploads'.$file['savepath'].$file['savename'];   
 		  	}
 		}
 		$data = $_POST;
@@ -93,7 +93,7 @@ class GoodsController extends Controller {
 				$this->error($upload->getError());   
 			}else{// 上传成功 			       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];   
 			  	}
 			}
 			$data['pic'] = $path;

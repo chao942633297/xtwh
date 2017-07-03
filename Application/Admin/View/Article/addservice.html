@@ -1,0 +1,224 @@
+<include file="Public/head" />
+<style type="text/css">
+  table tr > td {padding-left:20px;padding-bottom:10px;width: 25%;}
+</style>
+<!-- 上传商品缩略图 -->
+<form id="fmform" action="" method="POST" enctype="multipart/form-data">
+    <input type="hidden" value="fmimg" name="imgtype"/>
+    <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform')"/>
+</form>
+<form id="carform" action="" method="POST" enctype="multipart/form-data">
+  <input type="hidden" value="carimg" name="imgtype"/>
+  <input id="carimg" style="display:none" name="carimg" type="file" onchange="upload('carform')"/>      
+</form>  
+<script type="text/javascript">
+		//上传
+  var num = 1;
+  function upload(fromID){
+      var vars=$("#"+fromID);
+      var options={
+          type:"post",
+          url:"{:U('/Admin/File/Upload')}",
+          dataType:'json',
+          contentType:"application/json;charset=utf-8",
+          success:function(data){
+              if(data!="false"){
+                if (fromID == 'fmform') {
+                  $("#imgurl").attr('src',data);    
+                }else{
+                  var str = '<img onclick="imgclick(\'car_'+num+'\')" id="car_'+num+'" src="'+data+'" style="width:100px;height:100px;margin-right:5px;" />'; 
+                  $("#car").append(str);
+                  num++;
+                }
+              }
+          }
+      }
+      vars.ajaxSubmit(options);
+  }
+
+  function imgclick(carid){
+    if (confirm("是否删除此图片?")) {
+      $("#"+carid).remove();
+    }else{
+      return false;
+    }
+  }
+</script>
+	<div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">添加 | 编辑服务文章</h4>
+    </div>
+		<form action="" method>
+     <div class="modal-body">
+		<table style="width: 100%;">
+		  <tr>
+			<td style="padding-left:20px;">文章标题:</td>
+			<td><input type="text" class="form-control" name="name" placeholder="商品名称" id="name" value="{$data.title}"></td>
+			<td></td>
+			<td></td>
+
+          </tr>
+          <tr>
+			<td style="padding-left:20px;">文章logo:</td>
+            <td style="width:380px">
+              <empty name="data.logo">
+              <img id="imgurl" name="imgurl" style="width: 100px;height: 100px;" class="form-control" src="__PUBLIC__/images/default.png" onclick="javascript:$('#fmimg').click();" alt="请选择图片" />
+              <else />
+              <img id="imgurl" name="imgurl" style="width: 100px;height: 100px;" class="form-control" src="{$data.logo}" onclick="javascript:$('#fmimg').click();" alt="图片损坏" />
+              </empty>
+            </td>
+			<td></td>
+			<td></td>
+
+      </tr>
+          <tr style="padding-left:20px;">
+            <td>文章类型:</td>
+            <td>
+              <select name="" id="category" class="form-control" style="margin-bottom: 10px;margin-top:10px;">
+                <volist name="cate" id="vo" >
+                  <option value="{$vo.id}">{$vo.name}</option>
+                </volist>         
+              </select>
+            </td>
+			<td></td>
+			<td></td>
+
+          </tr> 
+          <tr style="padding-left:20px;">
+            <td>机构/老师:</td>
+            <td>
+              <select name="" id="user2" class="form-control" style="margin-bottom: 10px;margin-top:10px;">
+                <option value="0">平台</option>
+                <volist name="user" id="vo" >
+                  <option value="{$vo.id}">{$vo.name}--{$vo.phone}</option>
+                </volist>         
+              </select>
+            </td>
+      <td></td>
+      <td></td>
+
+          </tr>           
+           <tr>        
+            <td>文章简述:</td>
+            <td><textarea style="resize:none;width:410px" type="text" rows="4" class="form-control" name="desc" id="desc" >{$data.desc}</textarea> 
+			<td></td>
+			<td></td>
+
+         </tr>                   
+          <tr id="lun1"> 
+            <td rowspan="2">轮播图:</td>
+            <td id="car" colspan="3">                 
+            <button type="button" style="width: 100px;height:25px;float:left;" onclick="javascript:$('#carimg').click();">点击上传图片</button>
+            </td>
+		 </tr>
+		</table>
+        <div style="width: 70%;">
+          <p style="font-size:14px;padding-left:20px;margin-top:15px;text-align: center;width: 50%">文章详情:</p>
+          <span id="detail" name="detail" style="margin-left:20px;display:block;">{$data.detail|htmlspecialchars_decode|stripslashes}</span>                 
+        </div>
+	    </div>
+      <input type="hidden" name="aid" id="aid" value="{$data.id}">
+      <input type="hidden" id="type" value="{$type}">
+      <input type="hidden" name="class" id="class1" value="{$data.class}">
+      <input type="hidden" name="u2id" id="u2id" value="{$data.u2id}">
+		</form>        
+<script id="container" name="detail" type="text/plain" style="min-height: 400px;width:80%;margin:0 auto">
+</script>		
+<button class="btn btn-default" style="display:block;width:200px;margin:0 auto;margin-top:15px;" onclick="saveFactoryProduct()">完成</button>
+<include file="Public/footer" />
+<script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+   $("#detail").hide();
+
+    var ue;
+    $(function(){
+    	$("#container").height(document.documentElement.clientHeight-160);
+         ue = UE.getEditor('container',{
+            serverUrl :'{:U('/Admin/Article/ueditor')}'
+        });
+            ue.ready(function() {
+		    //设置编辑器的内容
+		    ue.setContent($("#detail").html());      
+		});
+    });
+
+	//保存添加或修改的厂商商品信息
+	function saveFactoryProduct(){
+  	var html     = ue.getContent();	
+    // console.log(html);
+  	var name     = $("#name").val();	
+    var logo= $("#imgurl").attr("src");       
+  	var category= $("#category option:selected").val();
+    var u2id= $("#user2 option:selected").val();
+    var id = $("#aid").val();
+    var type = $("#type").val();
+    var desc = $("#desc").val();
+    var str = '';
+    $("#car img").each(function(){
+        var src = $(this).attr("src");
+        str += src+'*|*';
+    });
+  	if (name == '') {
+			alert('标题称不准为空!');return;
+  	}
+
+    if (logo == "") {
+      alert("请上传logo");return;
+    }
+    if (type == 1) {
+      if (str == "") {
+        alert("请上传轮播图");return;
+      }
+    }
+
+
+  	$.ajax({
+  		type     : "POST",
+  		url      : "{:U('/Admin/Article/saveService')}",
+  		data     : {title:name,logo:logo,class:category,lunbo:str,desc:desc,detail:html,u2id:u2id,id:id,type:type},
+  		dataType : "json",
+  		error		 : function(){},
+  		success  : function(data){
+			if (data.code == 1) {
+				alert(data.msg);
+        window.location.href = "{:U('Admin/Article/service')}";
+			}else{
+				alert(data.msg);
+			}     				
+  		}
+  	});
+	}
+
+$(document).ready(function(){
+  var type = $("#type").val();
+  var class1 = $("#class1").val();
+  var u2id = $("#u2id").val();
+  if ( type == 2) {
+    $("#lun1").hide();
+  }else{
+    $("#lun1").show();
+  }
+
+  $("#category option").each(function(){
+    var value = $(this).val();
+    if (value == class1) {
+      $(this).prop('selected','selected');
+    }else{
+      $(this).removeProp('selected');
+    }
+  });
+
+  $("#user2 option").each(function(){
+    var value = $(this).val();
+    if (value == u2id) {
+      $(this).prop('selected','selected');
+    }else{
+      $(this).removeProp('selected');
+    }
+  });
+
+});
+
+</script>
+
+

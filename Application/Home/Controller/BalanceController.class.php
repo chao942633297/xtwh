@@ -3,12 +3,10 @@ namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
 
-class BalanceController extends Controller{
+class BalanceController extends BaseController{
 
     public function balancePay(){
-        $input = I('get.');
-        $orderId = $input['inputId'];
-        $orderId = '17';
+        $orderId = I('get.orderId');
 
         $order = D('OrderRelation');
         $backmoney = D('Backmoney');
@@ -48,7 +46,8 @@ class BalanceController extends Controller{
                     $returnVal['rebateMoney'] = $rebateDescMoney;     //扣除基金的钱
                     $lastMoney = $orderData['goodprice'] - $userDescMoney - $rebateDescMoney;    //订单扣除用户余额,扣除基金后的钱
 
-                    return array('0', '余额不足,请选择其他支付方式');
+                    // return array('0', '余额不足,请选择其他支付方式');
+                    jsonpReturn1('0', '余额不足,请选择其他支付方式');
                 }
             } else {                             //可返佣的钱小于0 ,说明7200已全部返完 ,余额可全部消费
                 if ($userMoney - $orderData['goodprice'] >= 0) {     //余额大于 订单金额,则用余额直接购买,(不返佣)
@@ -62,7 +61,8 @@ class BalanceController extends Controller{
                     } else {
                         $rebateDescMoney = $rebateMoney;      //不足则先扣除基金
                         //调 微信或支付宝进行支付
-                        return array('0', '余额不足,请选择其他支付方式');
+                        // return array('0', '余额不足,请选择其他支付方式');
+                        jsonpReturn1('0', '余额不足,请选择其他支付方式');
                     }
                 }
             }
@@ -87,15 +87,19 @@ class BalanceController extends Controller{
                 // 减少用户基金
                 $back['u2id'] = $orderData['user2']['id'];
                 $back['money'] = -$rebateDescMoney;
-                $back['message'] = '购物';
+                if($orderData['courseid']){
+                    $back['message'] = '购买课程';
+                }else if($orderData['goodid']){
+                    $back['message'] = '购买乐器';
+                }
                 $back['create_at'] = time();
                 $back['order_id'] = $orderData['id'];
                 if ($res && $res1 && $res2) {
                     $res3 = $backmoney->add($back);
                     if ($res3) {
                         $backmoney->commit();
-//                    jsonpReturn('1','购买成功');
-                        return array('1', '购买成功');
+                            jsonpReturn1('1','购买成功');
+                        // return array('1', '购买成功');
                     } else {
                         throw new Exception();
                     }

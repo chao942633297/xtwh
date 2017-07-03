@@ -13,7 +13,7 @@ vendor('AliPay.AopClient');
 vendor('AliPay.AlipayTradeService');
 vendor('AliPay.AlipayTradeWapPayContentBuilder');
 vendor('AliPay.AlipayFundTransToaccountTransferRequest');
-class AliPayController extends Controller{
+class AliPayController extends BaseController{
 
     public function webPay($orderId){             //支付宝支付
         $order = D('Order');

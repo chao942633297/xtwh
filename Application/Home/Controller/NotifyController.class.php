@@ -5,14 +5,10 @@ use Think\Exception;
 use Vendor\AliPay\AlipayTradeService;
 use Vendor\Weixinpay\WxPayConf_pub\Notify_pub;
 
-class NotifyController extends Controller{
+class NotifyController extends BaseController{
 
     public function aliNotify(){
-//        file_put_contents('123.txt','123123123');
-//        foreach($_GET as $k=>$v){
-//            file_put_contents('./log.txt',file_get_contents('./log.txt',$k.'校验成功:'.$v));
-//        }
-        $arr = $_GET;
+        $arr = $_GET;                 //获取回调数据
         $user = D('User2');
         $alipayService = new AlipayTradeService();
         $result = $alipayService->check($arr);
@@ -21,58 +17,89 @@ class NotifyController extends Controller{
             $total_fee = $_GET['total_amount'];
             $orderData = D('OrderRelation')->where(array('ordercode' => $orderCode))->relation(true)->find();
             if ($orderData['status'] == '1') {
-//                dump($orderData);
-                $rebate_money = $orderData['user2']['rebate_money'];   //用户已参与第一返佣的钱
-                $limit_money = $orderData['course']['limit_price'] ? $orderData['course']['limit_price'] : 7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
-                $surplus = 7200 - $rebate_money;     //用户剩余可用于第一返佣规则的钱
-                if ($surplus - $limit_money >= 0) {
-                    //返佣$limit_money
-                    $manyMoney = $limit_money;
-                    $lessMoney = $total_fee - $limit_money;
-                } else {
-                    //返佣$surplus
-                    $manyMoney = $surplus;
-                    $lessMoney = $total_fee - $surplus;
-                }
-                $rebateResult = $this->rebate($manyMoney, $lessMoney, $orderData['u2id']);
-                if ($rebateResult) {
-                    $res = $user->where(array('id' => $orderData['u2id']))->setInc('rebate_money', $manyMoney);
-                    $newData['status'] = '2';
-                    $newData['paytype'] = '支付宝';
-                    $res1 = D('Order')->where(array('id'=>$orderData['id']))->save();
-                    if ($res && $res1 ) {
-                        echo 'success';
-//                        jsonpReturn('1', '保存成功');
-                    } else {
-//                        jsonpReturn('0', '保存失败');
-                        echo 'fail';
-                    }
-                } else {
-                    echo 'fail';
-//                    jsonpReturn('0', '系统错误!');
-                }
+                $this->returnNotify($orderData,$total_fee,'支付宝');
             }
         }
 
     }
 
-    public function wechatNotify(){
-        file_put_contents('123','testwx');
+    public function wechatNotify()
+    {
+        vendor('Weixinpay.WxPayPubHelper');     //获取回调数据
         $notify = new Notify_pub();
         //存储微信的回调
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $data = $notify->saveData($xml);
-        foreach($data as $k=>$v){
-            file_put_contents('./logwx.txt',file_get_contents('./logwx.txt',$k.'校验成功:'.$v));
+        $notify->saveData($xml);
+        if ($notify->checkSign() == FALSE) {
+            $notify->setReturnParameter("return_code", "FAIL");//返回状态码
+            $notify->setReturnParameter("return_msg", "签名失败");//返回信息
+        } else {
+            $notify->setReturnParameter("return_code", "SUCCESS");//设置返回码
         }
-        if($notify->checkSign() == FALSE){
-            $notify->setReturnParameter("return_code","FAIL");//返回状态码
-            $notify->setReturnParameter("return_msg","签名失败");//返回信息
-        }else{
-            $notify->setReturnParameter("return_code","SUCCESS");//设置返回码
+        $log_name = "./notify_url.log";//log文件路径
+//        $this->log_result($log_name, "【接收到的notify通知】:\n" . $xml . "\n");
+
+        if ($notify->checkSign() == TRUE) {
+            if ($notify->data["return_code"] == "FAIL") {
+                //此处应该更新一下订单状态，商户自行增删操作
+                $this->log_result($log_name, "【通信出错】:\n" . $xml . "\n");
+            } elseif ($notify->data["result_code"] == "FAIL") {
+                //此处应该更新一下订单状态，商户自行增删操作
+                $this->log_result($log_name, "【业务出错】:\n" . $xml . "\n");
+            } else {
+                //此处应该更新一下订单状态，商户自行增删操作
+                $this->log_result($log_name, "【支付成功】:\n" . $xml . "\n");
+                $returnData = $notify->xmlToArray($xml);
+                $total_fee = $returnData['total_fee'];
+                $orderData = D('OrderRelation')->where(array('ordercode'=>$returnData['out_trade_no']))->relation(true)->find();
+                if($orderData['status'] == 1){         //订单待支付状态
+                    $this->returnNotify($orderData,$total_fee,'微信');
+                }
+            }
         }
-        $returnXml = $notify->returnXml();
-        echo $returnXml;
+    }
+
+
+    // 打印log
+    public function  log_result($file,$word)
+    {
+        $fp = fopen($file,"a");
+        flock($fp, LOCK_EX) ;
+        fwrite($fp,"执行日期：".strftime("%Y-%m-%d %H：%M：%S",time())."\n".$word."\n\n");
+        flock($fp, LOCK_UN);
+        fclose($fp);
+    }
+
+            //回调后,计算返佣的钱,和改变订单状态
+    public function returnNotify($orderData,$total_fee,$paytype){
+        $rebate_money = $orderData['user2']['rebate_money'];   //用户已参与第一返佣的钱
+        $limit_money = $orderData['course']['limit_price'] ? $orderData['course']['limit_price'] : 7200;    //课程限制可用于第一返佣的钱  充值则为默认(7200)
+        $surplus = 7200 - $rebate_money;     //用户剩余可用于第一返佣规则的钱
+        if ($surplus - $limit_money >= 0) {
+            //返佣$limit_money
+            $manyMoney = $limit_money;
+            $lessMoney = $total_fee - $limit_money;
+        } else {
+            //返佣$surplus
+            $manyMoney = $surplus;
+            $lessMoney = $total_fee - $surplus;
+        }
+        $rebateResult = $this->rebate($manyMoney, $lessMoney, $orderData['u2id']);
+        if ($rebateResult) {
+            $res = D('User2')->where(array('id' => $orderData['u2id']))->setInc('rebate_money', $manyMoney);
+            $newData['status'] = '2';
+            $newData['paytype'] = $paytype;
+            $newData['real_money'] = $total_fee;
+            $res1 = D('Order')->where(array('id'=>$orderData['id']))->save($newData);
+            $res2 = promotion($total_fee,$orderData['u2id']);
+            if ($res && $res1 && $res2 ) {
+                exit('success');
+            } else {
+                exit('fail');
+            }
+        } else {
+            exit('fail');
+        }
     }
 
 
@@ -108,7 +135,7 @@ class NotifyController extends Controller{
                     $one[$i]['money'] = $manyMoney * $conf['my'][$num] * 0.01;
                     $one[$i]['u2id'] = $firstData['id'];
                     $one[$i]['source'] = $userId;
-                    $one[$i]['message'] = '直营分佣基金';
+                    $one[$i]['message'] = '直营消费返佣';
                     $one[$i]['create_at'] = time();
                     $i++;
                 }
@@ -119,7 +146,7 @@ class NotifyController extends Controller{
                         $one[$i]['money'] = $twoMoney1;
                         $one[$i]['u2id'] = $firstData['id'];
                         $one[$i]['source'] = $userId;
-                        $one[$i]['message'] = '非直营分佣基金';
+                        $one[$i]['message'] = '非直营消费返佣';
                         $one[$i]['create_at'] = time();
                     }
                 }
@@ -134,7 +161,7 @@ class NotifyController extends Controller{
                             $two[$y]['money'] = $manyMoney * $conf['my'][$num] * 0.01;
                             $two[$y]['u2id'] = $twoData['id'];
                             $two[$y]['source'] = $userId;
-                            $two[$y]['message'] = '直营分佣基金';
+                            $two[$y]['message'] = '直营消费返佣';
                             $two[$y]['create_at'] = time();
                             $y++;
                         }
@@ -145,7 +172,7 @@ class NotifyController extends Controller{
                                 $two[$y]['money'] = $twoMoney2;
                                 $two[$y]['u2id'] = $twoData['id'];
                                 $two[$y]['source'] = $userId;
-                                $two[$y]['message'] = '非直营分佣基金';
+                                $two[$y]['message'] = '非直营消费返佣';
                                 $two[$y]['create_at'] = time();
                             }
                         }
@@ -160,7 +187,7 @@ class NotifyController extends Controller{
                                     $three[$j]['money'] = $manyMoney * $conf['my'][$num] * 0.01;
                                     $three[$j]['u2id'] = $threeData['id'];
                                     $three[$j]['source'] = $userId;
-                                    $three[$j]['message'] = '直营分佣基金';
+                                    $three[$j]['message'] = '直营消费返佣';
                                     $three[$j]['create_at'] = time();
                                     $j++;
                                 }
@@ -171,7 +198,7 @@ class NotifyController extends Controller{
                                         $three[$j]['money'] = $twoMoney3;
                                         $three[$j]['u2id'] = $threeData['id'];
                                         $three[$j]['source'] = $userId;
-                                        $three[$j]['message'] = '非直营分佣基金';
+                                        $three[$j]['message'] = '非直营消费返佣';
                                         $three[$j]['create_at'] = time();
                                     }
                                 }

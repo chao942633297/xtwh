@@ -77,4 +77,36 @@ class AccountController extends Controller {
         $this->ajaxReturn(["status"=>1,"data"=>$data]);       
     }
 
+    /**
+     *
+     * 导出Excel -- 例子
+     */
+    public function getExcel(){//导出Excel
+        $xlsName  = "佣金列表";
+        $xlsCell  = array(
+        array('id','账号序列'),
+        array('nickname','昵称'),
+        array('phone','手机号'),
+        array('money','佣金金额'),
+        array('message','佣金来源'),
+        array('createtime','时间')
+        );
+        $comm = M('backmoney')->field("id,money,message,FROM_UNIXTIME(create_at,'%Y-%m-%d %H:%i:%s') as createtime")->select();  //所有佣金记录        
+        $userid = M('backmoney')->getField("u2id",true);
+        $userid = array_unique($userid);
+        $where["id"] = array("in",$userid);
+        $userinfo = M('user2')->where($where)->select();   //所有佣金记录的用户
+
+        foreach ($comm as $k => $v) {
+            foreach ($userinfo as $k1 => $v1) {
+                if ($v['u2id'] == $v1["id"]) {
+                    $comm[$k]["nickname"] = $v1["nickname"];
+                    $comm[$k]["phone"] = $v1["phone"]; 
+                }
+            }
+        }
+        // var_dump($comm);
+        getExcel($xlsName,$xlsCell,$comm);
+    }
+
 }

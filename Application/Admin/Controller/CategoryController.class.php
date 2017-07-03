@@ -122,7 +122,7 @@ class CategoryController extends Controller
 				$this->error($upload->getError());   
 			}else{// 上传成功 			       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];   
 			  	}
 			}
 			$_POST['icon_img'] = $path;

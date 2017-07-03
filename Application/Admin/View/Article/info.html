@@ -1,50 +1,56 @@
 <include file="Public/head" />
-<script src="__PUBLIC__/js/uploadPreview.js" type="text/javascript"></script>
-<script src="__PUBLIC__/js/uploadPreview.min.js" type="text/javascript"></script>
- <script>
-       window.onload = function () { 
-            new uploadPreview({ UpBtn: "up_img", DivShow: "imgdiv", ImgShow: "imgShow" });
-        }
-    </script>
 <style type="text/css">
-	table tr > td {padding-left:20px;padding-bottom:10px;width:40%;text-align: center}
+.jyt_box{
+  overflow: hidden;
+  width: 100%;
+}
+.jyt_box ul{}
+.jyt_box ul li{
+  overflow: hidden;
+  width: 100%;
+  line-height: 30px;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+
+}
+.jyt_box ul li label{
+  float: left;
+  width: 10%;
+  text-align: right;
+}
+.jyt_box ul li div{
+  float: left;
+  width: 90%;
+  text-align: center;
+}
+.jyt_box ul li div img{
+  display: block;
+  margin:0 auto;
+}
 </style>
-	<div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">文章详情:</h4>
-    </div>
-    <form action="{:U('Article/doSomething')}" method="post" onSubmit="return check();" enctype="multipart/form-data">
-     <div class="modal-body">
-       
-				<table style="width: 80%;">
-          <tr style="margin-bottom:5px;">
-            <td>文章标题:</td>
-            <td><input type="text" name="title" class="form-control" id="title" style="width: 200px;" value="{$data.title}"></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>文章logo:</td>
-            <td><input type="file" style="width:100px;" class="form-control" id="up_img" name="photo" > <div id="imgdiv"><img id="imgShow" width="100" height="100" style="display: block;padding-top:10px;" src="{$data.logo}" /></div></td>
-          </tr>
-          <tr style="margin-bottom:5px;">
-            <td>文章类型:</td>
-            <td><select name="type" class="form-control" style="width:200px;margin-bottom: 10px;margin-top:10px; " >
-                <option value="1" <?php if($data['type'] == 1) echo 'selected';?>>平台介绍</option>
-                <option value="2" <?php if($data['type'] == 2) echo 'selected';?>>合作机构展示 </option>
-                <option value="3" <?php if($data['type'] == 3) echo 'selected';?>>平台新闻</option> 
-                <option value="4" <?php if($data['type'] == 4) echo 'selected';?>>活动</option>                           
-            </select></td>
-          </tr>          
-           <tr>        
-            <td>文章简述:</td>
-            <td><textarea style="resize:none;width:410px" type="text" rows="4" class="form-control" name="desc" id="desc" >{$data.desc}</textarea> 
-         </tr>	       
-	       <tr>
-						<td style='margin-top:10px;padding-bottom:0px;'>文章详情:</td>
-						<td>
-							<span id="detail" name="detail" style='display:block;margin-top:10px;'>{$data.detail}</span> 					
-						</td>	       	
-	       </tr> 
-				</table>
-	    </div>      	
-</form>
+  <div class="jyt_box">
+    <ul>
+      <li>
+        <label>文章标题:</label>
+        <div>{$data.title}</div>
+      </li>
+      <li>
+        <label>文章logo:</label>
+        <div><img id="imgShow" width="100" height="100" src="{$data.logo}" /></div>
+      </li>
+      <li>
+        <label>文章类型:</label>
+        <div style="color:red;font-weight:bold;">
+          <if condition="$data.type eq 1"> 平台介绍<elseif condition="$data.type eq 2"/>合作机构展示<elseif condition="$data.type eq 3"/>平台新闻<else /> 活动</if>
+        </div>
+      </li>
+      <li>
+        <label>文章简述:</label>
+      <div>{$data.desc}</div>
+      </li>
+    </ul> 
+  </div>
+      <label style="width: 10%;text-align: right;padding: 5px 0;">文章详情:</label>
+      <div id="detail" name="detail">{$data.detail}</div>
 <include file="Public/footer" />
 

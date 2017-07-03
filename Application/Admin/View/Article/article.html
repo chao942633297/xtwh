@@ -1,7 +1,7 @@
 <include file="Public/head" />
 
 <style type="text/css">
-  table tr > td {padding-left:20px;padding-bottom:10px;width:40%;}
+  table tr > td {padding-left:20px;padding-bottom:10px;}
 </style>
   <table>
     <tr>
@@ -47,15 +47,19 @@
     return "<img src='"+p+"' style='width:50px;height:50px;'>";
   }
 
-  function articleType(type){
+  function articleType(id,option,object){
+    var type   = object.type;
+    var class1 = object.class; 
     if (type == 1) {
       return "平台介绍";
     }else if(type == 2){
       return "合作机构展示";
     }else if( type == 3){
       return "平台新闻";
-    }else{
+    }else if(type == 4){
       return "活动";
+    }else if(type == 0){
+      return class1;
     }
   }
 
@@ -66,7 +70,7 @@
           { label: '编号', name: 'id',width:'50'},
           { label: '文章标题', name: 'title',width:'120',},
           { label: '封面', name: 'logo',width:'50',formatter:pics},
-          { label: '文章类型', name: 'type',width:'120',formatter:articleType},
+          { label: '文章类型', name: 'id',width:'120',formatter:articleType},
           { label: '简述', name: 'desc',width:'150'},
           { label: '阅读量', name: 'looknum',width:'50'},
           { label: '添加时间', name: 'create_at',width:'100'},

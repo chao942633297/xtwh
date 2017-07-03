@@ -17,6 +17,9 @@
                                 <button type="button" class="btn btn-lg btn-primary" style="background-color: #7C26BD;margin:5px auto;" onclick="savelunbo();">保 存</button>
                             </td>
                         </tr>
+                        <input type="hidden" name="type" id="type" value="{$type}">
+                        <input type="hidden" name="pid" id="pid" value="{$pid}">
+
                     </table>
                 </div>
             </div>
@@ -42,14 +45,17 @@ function upload(fromID,imgid){
 
 function savelunbo(){
     var img = $("#imgurl").attr("src");
+    var type = $("#type").val();
+    var pid = $("#pid").val();
+
     $.ajax({
         url:"{:U('/Admin/Admin/addlb')}",
-        data:{"img":img},
+        data:{"img":img,"type":type,"pid":pid},
         dataType:"json",
         success:function(msg){
             console.log(msg);
             if (msg) {
-                $(window.parent.document).find("#main_iframe").attr("src","{:U('/Admin/Admin/lunbo')}");
+                window.location.href = "{:U('Admin/Admin/lunbo/type/"+type+"/id/"+pid+"')}";
             }else{
                 alert("添加失败");
             }

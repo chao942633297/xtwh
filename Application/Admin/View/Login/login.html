@@ -74,6 +74,11 @@
 			</div>
 		</div>
 		<script type="text/javascript">
+        $(this).keydown(function (e){
+            if(e.which == "13"){
+                login();
+            }
+        })		
 		function login(){
 			if($("#username").val()==""){
 				alert('请输入用户名');
@@ -96,13 +101,15 @@
 				success : function(data) {
 					if (data.status) {
 						location.href = data.url;
-					} else {
+					}else{
 						alert(data.info);
+						var captcha_img = $('#vercode');
+						captcha_img.click();
 					}
 				}
 			});
 		}
-		$(document).ready(function(){
+		function clickvode(){
 			var captcha_img = $('#vercode');
 			var verifyimg = captcha_img.attr("src");
 			captcha_img.click(function(){
@@ -111,9 +118,13 @@
 			    }else{
 			        $(this).attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
 			    }
-			});
+			});			
+		}
+		$(document).ready(function(){
+			clickvode();
 		});
 		</script>
+
 	</body>
 </html>
 <script>

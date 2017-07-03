@@ -5,7 +5,7 @@
     <input id="fmimg" style="display: none;" name="fmimg" type="file" onchange="upload('fmform','imgurl')"/>
 </form>
   <div>
-    <a href="{:U('Admin/Admin/addLunbo1')}" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加轮播图</a>
+    <a href="{:U('Admin/Admin/addLunbo1')}?type={$type}&pid={$pid}" style="margin-left:10px;width:100px;" type="button" class="btn btn-primary">添加轮播图</a>
   </div>
   <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">

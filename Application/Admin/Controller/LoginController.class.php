@@ -9,19 +9,19 @@ class LoginController extends Controller {
 	 * 登录页面
 	 */
 	public function login(){
-
 		if(IS_POST){
             //取出POST请求的参数值
             $username=I('username');
             $pwd=md5(I('password'));
             $users=M('admin');
             $vercode=I("code");
+
             if(!$this->check_verify($vercode)){
                 $this->error('验证码错误');
             }
             //根据用户名查询出  该用户信息
             $user=$users->where("username='%s'",$username)->find();
-            //判断密码是否一致
+			//判断密码是否一致
             if($pwd==$user['password']){
                 //保存当前登录用户的 ID 和名称 到Session中
                 $_SESSION['userid']  =$user['id'];

@@ -1,0 +1,79 @@
+<include file="Public/head" />
+
+<style type="text/css">
+  table tr > td {padding-left:20px;padding-bottom:10px;}
+</style>
+  <table>
+    <tr>
+      <td colspan="4"><a href="{:U('Article/addservice')}?type=1" class="btn btn-primary";">添加服务文章</a></td>      
+    </tr>
+  </table>
+
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="userlist" style="padding-right: 20px;">
+      <table id="jqGrid" style="width: 100%;"></table>
+      <div id="jqGridPager"></div>  
+      </div>
+      <div role="tabpanel" class="tab-pane" id="edituser">    
+  </div>
+</div>
+
+<include file="Public/footer" />
+<script type="text/javascript">
+  function formatLink(id,options,object) {
+      var data  = object;
+      var status= object.status;
+      var url = "{:U('Admin/Admin/lunbo/type/0/id/"+id+"')}";
+        return "<a class='btn btn-primary' style='margin-right:5px;' href='"+url+"'>轮播图管理</a>&nbsp;&nbsp;<a href='addservice?type=2&id="+id+"' class='btn btn-primary' style='margin-right:5px;'>编辑</a>&nbsp;&nbsp;<a href='javascript:' class='btn btn-danger' id='com"+id+"' onclick='del("+id+")'>删除</a>"; 
+  };
+
+  function del(id){
+    if (confirm('确定删除吗?')) {
+      $.ajax({
+        url:"{:U('Admin/Article/del')}",
+        type:"GET",
+        data:{id:id},
+        success:function(msg){
+          if (msg) {
+            $("#com"+id).parent().parent().remove();
+          }else{
+            alert("删除失败");
+          }
+        }
+      });
+    }
+  }
+ 
+  function pics(p){
+    return "<img src='"+p+"' style='width:50px;height:50px;'>";
+  }
+
+
+  $(document).ready(function($) { 
+    $("#jqGrid").jqGrid({
+      styleUI : 'Bootstrap',
+      colModel: [
+          { label: '编号', name: 'id',width:'50'},
+          { label: '文章标题', name: 'title',width:'120',},
+          { label: '封面', name: 'logo',width:'50',formatter:pics},
+          // { label: '文章类型', name: 'class',width:'120' },
+          { label: '简述', name: 'desc',width:'150'},
+          { label: '阅读量', name: 'looknum',width:'50'},
+          { label: '添加时间', name: 'create_at',width:'100'},
+          { label: '操作', name: 'id',width:'120',formatter:formatLink}
+      ],
+      viewrecords: true,
+      rownumbers: true,
+      rownumWidth: 35,
+      height: document.documentElement.clientHeight-135,
+      autowidth:true,
+      rowNum: 9,
+      datatype: 'local',
+      loadonce:true,
+      pager: "#jqGridPager"
+    });
+    $("#jqGrid").jqGrid('setGridParam', { data: eval({$data})});
+    $("#jqGrid").trigger('reloadGrid');
+  });
+</script>
+

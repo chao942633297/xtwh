@@ -10,7 +10,7 @@
         }
     </script>
 <style type="text/css">
-	table tr > td:first-child{padding-left:20px;padding-bottom:10px;width:40%;text-align:center;}
+	table tr > td:first-child{padding-left:20px;padding-bottom:10px;text-align:center;}
 	table tr > td:last-child input{width:60%;margin-bottom:10px;	}
 ul, ol, dl { list-style: none; }
 ._citys { width: 450px; display: inline-block; border: 2px solid #eee; padding: 5px; position: relative; background: #fff;}
@@ -67,6 +67,7 @@ ul, ol, dl { list-style: none; }
 	    <input type="hidden" name="type" value="add"> 
 	    <input type="hidden" name="class" value="2">  
       <input type="hidden" name="classall" value="" id="classall"> 
+      <input type="hidden" name="major" id="major" value="">
 
 		<button class="btn btn-default" type="submit" style="width:200px;text-align:center;margin-top:15px;margin-left:600px;">完成</button>
 </form>
@@ -113,6 +114,7 @@ ul, ol, dl { list-style: none; }
     typename = typename.substr(1);
     $("#classall").val(typeid);
     $("#classname").val(typename);
+    $("#major").val(typename);
     $("#closetype").click();
   });
 

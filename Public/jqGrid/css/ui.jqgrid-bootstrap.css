@@ -189,7 +189,7 @@ div.tablediv > .table-bordered {
 .ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td { 
 	overflow: hidden; 
 	white-space: pre; 
-	padding-right: 2px;
+	/*padding-right: 2px;*/
 }
 .ui-jqgrid tr.jqgfirstrow  td {
 	height:auto; 

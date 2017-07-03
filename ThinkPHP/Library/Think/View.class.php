@@ -65,6 +65,7 @@ class View {
      * @return mixed
      */
     public function display($templateFile='',$charset='',$contentType='',$content='',$prefix='') {
+
         G('viewStartTime');
         // 视图开始标签
         Hook::listen('view_begin',$templateFile);

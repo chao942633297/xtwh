@@ -50,7 +50,7 @@ class MechanismController extends Controller
 				$this->error($upload->getError());   
 			}else{		       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];
 			  	}
 			}
 			$data['logo']  = $path;
@@ -58,10 +58,12 @@ class MechanismController extends Controller
 		
 		$data['class'] = 2;    	
     	if($type == 'add'){
+
     		$row = M('user1')->where(array('title'=>$_POST['title']))->select();
     		if($row){    		
     			$this->error('机构已存在');
-    		}  
+    		} 
+            $data['major'] = $_POST['major']; 
     		$data['create_at'] = time();
     		$id = M('user1')->add($data);
             $typeid = explode(",",I('classall'));
@@ -171,7 +173,7 @@ class MechanismController extends Controller
 				$this->error($upload->getError());   
 			}else{		       
 			  	foreach($info as $file){
-			  		$path =  __ROOT__.'/Uploads'.$file['savepath'].$file['savename'];   
+			  		$path =  '/Uploads'.$file['savepath'].$file['savename'];   
 			  	}
 			}
 			$data['logo'] = $path;

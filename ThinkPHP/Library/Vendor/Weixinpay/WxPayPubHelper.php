@@ -28,9 +28,11 @@
  * 		postXmlSSLCurl(),使用证书，以post方式提交xml到对应的接口url
 */
 namespace Vendor\Weixinpay\WxPayConf_pub;
+use Vendor\Weixinpay\SDKRuntimeException;
 use Vendor\Weixinpay\WxPayConf_pub;
 
 vendor('Weixinpay.WxPayPubConfig');
+vendor('Weixinpay.SDKRuntimeException');
 /**
  * 所有接口的基类
  */
@@ -357,6 +359,7 @@ class UnifiedOrder_pub extends Wxpay_client_pub
 	 */
 	function getPrepayId()
 	{
+
 		$this->postXml();
 		$this->result = $this->xmlToArray($this->response);
 		$prepay_id = $this->result["prepay_id"];
@@ -775,6 +778,10 @@ class JsApi_pub extends Common_util_pub
 	var $prepay_id;//使用统一支付接口得到的预支付id
 	var $curl_timeout;//curl超时时间
 
+    var $access_token;
+    public $errCode = 40001;
+    public $errMsg = "no access";
+
 	function __construct() 
 	{
 
@@ -904,6 +911,33 @@ class JsApi_pub extends Common_util_pub
 			exit($_GET["echostr"]);
 		}
 	}
+
+
+    public function http_curl($url, $type = 'get', $res = 'json', $arr = ''){
+        //1、初始化curl
+        $ch = curl_init();
+        //2、设置curl的参数
+        // curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, FALSE); //针对php5.6版本
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//将抓取到的东西返回
+        if ($type == 'post') {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);// 传递一个作为HTTP “POST”操作的所有数据的字符串。
+        }
+        //3、采集
+        $output = curl_exec($ch);
+        //4、关闭
+        curl_close($ch);
+        if ($res == 'json') {
+            if (curl_errno($ch)) {
+                //请求失败，返回错误信息
+                return curl_error($ch);
+            } else {
+                //请求成功
+                return json_decode($output, true);
+            }
+        }
+    }
 
 
 
